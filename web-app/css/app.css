@@ -1,0 +1,46 @@
+html {
+    height: 100%;
+}
+body {
+    /*padding-top: 40px;*/
+    height: 100%;
+}
+
+.layout {
+    height: 100%;
+}
+
+.ui-layout-pane {
+    border: none;
+}
+
+#list {
+    background-color: #eee;
+    padding: 0;
+}
+
+
+#list > ul {
+    margin: 0;
+}
+#list > ul > li {
+    list-style-type: none;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #aaa;
+    cursor: pointer;
+}
+#list > ul > li > a {
+    display: block;
+    padding: 15px 10px;
+    text-decoration: none;
+}
+#list > ul > li > a span {
+    color: #333333;
+}
+#list > ul > li .count {
+    float: right;
+}
+
+#main {
+    /*height: 100%;*/
+}
