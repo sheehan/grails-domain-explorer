@@ -15,6 +15,35 @@ App.Domain = (function (App, Backbone) {
 
     });
 
+    Domain.DomainListItemModel = Backbone.Model.extend({
+
+    });
+
+    Domain.DomainListItemCollection = Backbone.Collection.extend({
+        url: function () {
+            return '/domexample/domain/listEntities?fullName=' + this.fullName;
+        },
+        model: Domain.DomainListItemModel,
+        initialize: function(models, options) {
+            this.fullName = options.fullName;
+        }
+    });
+
+    Domain.DomainListItemView = Backbone.Marionette.ItemView.extend({
+        template: '#domain-list-item-template',
+        tagName: 'li',
+
+        events: {
+        }
+
+    });
+
+    Domain.DomainListCollectionView = Backbone.Marionette.CollectionView.extend({
+
+        itemView: Domain.DomainListItemView,
+        tagName: 'ul'
+    });
+
     Domain.showDomain = function(fullName) {
         var model = new Domain.DomainModel({
             fullName: fullName
@@ -29,8 +58,23 @@ App.Domain = (function (App, Backbone) {
         });
     };
 
+    Domain.showDomainList = function(fullName) {
+        var collection = new Domain.DomainListItemCollection([], {
+            fullName: fullName
+        });
 
-    App.vent.on("domain:show", Domain.showDomain);
+        collection.fetch().done(function(){
+            var view = new Domain.DomainListCollectionView({
+                collection: collection
+            });
+            // TODO update hash
+            App.layout.main.show(view);
+        });
+    };
+
+
+//    App.vent.on("domain:show", Domain.showDomain);
+    App.vent.on("domain:show", Domain.showDomainList);
 
     App.addInitializer(function (options) {
     });
