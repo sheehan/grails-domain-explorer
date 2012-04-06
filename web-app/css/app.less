@@ -1,0 +1,40 @@
+html {
+    height: 100%;
+}
+body {
+    /*padding-top: 40px;*/
+    height: 100%;
+}
+
+.layout {
+    height: 100%;
+}
+
+.ui-layout-pane {
+    border: none;
+}
+
+#list {
+    background-color: #eee;
+    padding: 0;
+    > ul {
+        margin: 0;
+        li {
+            list-style-type: none;
+            border-top: 1px solid #fff;
+            border-bottom: 1px solid #aaa;
+            cursor: pointer;
+            > a {
+            display: block;
+                padding: 15px 10px;
+                text-decoration: none;
+                span {
+                  color: #333333;
+                }
+            }
+            .count {
+                float: right;
+            }
+        }
+    }
+}

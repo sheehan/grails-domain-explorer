@@ -7,6 +7,7 @@
   <link href="${resource(dir: 'bootstrap/css', file: 'bootstrap-responsive.css')}" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'layout-default-latest.css')}"/>
   <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'app.css')}"/>
+  <link rel="stylesheet/less" type="text/css" href="${resource(dir: 'css', file: 'app.less')}">
 </head>
 
 <body>
@@ -45,6 +46,7 @@
 </script>
 
 
+<script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/less-1.3.0.min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/jquery-1.7.1.min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/jquery.layout-latest.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/underscore-min.js')}"></script>
