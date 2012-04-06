@@ -25,6 +25,7 @@ class DomainController {
         GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.fullName)
         def json = [
             fullName: domainClass.fullName,
+            name: domainClass.name,
             count: domainClass.clazz.count()
         ]
         render json as JSON

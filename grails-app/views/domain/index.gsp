@@ -12,22 +12,33 @@
 <body>
 <script id="layout-template" type="text/template">
   %{--<div class="navbar navbar-fixed-top">--}%
-    %{--<div class="navbar-inner">--}%
-      %{--<div class="container">--}%
-        %{--<a class="brand" href="#">Project name</a>--}%
-      %{--</div>--}%
-    %{--</div>--}%
+  %{--<div class="navbar-inner">--}%
+  %{--<div class="container">--}%
+  %{--<a class="brand" href="#">Project name</a>--}%
+  %{--</div>--}%
+  %{--</div>--}%
   %{--</div>--}%
   %{--<div class="layout">--}%
-    <section id="list"></section>
-    <section id="main">&nbsp;</section>
+  <section id="list"></section>
+  <section id="main">&nbsp;</section>
   %{--</div>--}%
 </script>
 <script id="domain-count-item-template" type="text/template">
   <a href="#"><span class="name">{{name}}</span><span class="count">{{count}}</span></a>
 </script>
 <script id="domain-template" type="text/template">
-  {{fullName}}
+  <div>
+    <span class="name">{{name}}</span>
+    <span class="count">{{count}}</span>
+  </div>
+
+  <div>
+    <div class="btn-group" data-toggle="buttons-radio">
+      <button class="btn">Overview</button>
+      <button class="btn">List</button>
+      <button class="btn">Create</button>
+    </div>
+  </div>
 </script>
 <script id="domain-list-item-template" type="text/template">
   {{id}}

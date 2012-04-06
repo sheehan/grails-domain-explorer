@@ -7,7 +7,7 @@ App.Domain = (function (App, Backbone) {
         }
     });
 
-    Domain.DomainItemView = Backbone.Marionette.ItemView.extend({
+    Domain.DomainView = Backbone.Marionette.ItemView.extend({
         template: '#domain-template',
 
         events: {
@@ -50,7 +50,7 @@ App.Domain = (function (App, Backbone) {
         });
 
         model.fetch().done(function(){
-            var view = new Domain.DomainItemView({
+            var view = new Domain.DomainView({
                 model: model
             });
             // TODO update hash
@@ -74,7 +74,7 @@ App.Domain = (function (App, Backbone) {
 
 
 //    App.vent.on("domain:show", Domain.showDomain);
-    App.vent.on("domain:show", Domain.showDomainList);
+    App.vent.on("domain:show", Domain.showDomain);
 
     App.addInitializer(function (options) {
     });
