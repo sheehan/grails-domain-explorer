@@ -11,6 +11,10 @@ App.Domain = (function (App, Backbone) {
         template: '#domain-template',
         className: 'domainView',
 
+        onRender: function() {
+            this.$('.overview').button('toggle');
+        },
+
         events: {
         }
 

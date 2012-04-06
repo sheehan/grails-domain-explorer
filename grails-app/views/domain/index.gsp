@@ -35,9 +35,9 @@
 
   <div class="toolbar">
     <div class="btn-group" data-toggle="buttons-radio">
-      <button class="btn">Overview</button>
-      <button class="btn">List</button>
-      <button class="btn">Create</button>
+      <button class="btn overview">Overview</button>
+      <button class="btn list">List</button>
+      <button class="btn create">Create</button>
     </div>
   </div>
 </script>
