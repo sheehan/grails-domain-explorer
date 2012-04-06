@@ -20,20 +20,20 @@
   %{--</div>--}%
   %{--</div>--}%
   %{--<div class="layout">--}%
-  <section id="list"></section>
-  <section id="main">&nbsp;</section>
+  <section id="list-wrapper"><section id="list" class="ui-layout-content"></section></section>
+  <section id="main-wrapper"><section id="main" class="ui-layout-content">&nbsp;</section></section>
   %{--</div>--}%
 </script>
 <script id="domain-count-item-template" type="text/template">
   <a href="#"><span class="name">{{name}}</span><span class="count">{{count}}</span></a>
 </script>
 <script id="domain-template" type="text/template">
-  <div>
+  <div class="header">
     <span class="name">{{name}}</span>
     <span class="count">{{count}}</span>
   </div>
 
-  <div>
+  <div class="toolbar">
     <div class="btn-group" data-toggle="buttons-radio">
       <button class="btn">Overview</button>
       <button class="btn">List</button>

@@ -7,8 +7,8 @@
         className: 'layout',
 
         regions: {
-            list: "#list",
-            main: "#main"
+            list: "#list-wrapper #list",
+            main: "#main-wrapper #main"
         },
 
         initialize: function(){
@@ -21,9 +21,9 @@
         App.layout.render().done(function() {
             $("body").prepend(App.layout.el);
             App.layout.$el.layout({
-                west__paneSelector: '#list',
+                west__paneSelector: '#list-wrapper',
                 west__size: 400,
-                center__paneSelector: '#main'
+                center__paneSelector: '#main-wrapper'
             });
         });
     });

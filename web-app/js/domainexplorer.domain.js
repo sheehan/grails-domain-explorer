@@ -9,6 +9,7 @@ App.Domain = (function (App, Backbone) {
 
     Domain.DomainView = Backbone.Marionette.ItemView.extend({
         template: '#domain-template',
+        className: 'domainView',
 
         events: {
         }
