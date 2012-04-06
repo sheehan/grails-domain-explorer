@@ -6,7 +6,6 @@
   <link href="${resource(dir: 'bootstrap/css', file: 'bootstrap.css')}" rel="stylesheet">
   <link href="${resource(dir: 'bootstrap/css', file: 'bootstrap-responsive.css')}" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'layout-default-latest.css')}"/>
-  <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'app.css')}"/>
   <link rel="stylesheet/less" type="text/css" href="${resource(dir: 'css', file: 'app.less')}">
 </head>
 

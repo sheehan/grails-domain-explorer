@@ -33,13 +33,24 @@ App.DomainList = (function (App, Backbone) {
         App.layout.list.show(DomainList.domainCountCollectionView);
     };
 
+    DomainList.showDomain = function(fullName) {
+        console.log('TODO highlight '  + fullName);
+    };
+
     App.addInitializer(function (options) {
         DomainList.domainCountList = new DomainList.DomainCountCollection();
         DomainList.domainCountList.fetch();
         DomainList.domainCountCollectionView = new DomainList.DomainCountCollectionView({
             collection: DomainList.domainCountList
         });
-        DomainList.domainCountCollectionView.render();
+//        DomainList.domainCountCollectionView.render();
+    });
+
+
+    App.vent.bind("domain:show", DomainList.showDomain);
+
+    App.bind("initialize:after", function(options){
+        DomainList.showDomainCountList();
     });
 
     return DomainList;
@@ -49,7 +60,8 @@ App.DomainList = (function (App, Backbone) {
 (function (App, Backbone, $) {
     var Router = Backbone.Marionette.AppRouter.extend({
         appRoutes: {
-            "": "showDomainCountList"
+//            "": "showDomainCountList",
+//            "domain/:fullName": "showDomain"
         }
     });
 

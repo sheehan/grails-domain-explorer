@@ -12,6 +12,9 @@ App.Domain = (function (App, Backbone) {
         className: 'domainView',
 
         onRender: function() {
+        },
+
+        showOverview: function() {
             this.$('.overview').button('toggle');
         },
 
@@ -58,9 +61,12 @@ App.Domain = (function (App, Backbone) {
             var view = new Domain.DomainView({
                 model: model
             });
-            // TODO update hash
             App.layout.main.show(view);
+
+            view.showOverview();
         });
+
+        Backbone.history.navigate('domain/' + fullName);
     };
 
     Domain.showDomainList = function(fullName) {
@@ -72,13 +78,11 @@ App.Domain = (function (App, Backbone) {
             var view = new Domain.DomainListCollectionView({
                 collection: collection
             });
-            // TODO update hash
             App.layout.main.show(view);
         });
     };
 
 
-//    App.vent.on("domain:show", Domain.showDomain);
     App.vent.on("domain:show", Domain.showDomain);
 
     App.addInitializer(function (options) {
@@ -89,17 +93,17 @@ App.Domain = (function (App, Backbone) {
 
 
 (function (App, Backbone, $) {
-//    var Router = Backbone.Marionette.AppRouter.extend({
-//        appRoutes: {
-//            "": "showDomain"
-//        }
-//    });
-//
-//    App.addInitializer(function(){
-//        App.router = new Router({
-//            controller: App.Domain
-//        });
-//    });
+    var Router = Backbone.Marionette.AppRouter.extend({
+        appRoutes: {
+            "domain/:fullName": "showDomain"
+        }
+    });
+
+    App.addInitializer(function(){
+        App.router = new Router({
+            controller: App.Domain
+        });
+    });
 })(App, Backbone, $);
 
 
