@@ -39,6 +39,20 @@
       <button class="btn create">Create</button>
     </div>
   </div>
+
+  <div class="content"></div>
+</script>
+<script id="domain-overview-template" type="text/template">
+  overview {{name}}
+</script>
+<script id="domain-list-template" type="text/template">
+  list {{name}}
+  <div class="body">
+
+  </div>
+</script>
+<script id="domain-create-template" type="text/template">
+  create {{name}}
 </script>
 <script id="domain-list-item-template" type="text/template">
   {{id}}

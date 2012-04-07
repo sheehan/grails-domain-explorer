@@ -62,16 +62,19 @@ body {
   }
 
   .domainView {
-    .header {
+    & > .header {
       padding: 10px;
       border-bottom: 1px solid #aaa;
       span.count {
         float: right;
       }
     }
-    .toolbar {
+    & > .toolbar {
       padding: 5px 10px;
       border-bottom: 1px solid #aaa;
+    }
+    & > .content {
+      padding: 10px;
     }
   }
 }

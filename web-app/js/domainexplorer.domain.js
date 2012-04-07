@@ -7,20 +7,76 @@ App.Domain = (function (App, Backbone) {
         }
     });
 
-    Domain.DomainView = Backbone.Marionette.ItemView.extend({
+    Domain.DomainView = Backbone.Marionette.Layout.extend({
         template: '#domain-template',
+
         className: 'domainView',
+
+        events: {
+            'click .overview': 'showOverview',
+            'click .list': 'showList',
+            'click .create': 'showCreate'
+        },
+
+        regions: {
+            content: '.content'
+        },
 
         onRender: function() {
         },
 
         showOverview: function() {
             this.$('.overview').button('toggle');
+            var view = new Domain.OverviewView({
+                model: this.model
+            });
+            this.content.show(view);
         },
 
-        events: {
-        }
+        showList: function() {
+            this.$('.list').button('toggle');
+            var view = new Domain.ListView({
+                model: this.model
+            });
+            this.content.show(view);
+        },
 
+        showCreate: function() {
+            this.$('.create').button('toggle');
+            var view = new Domain.CreateView({
+                model: this.model
+            });
+            this.content.show(view);
+        }
+    });
+
+    Domain.OverviewView = Backbone.Marionette.ItemView.extend({
+        template: '#domain-overview-template'
+    });
+
+    Domain.ListView = Backbone.Marionette.Layout.extend({
+        template: '#domain-list-template',
+
+        regions: {
+            body: '.body'
+        },
+
+        onRender: function() {
+            var collection = new Domain.DomainListItemCollection([], {
+                fullName: this.model.get('fullName')
+            });
+
+            collection.fetch().done(_.bind(function(){
+                var view = new Domain.DomainListCollectionView({
+                    collection: collection
+                });
+                this.body.show(view);
+            }, this));
+        }
+    });
+
+    Domain.CreateView = Backbone.Marionette.ItemView.extend({
+        template: '#domain-create-template'
     });
 
     Domain.DomainListItemModel = Backbone.Model.extend({
@@ -47,7 +103,6 @@ App.Domain = (function (App, Backbone) {
     });
 
     Domain.DomainListCollectionView = Backbone.Marionette.CollectionView.extend({
-
         itemView: Domain.DomainListItemView,
         tagName: 'ul'
     });
@@ -69,30 +124,8 @@ App.Domain = (function (App, Backbone) {
         Backbone.history.navigate('domain/' + fullName);
     };
 
-    Domain.showDomainList = function(fullName) {
-        var collection = new Domain.DomainListItemCollection([], {
-            fullName: fullName
-        });
-
-        collection.fetch().done(function(){
-            var view = new Domain.DomainListCollectionView({
-                collection: collection
-            });
-            App.layout.main.show(view);
-        });
-    };
-
-
     App.vent.on("domain:show", Domain.showDomain);
 
-    App.addInitializer(function (options) {
-    });
-
-    return Domain;
-})(App, Backbone);
-
-
-(function (App, Backbone, $) {
     var Router = Backbone.Marionette.AppRouter.extend({
         appRoutes: {
             "domain/:fullName": "showDomain"
@@ -100,10 +133,12 @@ App.Domain = (function (App, Backbone) {
     });
 
     App.addInitializer(function(){
-        App.router = new Router({
-            controller: App.Domain
+        Domain.router = new Router({
+            controller: Domain
         });
     });
-})(App, Backbone, $);
+
+    return Domain;
+})(App, Backbone);
 
 
