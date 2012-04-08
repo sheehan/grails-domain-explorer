@@ -29,14 +29,13 @@
 <script id="domain-template" type="text/template">
   <div class="header">
     <span class="name">{{name}}</span>
-    <span class="count">{{count}}</span>
+    <span class="count">({{count}})</span>
   </div>
 
   <div class="toolbar">
     <div class="btn-group" data-toggle="buttons-radio">
       <button class="btn overview">Overview</button>
       <button class="btn list">List</button>
-      <button class="btn create">Create</button>
     </div>
   </div>
 
@@ -44,18 +43,6 @@
 </script>
 <script id="domain-overview-template" type="text/template">
   overview {{name}}
-</script>
-<script id="domain-list-template" type="text/template">
-  <table>
-    <thead></thead>
-    <tbody></tbody>
-  </table>
-  <div class="body">
-
-  </div>
-</script>
-<script id="domain-list-item-template" type="text/template">
-  {{id}}
 </script>
 <script id="domain-create-template" type="text/template">
   create {{name}}

@@ -55,7 +55,6 @@ App.Domain = (function (App, Backbone) {
     });
 
     Domain.DomainListItemView = Backbone.Marionette.ItemView.extend({
-        template: '#domain-list-item-template',
         tagName: 'tr',
 
         events: {
