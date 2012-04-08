@@ -73,6 +73,7 @@ App.Domain = (function (App, Backbone) {
     Domain.ListView = Backbone.Marionette.CompositeView.extend({
         itemView: Domain.DomainListItemView,
         tagName: 'table',
+        className: 'table table-striped',
 
         initialize: function(options) {
             this.bind('item:added', function(view) {
