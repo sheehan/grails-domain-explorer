@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Test</title>
+  <title>Domain Explorer</title>
 
   <link href="${resource(dir: 'bootstrap/css', file: 'bootstrap.css')}" rel="stylesheet">
   <link href="${resource(dir: 'bootstrap/css', file: 'bootstrap-responsive.css')}" rel="stylesheet">
@@ -46,25 +46,27 @@
   overview {{name}}
 </script>
 <script id="domain-list-template" type="text/template">
-  list {{name}}
+  <table>
+    <thead></thead>
+    <tbody></tbody>
+  </table>
   <div class="body">
 
   </div>
 </script>
-<script id="domain-create-template" type="text/template">
-  create {{name}}
-</script>
 <script id="domain-list-item-template" type="text/template">
   {{id}}
 </script>
-
+<script id="domain-create-template" type="text/template">
+  create {{name}}
+</script>
 
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/less-1.3.0.min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/jquery-1.7.1.min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/jquery.layout-latest.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/underscore-min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/backbone-min.js')}"></script>
-<script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/backbone.marionette.js')}"></script>
+<script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/backbone.marionette2.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'bootstrap/js', file: 'bootstrap.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.domainlist.js')}"></script>
