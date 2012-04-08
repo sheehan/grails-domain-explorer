@@ -3,7 +3,7 @@ App.Domain = (function (App, Backbone) {
 
     Domain.DomainModel = Backbone.Model.extend({
         url: function () {
-            return '/domexample/domain/item?fullName=' + this.get('fullName');
+            return '/domexample/domain/domainType?fullName=' + this.get('fullName');
         }
     });
 
@@ -54,24 +54,46 @@ App.Domain = (function (App, Backbone) {
         template: '#domain-overview-template'
     });
 
-    Domain.ListView = Backbone.Marionette.Layout.extend({
-        template: '#domain-list-template',
+    Domain.DomainListItemView = Backbone.Marionette.ItemView.extend({
+        template: '#domain-list-item-template',
+        tagName: 'tr',
 
-        regions: {
-            body: '.body'
+        events: {
         },
 
-        onRender: function() {
-            var collection = new Domain.DomainListItemCollection([], {
+        renderHtml: function(data) {
+            var properties = this.domainType.get('properties');
+            return _.collect(properties, function(property) {
+                return '<td>'+this.model.get(property.name)+'</td>';
+            }, this).join('');
+        }
+
+    });
+
+    Domain.ListView = Backbone.Marionette.CompositeView.extend({
+        itemView: Domain.DomainListItemView,
+        tagName: 'table',
+
+        initialize: function(options) {
+            this.bind('item:added', function(view) {
+                view.domainType = this.model
+            });
+            this.collection = new Domain.DomainListItemCollection([], {
                 fullName: this.model.get('fullName')
             });
+            this.collection.fetch();
+        },
 
-            collection.fetch().done(_.bind(function(){
-                var view = new Domain.DomainListCollectionView({
-                    collection: collection
-                });
-                this.body.show(view);
-            }, this));
+        renderModel: function() {
+            var properties = this.model.get('properties');
+            var html = _.collect(properties, function(property) {
+                return '<th>'+property.name+'</th>';
+            }, this).join('');
+            return '<thead><tr>' + html + '</tr></thead><tbody></tbody>';
+        },
+
+        appendHtml: function(collectionView, itemView){
+            collectionView.$('tbody').append(itemView.el);
         }
     });
 
@@ -91,20 +113,6 @@ App.Domain = (function (App, Backbone) {
         initialize: function(models, options) {
             this.fullName = options.fullName;
         }
-    });
-
-    Domain.DomainListItemView = Backbone.Marionette.ItemView.extend({
-        template: '#domain-list-item-template',
-        tagName: 'li',
-
-        events: {
-        }
-
-    });
-
-    Domain.DomainListCollectionView = Backbone.Marionette.CollectionView.extend({
-        itemView: Domain.DomainListItemView,
-        tagName: 'ul'
     });
 
     Domain.showDomain = function(fullName) {

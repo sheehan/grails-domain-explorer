@@ -21,19 +21,9 @@ class DomainController {
         render json as JSON
     }
 
-    def item() {
-        GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.fullName)
-        def json = [
-            fullName: domainClass.fullName,
-            name: domainClass.name,
-            count: domainClass.clazz.count()
-        ]
-        render json as JSON
-    }
-
     def listEntities() {
         GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.fullName)
-//        def json = domainClass.clazz.list().collect { entityToMap it, domainClass }
+//        def js    on = domainClass.clazz.list().collect { entityToMap it, domainClass }
         def json = domainClass.clazz.list()
         render json as JSON
     }
@@ -44,6 +34,7 @@ class DomainController {
         Map json = [
             name: domainClass.name,
             fullName: domainClass.fullName,
+            count: domainClass.clazz.count(),
             properties: domainClass.properties.collect {
                 Map m = [
                     name: it.name,
