@@ -3,7 +3,7 @@ App.Domain = (function (App, Backbone) {
 
     Domain.DomainModel = Backbone.Model.extend({
         url: function () {
-            return '/domexample/domain/domainType?fullName=' + this.get('fullName');
+            return '/refine/domain/domainType?fullName=' + this.get('fullName');
         }
     });
 
@@ -107,7 +107,7 @@ App.Domain = (function (App, Backbone) {
 
     Domain.DomainListItemCollection = Backbone.Collection.extend({
         url: function () {
-            return '/domexample/domain/listEntities?fullName=' + this.fullName;
+            return '/refine/domain/listEntities?fullName=' + this.fullName;
         },
         model: Domain.DomainListItemModel,
         initialize: function(models, options) {

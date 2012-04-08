@@ -5,7 +5,7 @@ App.DomainList = (function (App, Backbone) {
     });
 
     DomainList.DomainCountCollection = Backbone.Collection.extend({
-        url: '/domexample/domain/list',
+        url: '/refine/domain/list',
         model: DomainList.DomainCount
     });
 

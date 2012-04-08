@@ -6,11 +6,11 @@ import org.codehaus.groovy.grails.validation.ConstrainedProperty
 
 class DomainController {
 
-    def index() {
+    def index = {
 
     }
 
-    def list() {
+    def list = {
         def json = grailsApplication.domainClasses.collect { GrailsDomainClass clazz ->
             [
                 name: clazz.name,
@@ -21,17 +21,22 @@ class DomainController {
         render json as JSON
     }
 
-    def listEntities() {
+    def listEntities = {
         GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.fullName)
 //        def js    on = domainClass.clazz.list().collect { entityToMap it, domainClass }
-        def json = domainClass.clazz.list()
+        def json = domainClass.clazz.list(max:50).collect { domainInstanceAsMap it, domainClass }
         render json as JSON
     }
 
-    def domainType() {
+    def domainType = {
         GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.fullName)
+        Map json = domainClassToMap(domainClass)
+        render json as JSON
+    }
+
+    private Map domainClassToMap(GrailsDomainClass domainClass) {
         Map constrainedProperties = domainClass.constrainedProperties
-        Map json = [
+        [
             name: domainClass.name,
             fullName: domainClass.fullName,
             count: domainClass.clazz.count(),
@@ -55,7 +60,7 @@ class DomainController {
                     owningSide: it.owningSide,
                     circular: it.circular,
                     embedded: it.embedded,
-                    derived: it.derived,
+//                    derived: it.derived,
                 ]
                 ConstrainedProperty cp = constrainedProperties[it.name]
                 if (cp) {
@@ -64,10 +69,13 @@ class DomainController {
                 m
             }
         ]
-        render json as JSON
     }
 
-    private Map entityToMap(entity, GrailsDomainClass domainClass) {
-        entity as Map // TODO
+    private Map domainInstanceAsMap(entity, GrailsDomainClass domainClass) {
+        Map result = [:]
+        domainClass.properties.each { property ->
+            result[property.name] = entity[property.name]
+        }
+        result
     }
 }
