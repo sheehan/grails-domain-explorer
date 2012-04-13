@@ -19,12 +19,22 @@
   %{--</div>--}%
   %{--</div>--}%
   %{--<div class="layout">--}%
-  <section id="list-wrapper"><section id="list" class="ui-layout-content"></section></section>
-  <section id="main-wrapper"><section id="main" class="ui-layout-content">&nbsp;</section></section>
+  <section id="list-wrapper"></section>
+  <section id="main-wrapper">
+    <section id="main" class="ui-layout-content">
+      %{--<div class="header">Domain</div>--}%
+      <div class="content"></div>
+      <div class="footer">&nbsp;</div>
+    </section>
+  </section>
   %{--</div>--}%
 </script>
 <script id="domain-count-item-template" type="text/template">
   <a href="#"><span class="name">{{name}}</span><span class="count">{{count}}</span></a>
+</script>
+<script id="domain-count-section-template" type="text/template">
+  <div class="header">Domains</div>
+  <div class="content"><ul></ul></div>
 </script>
 <script id="domain-template" type="text/template">
   <div class="header">
@@ -50,6 +60,7 @@
 
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/less-1.3.0.min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/jquery-1.7.1.min.js')}"></script>
+<script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/jquery-ui-1.8.18.custom.min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/jquery.layout-latest.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/underscore-min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/backbone-min.js')}"></script>
@@ -59,5 +70,6 @@
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.domainlist.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.domain.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.layout.js')}"></script>
+<script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.jqueryplugins.js')}"></script>
 </body>
 </html>

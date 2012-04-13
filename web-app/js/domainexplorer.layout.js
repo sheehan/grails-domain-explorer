@@ -7,8 +7,8 @@
         className: 'layout',
 
         regions: {
-            list: "#list-wrapper #list",
-            main: "#main-wrapper #main"
+            list: "#list-wrapper",
+            main: "#main-wrapper #main .content"
         },
 
         initialize: function(){
@@ -25,6 +25,12 @@
                 west__size: 400,
                 center__paneSelector: '#main-wrapper'
             });
+        });
+        App.layout.list.on('view:show', function(view) {
+            _.delay(function() { // TODO LESS
+                App.layout.$el.layout().resizeAll();
+                $(window).resize();
+            }, 1000);
         });
     });
 })(App, Backbone, $);

@@ -23,14 +23,46 @@ App.DomainList = (function (App, Backbone) {
         }
     });
 
-    DomainList.DomainCountCollectionView = Backbone.Marionette.CollectionView.extend({
-
+    DomainList.DomainCountSectionView = Backbone.Marionette.CompositeView.extend({
+        template: '#domain-count-section-template',
+        tagName: 'section',
+        attributes: { id: 'list', 'class': 'ui-layout-content'},
         itemView: DomainList.DomainCountItemView,
-        tagName: 'ul'
+
+        initialize: function() {
+            _.bindAll(this, '_resizeListener');
+            $(window).resize(this._resizeListener);
+        },
+
+        appendHtml: function(collectionView, itemView) {
+            this.$('ul').append(itemView.el);
+        },
+
+        onRender: function() {
+            this.resize();
+        },
+
+        resize: function() {
+            var $target = this.$el.find('.content');
+            var parentHeight = this.$el.height();
+            var childrenHeight = 0;
+            this.$el.children().each(function() {
+                childrenHeight += $(this).outerHeight();
+            });
+            $target.height($target.height() - childrenHeight + parentHeight).css({'overflow': 'auto'});
+        },
+
+        _resizeListener: _.debounce(function() {
+            this.resize();
+        }, 500),
+
+        close: function() {
+            $(window).off('resize', this._resizeListener);
+        }
     });
 
     DomainList.showDomainCountList = function() {
-        App.layout.list.show(DomainList.domainCountCollectionView);
+        App.layout.list.show(DomainList.domainCountSectionView);
     };
 
     DomainList.showDomain = function(fullName) {
@@ -40,10 +72,9 @@ App.DomainList = (function (App, Backbone) {
     App.addInitializer(function (options) {
         DomainList.domainCountList = new DomainList.DomainCountCollection();
         DomainList.domainCountList.fetch();
-        DomainList.domainCountCollectionView = new DomainList.DomainCountCollectionView({
+        DomainList.domainCountSectionView = new DomainList.DomainCountSectionView({
             collection: DomainList.domainCountList
         });
-//        DomainList.domainCountCollectionView.render();
     });
 
 

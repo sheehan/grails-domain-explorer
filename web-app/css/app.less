@@ -5,6 +5,7 @@ html {
 body {
 /*padding-top: 40px;*/
   height: 100%;
+//  padding: 10px;
 }
 
 .layout {
@@ -13,40 +14,57 @@ body {
 
 .ui-layout-pane {
   border: none;
+  padding: 0;
 }
 
-.section() {
+.section(){
+ .header {
+    border-radius: 10px 10px 0 0;
+    background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #ccc 100%);
+    border-bottom: 1px solid #aaa;
+    padding: 10px;
+  }
   border-radius: 10px;
   border: 1px solid #aaa;
   box-shadow: 0 0 2px #aaa;
+  & > .footer {
+      padding: 10px;
+  }
 }
 
 #list-wrapper {
-  padding: 0;
+  padding: 10px 0 10px;
   overflow: hidden;
   #list {
+    margin: 0 5px 0 10px;
     .section;
-    margin: 10px 5px 10px 10px;
+//    margin: 10px 5px 10px 10px;
     height: 100%;
     padding: 0;
-    & > ul {
-      margin: 0;
-      li {
-        list-style-type: none;
-        border-top: 1px solid #fff;
-        border-bottom: 1px solid #aaa;
-        cursor: pointer;
-        background-color: #eee;
-        & > a {
-          display: block;
-          padding: 15px 10px;
-          text-decoration: none;
-          span {
-            color: #333333;
+    .header {
+    }
+    .content {
+      & > ul {
+        margin: 0;
+        li {
+          list-style-type: none;
+//          border-top: 1px solid #fff;
+//          border-bottom: 1px solid #aaa;
+          cursor: pointer;
+//          background-color: #eee;
+          & > a {
+            display: block;
+            padding: 10px 10px;
+            text-decoration: none;
+            span {
+              color: #4183C4;
+            }
           }
-        }
-        .count {
-          float: right;
+          .count {
+            color: #777;
+//            font-weight: bold;
+            float: right;
+          }
         }
       }
     }
@@ -54,20 +72,17 @@ body {
 }
 
 #main-wrapper {
-  padding: 0;
+  padding: 10px 10px 10px 5px;
   overflow: hidden;
   #main {
     .section;
-    margin: 10px 10px 10px 5px;
+//    margin: 10px 10px 10px 5px;
     padding: 0;
   }
 
   .domainView {
     & > .header {
-      padding: 10px;
-      border-bottom: 1px solid #aaa;
-      span.count {
-//        float: right;
+      span.count { //        float: right;
       }
     }
     & > .toolbar {

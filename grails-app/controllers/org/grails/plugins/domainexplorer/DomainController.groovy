@@ -31,6 +31,7 @@ class DomainController {
     def domainType = {
         GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.fullName)
         Map json = domainClassToMap(domainClass)
+        println json
         render json as JSON
     }
 
@@ -40,7 +41,7 @@ class DomainController {
             name: domainClass.name,
             fullName: domainClass.fullName,
             count: domainClass.clazz.count(),
-            properties: domainClass.properties.collect {
+            properties: domainClass.properties.findAll { it.persistent }.collect {
                 Map m = [
                     name: it.name,
                     type: it.referencedPropertyType,
@@ -64,7 +65,7 @@ class DomainController {
                 ]
                 ConstrainedProperty cp = constrainedProperties[it.name]
                 if (cp) {
-                    m.constraints = cp.properties
+//                    m.constraints = cp.properties
                 }
                 m
             }
@@ -74,7 +75,7 @@ class DomainController {
     private Map domainInstanceAsMap(entity, GrailsDomainClass domainClass) {
         Map result = [:]
         domainClass.properties.each { property ->
-            result[property.name] = entity[property.name]
+            result[property.name] = entity[property.name]?.toString()
         }
         result
     }

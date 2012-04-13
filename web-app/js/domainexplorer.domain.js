@@ -22,9 +22,6 @@ App.Domain = (function (App, Backbone) {
             content: '.content'
         },
 
-        onRender: function() {
-        },
-
         showOverview: function() {
             this.$('.overview').button('toggle');
             var view = new Domain.OverviewView({
@@ -126,17 +123,17 @@ App.Domain = (function (App, Backbone) {
             });
             App.layout.main.show(view);
 
-            view.showOverview();
+            view.showList();
         });
 
-        Backbone.history.navigate('domain/' + fullName);
+        Backbone.history.navigate(fullName);
     };
 
     App.vent.on("domain:show", Domain.showDomain);
 
     var Router = Backbone.Marionette.AppRouter.extend({
         appRoutes: {
-            "domain/:fullName": "showDomain"
+            ":fullName": "showDomain"
         }
     });
 
