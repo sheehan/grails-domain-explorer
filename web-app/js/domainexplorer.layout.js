@@ -21,6 +21,11 @@
         App.layout.render().done(function() {
             $("body").prepend(App.layout.el);
             App.layout.$el.layout({
+                north__paneSelector: '#head-wrapper',
+                north__size: 50,
+                north__resizable: false,
+                north__closable: false,
+                north__spacing_open: 0,
                 west__paneSelector: '#list-wrapper',
                 west__size: 400,
                 center__paneSelector: '#main-wrapper'
