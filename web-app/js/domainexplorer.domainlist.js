@@ -17,7 +17,7 @@ App.DomainList = (function (App, Backbone) {
             'click': '_handleClick'
         },
 
-        _handleClick: function(event) {
+        _handleClick: function (event) {
             event.preventDefault();
             App.vent.trigger("domain:show", this.model.get('fullName'));
         }
@@ -29,44 +29,73 @@ App.DomainList = (function (App, Backbone) {
         attributes: { id: 'list', 'class': 'ui-layout-content'},
         itemView: DomainList.DomainCountItemView,
 
-        initialize: function() {
+        initialize: function () {
             _.bindAll(this, '_resizeListener');
             $(window).resize(this._resizeListener);
         },
 
-        appendHtml: function(collectionView, itemView) {
+        appendHtml: function (collectionView, itemView) {
             this.$('ul').append(itemView.el);
         },
 
-        onRender: function() {
+        onRender: function () {
             this.resize();
+            this.highlightActiveView();
         },
 
-        resize: function() {
+        highlightActiveView: function () {
+            if (this.activeFullName) {
+                var activeView = this.findItemViewByFullName(this.activeFullName);
+                if (activeView) {
+                    activeView.$el.addClass('active');
+                }
+            }
+        },
+
+        removeHighlight: function () {
+            if (this.activeFullName) {
+                var activeView = this.findItemViewByFullName(this.activeFullName);
+                if (activeView) {
+                    activeView.$el.removeClass('active');
+                }
+            }
+        },
+
+        setActiveView: function (fullName) {
+            this.removeHighlight();
+            this.activeFullName = fullName;
+            this.highlightActiveView();
+        },
+
+        findItemViewByFullName: function (fullName) {
+            return _.find(this.children, function (childView) { return childView.model.get('fullName') == fullName; });
+        },
+
+        resize: function () {
             var $target = this.$el.find('.content');
             var parentHeight = this.$el.height();
             var childrenHeight = 0;
-            this.$el.children().each(function() {
+            this.$el.children().each(function () {
                 childrenHeight += $(this).outerHeight();
             });
             $target.height($target.height() - childrenHeight + parentHeight).css({'overflow': 'auto'});
         },
 
-        _resizeListener: _.debounce(function() {
+        _resizeListener: _.debounce(function () {
             this.resize();
         }, 500),
 
-        close: function() {
+        close: function () {
             $(window).off('resize', this._resizeListener);
         }
     });
 
-    DomainList.showDomainCountList = function() {
+    DomainList.showDomainCountList = function () {
         App.layout.list.show(DomainList.domainCountSectionView);
     };
 
-    DomainList.showDomain = function(fullName) {
-        console.log('TODO highlight '  + fullName);
+    DomainList.showDomain = function (fullName) {
+        DomainList.domainCountSectionView.setActiveView(fullName);
     };
 
     App.addInitializer(function (options) {
@@ -80,7 +109,7 @@ App.DomainList = (function (App, Backbone) {
 
     App.vent.bind("domain:show", DomainList.showDomain);
 
-    App.bind("initialize:after", function(options){
+    App.bind("initialize:after", function (options) {
         DomainList.showDomainCountList();
     });
 
@@ -96,7 +125,7 @@ App.DomainList = (function (App, Backbone) {
         }
     });
 
-    App.addInitializer(function(){
+    App.addInitializer(function () {
         App.router = new Router({
             controller: App.DomainList
         });

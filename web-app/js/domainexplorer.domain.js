@@ -129,11 +129,16 @@ App.Domain = (function (App, Backbone) {
         Backbone.history.navigate(fullName);
     };
 
+    Domain.showDomainRoute = function(fullName) {
+        App.vent.trigger("domain:show", fullName);
+        Domain.showDomain(fullName);
+    };
+
     App.vent.on("domain:show", Domain.showDomain);
 
     var Router = Backbone.Marionette.AppRouter.extend({
         appRoutes: {
-            ":fullName": "showDomain"
+            ":fullName": "showDomainRoute"
         }
     });
 
