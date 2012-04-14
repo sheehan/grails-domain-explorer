@@ -29,17 +29,12 @@ App.DomainList = (function (App, Backbone) {
         attributes: { id: 'list', 'class': 'ui-layout-content'},
         itemView: DomainList.DomainCountItemView,
 
-        initialize: function () {
-            _.bindAll(this, '_resizeListener');
-            $(window).resize(this._resizeListener);
-        },
-
         appendHtml: function (collectionView, itemView) {
             this.$('ul').append(itemView.el);
         },
 
         onRender: function () {
-            this.resize();
+            this.$el.find('.content').sizeToFit();
             this.highlightActiveView();
         },
 
@@ -81,12 +76,8 @@ App.DomainList = (function (App, Backbone) {
             $target.height($target.height() - childrenHeight + parentHeight).css({'overflow': 'auto'});
         },
 
-        _resizeListener: _.debounce(function () {
-            this.resize();
-        }, 500),
-
         close: function () {
-            $(window).off('resize', this._resizeListener);
+            this.$el.find('.content').sizeToFit('destroy');
         }
     });
 

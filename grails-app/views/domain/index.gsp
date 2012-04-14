@@ -64,11 +64,11 @@
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/underscore-min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/backbone-min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/backbone.marionette2.js')}"></script>
+<script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.jqueryplugins.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'bootstrap/js', file: 'bootstrap.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.domainlist.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.domain.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.layout.js')}"></script>
-<script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.jqueryplugins.js')}"></script>
 </body>
 </html>

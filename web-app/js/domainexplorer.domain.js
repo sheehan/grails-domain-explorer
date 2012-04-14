@@ -89,6 +89,10 @@ App.Domain = (function (App, Backbone) {
             return '<thead><tr>' + html + '</tr></thead><tbody></tbody>';
         },
 
+        onRender: function(){
+//            this.$el.sizeToFit();
+        },
+
         appendHtml: function(collectionView, itemView){
             collectionView.$('tbody').append(itemView.el);
         }

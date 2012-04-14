@@ -1,17 +1,20 @@
 jQuery.widget('domapp.sizeToFit', {
     _create: function() {
         _.bindAll(this, '_resizeListener');
+        this.resize();
         $(window).resize(this._resizeListener);
+        console.log('hi');
     },
 
     resize: function() {
-        var $target = this.el;
-        var $parent = this.$el.parent();
+        var $target = this.element;
+        var $parent = this.element.parent();
         var parentHeight = $parent.height();
         var childrenHeight = 0;
         $parent.children().each(function() {
             childrenHeight += $(this).outerHeight();
         });
+        console.log($target.height());
         $target.height($target.height() - childrenHeight + parentHeight).css({'overflow': 'auto'});
     },
 
