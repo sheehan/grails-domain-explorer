@@ -1,29 +1,22 @@
 jQuery.widget('domapp.sizeToFit', {
-    _create: function() {
-        _.bindAll(this, '_resizeListener');
+    _create: function () {
         this.resize();
-        $(window).resize(this._resizeListener);
-        console.log('hi');
     },
 
-    resize: function() {
-        var $target = this.element;
-        var $parent = this.element.parent();
-        var parentHeight = $parent.height();
-        var childrenHeight = 0;
-        $parent.children().each(function() {
-            childrenHeight += $(this).outerHeight();
-        });
-        console.log($target.height());
-        $target.height($target.height() - childrenHeight + parentHeight).css({'overflow': 'auto'});
+    resize: function () {
+        this.sizeElement(this.element);
     },
 
-    _resizeListener: _.debounce(function() {
-        this.resize();
-    }, 500),
+    sizeElement: function ($target) {
+        var $parent = $target.parent();
+        if ($parent.length) {
+            var parentHeight = $parent.height();
+            var childrenHeight = _.reduce($parent.children(), function (memo, val) { return memo + $(val).outerHeight()}, 0);
+            $target.height($target.height() - childrenHeight + parentHeight).css({'overflow': 'auto'});
+        }
+    },
 
-    destroy: function() {
-        $(window).off('resize', this._resizeListener);
+    destroy: function () {
         $.Widget.prototype.destroy.call(this);
     }
 });

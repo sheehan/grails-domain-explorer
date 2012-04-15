@@ -34,8 +34,11 @@ App.DomainList = (function (App, Backbone) {
         },
 
         onRender: function () {
-            this.$el.find('.content').sizeToFit();
             this.highlightActiveView();
+        },
+
+        resize: function() {
+            this.$el.find('.content').sizeToFit();
         },
 
         highlightActiveView: function () {
@@ -64,26 +67,8 @@ App.DomainList = (function (App, Backbone) {
 
         findItemViewByFullName: function (fullName) {
             return _.find(this.children, function (childView) { return childView.model.get('fullName') == fullName; });
-        },
-
-        resize: function () {
-            var $target = this.$el.find('.content');
-            var parentHeight = this.$el.height();
-            var childrenHeight = 0;
-            this.$el.children().each(function () {
-                childrenHeight += $(this).outerHeight();
-            });
-            $target.height($target.height() - childrenHeight + parentHeight).css({'overflow': 'auto'});
-        },
-
-        close: function () {
-            this.$el.find('.content').sizeToFit('destroy');
         }
     });
-
-    DomainList.showDomainCountList = function () {
-        App.layout.list.show(DomainList.domainCountSectionView);
-    };
 
     DomainList.showDomain = function (fullName) {
         DomainList.domainCountSectionView.setActiveView(fullName);
@@ -101,26 +86,10 @@ App.DomainList = (function (App, Backbone) {
     App.vent.bind("domain:show", DomainList.showDomain);
 
     App.bind("initialize:after", function (options) {
-        DomainList.showDomainCountList();
+        App.layout.list.show(DomainList.domainCountSectionView);
     });
 
     return DomainList;
 })(App, Backbone);
-
-
-(function (App, Backbone, $) {
-    var Router = Backbone.Marionette.AppRouter.extend({
-        appRoutes: {
-//            "": "showDomainCountList",
-//            "domain/:fullName": "showDomain"
-        }
-    });
-
-    App.addInitializer(function () {
-        App.router = new Router({
-            controller: App.DomainList
-        });
-    });
-})(App, Backbone, $);
 
 

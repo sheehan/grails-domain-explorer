@@ -11,14 +11,14 @@
             main: "#main-wrapper #main .content"
         },
 
-        initialize: function(){
+        initialize: function () {
         }
     });
 
-    App.addInitializer(function(){
+    App.addInitializer(function () {
         App.layout = new Layout();
 
-        App.layout.render().done(function() {
+        App.layout.render().done(function () {
             $("body").prepend(App.layout.el);
             App.layout.$el.layout({
                 north__paneSelector: '#head-wrapper',
@@ -31,17 +31,26 @@
                 center__paneSelector: '#main-wrapper'
             });
         });
-        App.layout.list.on('view:show', function(view) {
-            _.delay(function() { // TODO LESS
-                App.layout.$el.layout().resizeAll();
-                $(window).resize();
-            }, 1000);
+        App.layout.list.on('view:show', function (view) {
+            App.layout.$el.layout().resizeAll();
+            view.resize && view.resize();
+            view.on("render", function(){
+                view.resize && view.resize();
+            });
+        });
+
+        App.layout.main.on('view:show', function (view) {
+            App.layout.$el.layout().resizeAll();
+            view.resize && view.resize();
+            view.on("render", function(){
+                view.resize && view.resize();
+            });
         });
     });
 })(App, Backbone, $);
 
-App.bind("initialize:after", function(options){
-    if (Backbone.history){
+App.bind("initialize:after", function (options) {
+    if (Backbone.history) {
         Backbone.history.start();
     }
 });

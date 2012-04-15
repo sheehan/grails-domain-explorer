@@ -24,7 +24,7 @@
   <section id="main-wrapper">
     <section id="main" class="ui-layout-content">
       <div class="content"></div>
-      <div class="footer">&nbsp;</div>
+      %{--<div class="footer">&nbsp;</div>--}%
     </section>
   </section>
 </script>

@@ -30,6 +30,15 @@ App.Domain = (function (App, Backbone) {
             this.content.show(view);
         },
 
+
+        onRender: function () {
+        },
+
+        resize: function() {
+            this.$el.find('.content').sizeToFit();
+            console.log('resize');
+        },
+
         showList: function() {
             this.$('.list').button('toggle');
             var view = new Domain.ListView({
@@ -135,7 +144,6 @@ App.Domain = (function (App, Backbone) {
 
     Domain.showDomainRoute = function(fullName) {
         App.vent.trigger("domain:show", fullName);
-        Domain.showDomain(fullName);
     };
 
     App.vent.on("domain:show", Domain.showDomain);
