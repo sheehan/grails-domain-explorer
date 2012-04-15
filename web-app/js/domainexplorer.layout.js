@@ -11,16 +11,9 @@
             main: "#main-wrapper #main .content"
         },
 
-        initialize: function () {
-        }
-    });
-
-    App.addInitializer(function () {
-        App.layout = new Layout();
-
-        App.layout.render().done(function () {
-            $("body").prepend(App.layout.el);
-            App.layout.$el.layout({
+        onRender: function () {
+            var that = this;
+            this.$el.layout({
                 north__paneSelector: '#head-wrapper',
                 north__size: 40,
                 north__resizable: false,
@@ -30,21 +23,22 @@
                 west__size: 350,
                 center__paneSelector: '#main-wrapper'
             });
-        });
-        App.layout.list.on('view:show', function (view) {
-            App.layout.$el.layout().resizeAll();
-            view.resize && view.resize();
-            view.on("render", function(){
-                view.resize && view.resize();
+            _.each(this.regionManagers, function (manager, name) {
+                manager.on('view:show', function (view) {
+                    that.$el.layout().resizeAll();
+                    view.resize && view.resize();
+                    view.on("render", function () {
+                        view.resize && view.resize();
+                    });
+                });
             });
-        });
+        }
+    });
 
-        App.layout.main.on('view:show', function (view) {
-            App.layout.$el.layout().resizeAll();
-            view.resize && view.resize();
-            view.on("render", function(){
-                view.resize && view.resize();
-            });
+    App.addInitializer(function () {
+        App.layout = new Layout();
+        App.layout.render().done(function () {
+            $("body").prepend(App.layout.el);
         });
     });
 })(App, Backbone, $);
