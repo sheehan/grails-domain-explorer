@@ -69,6 +69,7 @@
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.domainlist.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.domain.js')}"></script>
+<script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.domain.instance.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.layout.js')}"></script>
 </body>
 </html>

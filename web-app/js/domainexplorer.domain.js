@@ -31,12 +31,8 @@ App.Domain = (function (App, Backbone) {
         },
 
 
-        onRender: function () {
-        },
-
         resize: function() {
             this.$el.find('.content').sizeToFit();
-            console.log('resize');
         },
 
         showList: function() {
@@ -64,6 +60,11 @@ App.Domain = (function (App, Backbone) {
         tagName: 'tr',
 
         events: {
+            'click': '_handleRowClick'
+        },
+
+        _handleRowClick: function() {
+            App.vent.trigger("domainInstance:show", this.model);
         },
 
         renderHtml: function(data) {
@@ -98,22 +99,12 @@ App.Domain = (function (App, Backbone) {
             return '<thead><tr>' + html + '</tr></thead><tbody></tbody>';
         },
 
-        onRender: function(){
-//            this.$el.sizeToFit();
-        },
-
         appendHtml: function(collectionView, itemView){
             collectionView.$('tbody').append(itemView.el);
         }
     });
 
-    Domain.CreateView = Backbone.Marionette.ItemView.extend({
-        template: '#domain-create-template'
-    });
-
-    Domain.DomainListItemModel = Backbone.Model.extend({
-
-    });
+    Domain.DomainListItemModel = Backbone.Model.extend({});
 
     Domain.DomainListItemCollection = Backbone.Collection.extend({
         url: function () {

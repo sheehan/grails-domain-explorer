@@ -24,6 +24,7 @@
                 center__paneSelector: '#main-wrapper'
             });
             _.each(this.regionManagers, function (manager, name) {
+                // TODO $(window).resize();
                 manager.on('view:show', function (view) {
                     that.$el.layout().resizeAll();
                     view.resize && view.resize();
