@@ -57,6 +57,19 @@
   create {{name}}
 </script>
 
+
+<script id="domain-instance-show-section-template" type="text/template">
+  <div class="header">
+    <span class="name">XXX TODO</span>
+    <span class="count">({{id}})</span>
+  </div>
+
+  <div class="toolbar">
+  </div>
+
+  <div class="content"></div>
+</script>
+
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/less-1.3.0.min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/jquery-1.7.1.min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/jquery-ui-1.8.18.custom.min.js')}"></script>

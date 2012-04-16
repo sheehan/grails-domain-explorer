@@ -14,12 +14,15 @@ App.Domain = (function (App, Backbone) {
 
         events: {
             'click .overview': 'showOverview',
-            'click .list': 'showList',
-            'click .create': 'showCreate'
+            'click .list': 'showList'
         },
 
         regions: {
             content: '.content'
+        },
+
+        resize: function() {
+            this.$el.find('.content').sizeToFit();
         },
 
         showOverview: function() {
@@ -30,22 +33,9 @@ App.Domain = (function (App, Backbone) {
             this.content.show(view);
         },
 
-
-        resize: function() {
-            this.$el.find('.content').sizeToFit();
-        },
-
         showList: function() {
             this.$('.list').button('toggle');
             var view = new Domain.ListView({
-                model: this.model
-            });
-            this.content.show(view);
-        },
-
-        showCreate: function() {
-            this.$('.create').button('toggle');
-            var view = new Domain.CreateView({
                 model: this.model
             });
             this.content.show(view);
@@ -85,10 +75,8 @@ App.Domain = (function (App, Backbone) {
             this.bind('item:added', function(view) {
                 view.domainType = this.model
             });
-            this.collection = new Domain.DomainListItemCollection([], {
-                fullName: this.model.get('fullName')
-            });
-            this.collection.fetch();
+            this.collection = new Domain.DomainListItemCollection();
+            this.collection.fetchByDomainType(this.model);
         },
 
         renderModel: function() {
@@ -108,11 +96,23 @@ App.Domain = (function (App, Backbone) {
 
     Domain.DomainListItemCollection = Backbone.Collection.extend({
         url: function () {
-            return '/refine/domain/listEntities?fullName=' + this.fullName;
+            return '/refine/domain/listEntities?fullName=' + this.domainTypeModel.get('fullName');
         },
+
+        initialize: function(options) {
+            var that = this;
+            this.on('reset', function(collection) {
+                that.each(function(model) {
+                    model.domainType = that.domainTypeModel;
+                });
+            });
+        },
+
         model: Domain.DomainListItemModel,
-        initialize: function(models, options) {
-            this.fullName = options.fullName;
+
+        fetchByDomainType: function(domainTypeModel) {
+            this.domainTypeModel = domainTypeModel;
+            return this.fetch();
         }
     });
 
