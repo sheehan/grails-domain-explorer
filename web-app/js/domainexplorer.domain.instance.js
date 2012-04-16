@@ -1,19 +1,21 @@
 App.Domain.Instance = (function (App, Backbone) {
-    var Domain = App.Domain;
     var Instance = {};
 
     Instance.ShowSectionView = Backbone.Marionette.Layout.extend({
         template: '#domain-instance-show-section-template',
+        className: 'showView',
 
         regions: {
             content: '.content'
         },
 
         resize: function() {
+            console.log('h');
             this.$el.find('.content').sizeToFit();
         },
 
         onRender: function() {
+            this.$el.find('.header .name').html(this.model.domainType.get('name') + ': ');
             var view = new Instance.ShowView({
                 model: this.model
             });
@@ -23,12 +25,13 @@ App.Domain.Instance = (function (App, Backbone) {
     });
 
     Instance.ShowView = Backbone.Marionette.ItemView.extend({
+        className: 'form-horizontal',
         renderHtml: function() {
             var properties = this.model.domainType.get('properties');
             var html =  _.collect(properties, function(property) {
-                return '<li>'+property.name + ': ' + this.model.get(property.name)+'</li>';
+                return '<div class="control-group"><label class="control-label">'+property.name + ':</label><div class="controls">' + this.model.get(property.name)+'</div></div>';
             }, this).join('');
-            return '<ul>' + html + '</ul>';
+            return html;
         }
     });
 
@@ -38,18 +41,6 @@ App.Domain.Instance = (function (App, Backbone) {
     };
 
     App.vent.on("domainInstance:show", Instance.showDomainInstance);
-
-//    var Router = Backbone.Marionette.AppRouter.extend({
-//        appRoutes: {
-//            ":fullName": "showDomainRoute"
-//        }
-//    });
-
-    App.addInitializer(function(){
-//        Domain.router = new Router({
-//            controller: Domain
-//        });
-    });
 
     return Instance;
 })(App, Backbone);

@@ -60,8 +60,8 @@
 
 <script id="domain-instance-show-section-template" type="text/template">
   <div class="header">
-    <span class="name">XXX TODO</span>
-    <span class="count">({{id}})</span>
+    <span class="name">XXX TODO:</span>
+    <span class="count">{{id}}</span>
   </div>
 
   <div class="toolbar">
