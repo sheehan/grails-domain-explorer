@@ -3,7 +3,7 @@ App.Domain = (function (App, Backbone) {
 
     Domain.DomainModel = Backbone.Model.extend({
         url: function () {
-            return '/refine/domain/domainType?fullName=' + this.get('fullName');
+            return App.createLink('domain', 'domainType', {fullName: this.get('fullName')})
         }
     });
 
@@ -113,8 +113,8 @@ App.Domain = (function (App, Backbone) {
     Domain.DomainListItemModel = Backbone.Model.extend({});
 
     Domain.DomainListItemCollection = Backbone.Collection.extend({
-        url: function () {
-            return '/refine/domain/listEntities?fullName=' + this.domainTypeModel.get('fullName');
+        url: function() {
+            return App.createLink('domain', 'listEntities', {fullName: this.domainTypeModel.get('fullName')});
         },
 
         initialize: function (options) {

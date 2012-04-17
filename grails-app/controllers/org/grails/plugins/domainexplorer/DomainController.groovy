@@ -10,7 +10,7 @@ class DomainController {
     def index = {
         [
             json: [
-                baseDir : resource(plugin: 'domain-explorer')
+                serverURL : grailsApplication.config.grails.serverURL
             ]
         ]
     }
