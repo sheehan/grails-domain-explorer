@@ -18,14 +18,15 @@ App.Domain = (function (App, Backbone) {
         },
 
         regions: {
+            header: '.header',
             content: '.content'
         },
 
-        resize: function() {
+        resize: function () {
             this.$el.find('.content').sizeToFit();
         },
 
-        showOverview: function() {
+        showOverview: function () {
             this.$('.overview').button('toggle');
             var view = new Domain.OverviewView({
                 model: this.model
@@ -33,7 +34,7 @@ App.Domain = (function (App, Backbone) {
             this.content.show(view);
         },
 
-        showList: function() {
+        showList: function () {
             this.$('.list').button('toggle');
             var view = new Domain.ListView({
                 model: this.model
@@ -53,14 +54,30 @@ App.Domain = (function (App, Backbone) {
             'click': '_handleRowClick'
         },
 
-        _handleRowClick: function() {
+        _handleRowClick: function () {
+
+            Backbone.history.navigate(this.domainType.get('fullName') + '/' + this.model.id);
             App.vent.trigger("domainInstance:show", this.model);
         },
 
-        renderHtml: function(data) {
+        renderHtml: function (data) {
             var properties = this.domainType.get('properties');
-            return _.collect(properties, function(property) {
-                return '<td>'+this.model.get(property.name)+'</td>';
+            return _.collect(properties,
+            function (property) {
+                var valueHtml = '',
+                    value = this.model.get(property.name);
+//                if (property.oneToMany) {
+//                    if (value == 0) {
+//                        valueHtml = '[]';
+//                    } else {
+//                        valueHtml = '<span class="instanceValue oneToMany">' + this.domainType.get('name') + ' (' + value + ')</span>';
+//                    }
+                if(value === null) {
+                    valueHtml = '<span class="instanceValue null">' + value + '</span>';
+                } else {
+                    valueHtml = value;
+                }
+                return '<td>' + valueHtml + '</td>';
             }, this).join('');
         }
 
@@ -71,23 +88,24 @@ App.Domain = (function (App, Backbone) {
         tagName: 'table',
         className: 'table table-striped',
 
-        initialize: function(options) {
-            this.bind('item:added', function(view) {
+        initialize: function (options) {
+            this.bind('item:added', function (view) {
                 view.domainType = this.model
             });
             this.collection = new Domain.DomainListItemCollection();
             this.collection.fetchByDomainType(this.model);
         },
 
-        renderModel: function() {
+        renderModel: function () {
             var properties = this.model.get('properties');
-            var html = _.collect(properties, function(property) {
-                return '<th>'+property.name+'</th>';
+            var html = _.collect(properties,
+            function (property) {
+                return '<th>' + property.name + '</th>';
             }, this).join('');
             return '<thead><tr>' + html + '</tr></thead><tbody></tbody>';
         },
 
-        appendHtml: function(collectionView, itemView){
+        appendHtml: function (collectionView, itemView) {
             collectionView.$('tbody').append(itemView.el);
         }
     });
@@ -99,10 +117,10 @@ App.Domain = (function (App, Backbone) {
             return '/refine/domain/listEntities?fullName=' + this.domainTypeModel.get('fullName');
         },
 
-        initialize: function(options) {
+        initialize: function (options) {
             var that = this;
-            this.on('reset', function(collection) {
-                that.each(function(model) {
+            this.on('reset', function (collection) {
+                that.each(function (model) {
                     model.domainType = that.domainTypeModel;
                 });
             });
@@ -110,18 +128,18 @@ App.Domain = (function (App, Backbone) {
 
         model: Domain.DomainListItemModel,
 
-        fetchByDomainType: function(domainTypeModel) {
+        fetchByDomainType: function (domainTypeModel) {
             this.domainTypeModel = domainTypeModel;
             return this.fetch();
         }
     });
 
-    Domain.showDomain = function(fullName) {
+    Domain.showDomain = function (fullName) {
         var model = new Domain.DomainModel({
             fullName: fullName
         });
 
-        model.fetch().done(function(){
+        model.fetch().done(function () {
             var view = new Domain.DomainView({
                 model: model
             });
@@ -133,7 +151,7 @@ App.Domain = (function (App, Backbone) {
         Backbone.history.navigate(fullName);
     };
 
-    Domain.showDomainRoute = function(fullName) {
+    Domain.showDomainRoute = function (fullName) {
         App.vent.trigger("domain:show", fullName);
     };
 
@@ -145,7 +163,7 @@ App.Domain = (function (App, Backbone) {
         }
     });
 
-    App.addInitializer(function(){
+    App.addInitializer(function () {
         Domain.router = new Router({
             controller: Domain
         });

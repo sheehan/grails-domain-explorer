@@ -1,3 +1,4 @@
+<%@ page import="grails.converters.JSON" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,5 +85,12 @@
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.domain.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.domain.instance.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'domainexplorer.layout.js')}"></script>
+
+<script type="text/javascript">
+  jQuery(function($) {
+    var json = ${(json ?: [:]) as JSON};
+    App.start(json);
+  });
+</script>
 </body>
 </html>

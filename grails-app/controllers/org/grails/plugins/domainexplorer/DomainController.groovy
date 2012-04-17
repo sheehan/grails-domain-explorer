@@ -3,11 +3,16 @@ package org.grails.plugins.domainexplorer
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import grails.converters.JSON
 import org.codehaus.groovy.grails.validation.ConstrainedProperty
+import org.codehaus.groovy.grails.commons.GrailsDomainClassProperty
 
 class DomainController {
 
     def index = {
-
+        [
+            json: [
+                baseDir : resource(plugin: 'domain-explorer')
+            ]
+        ]
     }
 
     def list = {
@@ -23,8 +28,7 @@ class DomainController {
 
     def listEntities = {
         GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.fullName)
-//        def js    on = domainClass.clazz.list().collect { entityToMap it, domainClass }
-        def json = domainClass.clazz.list(max:50).collect { domainInstanceAsMap it, domainClass }
+        def json = domainClass.clazz.list(max: 50).collect { domainInstanceAsMap it, domainClass }
         render json as JSON
     }
 
@@ -37,45 +41,52 @@ class DomainController {
 
     private Map domainClassToMap(GrailsDomainClass domainClass) {
         Map constrainedProperties = domainClass.constrainedProperties
+
+        List properties = domainClass.properties.findAll { it.persistent }.collect { GrailsDomainClassProperty property ->
+            Map m = [
+                name: property.name,
+                type: property.referencedPropertyType,
+                persistent: property.persistent,
+                optional: property.optional,
+                identity: property.identity,
+                hasOne: property.hasOne,
+                oneToOne: property.oneToOne,
+                oneToMany: property.oneToMany,
+                manyToOne: property.manyToOne,
+                manyToMany: property.manyToMany,
+                bidirectional: property.bidirectional,
+                association: property.association,
+                enum: property.enum,
+                naturalName: property.naturalName,
+                inherited: property.inherited,
+                owningSide: property.owningSide,
+                circular: property.circular,
+                embedded: property.embedded,
+//                    derived: property.derived,
+            ]
+            ConstrainedProperty cp = constrainedProperties[property.name]
+            if (cp) {
+//                    m.constraints = cp.properties
+            }
+            m
+        }.sort { it.name == 'id' ? '' : it.name }
+
         [
             name: domainClass.name,
             fullName: domainClass.fullName,
             count: domainClass.clazz.count(),
-            properties: domainClass.properties.findAll { it.persistent }.collect {
-                Map m = [
-                    name: it.name,
-                    type: it.referencedPropertyType,
-                    persistent: it.persistent,
-                    optional: it.optional,
-                    identity: it.identity,
-                    hasOne: it.hasOne,
-                    oneToOne: it.oneToOne,
-                    oneToMany: it.oneToMany,
-                    manyToOne: it.manyToOne,
-                    manyToMany: it.manyToMany,
-                    bidirectional: it.bidirectional,
-                    association: it.association,
-                    enum: it.enum,
-                    naturalName: it.naturalName,
-                    inherited: it.inherited,
-                    owningSide: it.owningSide,
-                    circular: it.circular,
-                    embedded: it.embedded,
-//                    derived: it.derived,
-                ]
-                ConstrainedProperty cp = constrainedProperties[it.name]
-                if (cp) {
-//                    m.constraints = cp.properties
-                }
-                m
-            }
+            properties: properties
         ]
     }
 
     private Map domainInstanceAsMap(entity, GrailsDomainClass domainClass) {
         Map result = [:]
-        domainClass.properties.each { property ->
-            result[property.name] = entity[property.name]?.toString()
+        domainClass.properties.findAll { it.persistent }.each { GrailsDomainClassProperty property ->
+            if (property.oneToMany) {
+                result[property.name] = entity[property.name]?.size() ?: 0
+            } else {
+                result[property.name] = entity[property.name]?.toString()
+            }
         }
         result
     }

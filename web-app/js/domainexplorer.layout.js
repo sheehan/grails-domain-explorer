@@ -49,5 +49,3 @@ App.bind("initialize:after", function (options) {
         Backbone.history.start();
     }
 });
-
-App.start({});
