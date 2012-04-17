@@ -1,4 +1,4 @@
-(function (App, Backbone, $) {
+(function (Dex, Backbone, $) {
 
     var Layout = Backbone.Marionette.Layout.extend({
 
@@ -36,15 +36,15 @@
         }
     });
 
-    App.addInitializer(function () {
-        App.layout = new Layout();
-        App.layout.render().done(function () {
-            $("body").prepend(App.layout.el);
+    Dex.addInitializer(function () {
+        Dex.layout = new Layout();
+        Dex.layout.render().done(function () {
+            $("body").prepend(Dex.layout.el);
         });
     });
-})(App, Backbone, $);
+})(Dex, Backbone, $);
 
-App.bind("initialize:after", function (options) {
+Dex.bind("initialize:after", function (options) {
     if (Backbone.history) {
         Backbone.history.start();
     }

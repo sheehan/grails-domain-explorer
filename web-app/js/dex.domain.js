@@ -1,9 +1,9 @@
-App.Domain = (function (App, Backbone) {
+Dex.Domain = (function (Dex, Backbone) {
     var Domain = {};
 
     Domain.DomainModel = Backbone.Model.extend({
         url: function () {
-            return App.createLink('domain', 'domainType', {fullName: this.get('fullName')})
+            return Dex.createLink('domain', 'domainType', {fullName: this.get('fullName')})
         }
     });
 
@@ -57,7 +57,7 @@ App.Domain = (function (App, Backbone) {
         _handleRowClick: function () {
 
             Backbone.history.navigate(this.domainType.get('fullName') + '/' + this.model.id);
-            App.vent.trigger("domainInstance:show", this.model);
+            Dex.vent.trigger("domainInstance:show", this.model);
         },
 
         renderHtml: function (data) {
@@ -114,7 +114,7 @@ App.Domain = (function (App, Backbone) {
 
     Domain.DomainListItemCollection = Backbone.Collection.extend({
         url: function() {
-            return App.createLink('domain', 'listEntities', {fullName: this.domainTypeModel.get('fullName')});
+            return Dex.createLink('domain', 'listEntities', {fullName: this.domainTypeModel.get('fullName')});
         },
 
         initialize: function (options) {
@@ -143,7 +143,7 @@ App.Domain = (function (App, Backbone) {
             var view = new Domain.DomainView({
                 model: model
             });
-            App.layout.main.show(view);
+            Dex.layout.main.show(view);
 
             view.showList();
         });
@@ -152,10 +152,10 @@ App.Domain = (function (App, Backbone) {
     };
 
     Domain.showDomainRoute = function (fullName) {
-        App.vent.trigger("domain:show", fullName);
+        Dex.vent.trigger("domain:show", fullName);
     };
 
-    App.vent.on("domain:show", Domain.showDomain);
+    Dex.vent.on("domain:show", Domain.showDomain);
 
     var Router = Backbone.Marionette.AppRouter.extend({
         appRoutes: {
@@ -163,13 +163,13 @@ App.Domain = (function (App, Backbone) {
         }
     });
 
-    App.addInitializer(function () {
+    Dex.addInitializer(function () {
         Domain.router = new Router({
             controller: Domain
         });
     });
 
     return Domain;
-})(App, Backbone);
+})(Dex, Backbone);
 
 

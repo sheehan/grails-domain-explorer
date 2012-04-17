@@ -1,4 +1,4 @@
-App.Domain.Instance = (function (App, Backbone) {
+Dex.Domain.Instance = (function (Dex, Backbone) {
     var Instance = {};
 
     Instance.ShowSectionView = Backbone.Marionette.Layout.extend({
@@ -50,12 +50,12 @@ App.Domain.Instance = (function (App, Backbone) {
 
     Instance.showDomainInstance = function (model) {
         console.log('showDomainInstance: %o', model);
-        App.layout.main.show(new Instance.ShowSectionView({model: model}));
+        Dex.layout.main.show(new Instance.ShowSectionView({model: model}));
     };
 
-    App.vent.on("domainInstance:show", Instance.showDomainInstance);
+    Dex.vent.on("domainInstance:show", Instance.showDomainInstance);
 
     return Instance;
-})(App, Backbone);
+})(Dex, Backbone);
 
 

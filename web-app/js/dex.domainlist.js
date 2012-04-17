@@ -1,11 +1,11 @@
-App.DomainList = (function (App, Backbone) {
+Dex.DomainList = (function (Dex, Backbone) {
     var DomainList = {};
 
     DomainList.DomainCount = Backbone.Model.extend({
     });
 
     DomainList.DomainCountCollection = Backbone.Collection.extend({
-        url: function() { return App.createLink('domain', 'list') },
+        url: function() { return Dex.createLink('domain', 'list') },
         model: DomainList.DomainCount
     });
 
@@ -19,7 +19,7 @@ App.DomainList = (function (App, Backbone) {
 
         _handleClick: function (event) {
             event.preventDefault();
-            App.vent.trigger("domain:show", this.model.get('fullName'));
+            Dex.vent.trigger("domain:show", this.model.get('fullName'));
         }
     });
 
@@ -74,7 +74,7 @@ App.DomainList = (function (App, Backbone) {
         DomainList.domainCountSectionView.setActiveView(fullName);
     };
 
-    App.addInitializer(function (options) {
+    Dex.addInitializer(function (options) {
         DomainList.domainCountList = new DomainList.DomainCountCollection();
         DomainList.domainCountList.fetch();
         DomainList.domainCountSectionView = new DomainList.DomainCountSectionView({
@@ -83,13 +83,13 @@ App.DomainList = (function (App, Backbone) {
     });
 
 
-    App.vent.bind("domain:show", DomainList.showDomain);
+    Dex.vent.bind("domain:show", DomainList.showDomain);
 
-    App.bind("initialize:after", function (options) {
-        App.layout.list.show(DomainList.domainCountSectionView);
+    Dex.bind("initialize:after", function (options) {
+        Dex.layout.list.show(DomainList.domainCountSectionView);
     });
 
     return DomainList;
-})(App, Backbone);
+})(Dex, Backbone);
 
 

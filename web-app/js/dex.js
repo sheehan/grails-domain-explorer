@@ -2,7 +2,7 @@ _.templateSettings = {
     interpolate : /\{\{(.+?)\}\}/g
 };
 
-App = new Backbone.Marionette.Application({
+Dex = new Backbone.Marionette.Application({
     start: function(options) {
         this.options = options;
         Backbone.Marionette.Application.prototype.start.apply(this, arguments);
