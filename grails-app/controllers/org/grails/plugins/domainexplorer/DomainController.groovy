@@ -1,16 +1,16 @@
 package org.grails.plugins.domainexplorer
 
-import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import grails.converters.JSON
-import org.codehaus.groovy.grails.validation.ConstrainedProperty
+import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import org.codehaus.groovy.grails.commons.GrailsDomainClassProperty
+import org.codehaus.groovy.grails.validation.ConstrainedProperty
 
 class DomainController {
 
     def index = {
         [
             json: [
-                serverURL : grailsApplication.config.grails.serverURL
+                serverURL: grailsApplication.config.grails.serverURL
             ]
         ]
     }
@@ -28,7 +28,7 @@ class DomainController {
 
     def listEntities = {
         GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.fullName)
-        def json = domainClass.clazz.list(max: 50).collect { domainInstanceAsMap it, domainClass }
+        def json = domainClass.clazz.list(max: 50).collect { domainInstanceToMap it, domainClass }
         render json as JSON
     }
 
@@ -36,6 +36,50 @@ class DomainController {
         GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.fullName)
         Map json = domainClassToMap(domainClass)
         println json
+        render json as JSON
+    }
+
+    def fromPath = {
+        List tokens = params.fragment.split('/').toList().reverse()
+
+        String fullName = tokens.pop()
+        GrailsDomainClass domainClass = grailsApplication.getDomainClass(fullName)
+
+        Object result
+        Long lastId
+        GrailsDomainClassProperty property
+
+        if (!tokens) {
+            result = domainClass.clazz.list(max: 50)
+        }
+
+        while (tokens) {
+            String next = tokens.pop()
+            Boolean isLast = tokens.empty
+            if (next.isLong()) {
+                lastId = next as Long
+                if (isLast) {
+                    result = domainClass.clazz.get(next)
+                }
+            } else {
+                property = domainClass.properties.find { it.name == next }
+                if (isLast) {
+                    def obj = domainClass.clazz.get(lastId)
+                    // TODO if collection, need to add max, pagination params
+                    result = obj[next]
+                }
+                domainClass = property.referencedDomainClass
+            }
+        }
+
+        Boolean isCollection = result instanceof Collection
+        println result
+        println isCollection
+        Map json = [
+            clazz: domainClassToMap(domainClass),
+            isCollection: isCollection,
+            value: isCollection ? result.collect { domainInstanceToMap it, domainClass } : domainInstanceToMap(result, domainClass)
+        ]
         render json as JSON
     }
 
@@ -79,7 +123,7 @@ class DomainController {
         ]
     }
 
-    private Map domainInstanceAsMap(entity, GrailsDomainClass domainClass) {
+    private Map domainInstanceToMap(entity, GrailsDomainClass domainClass) {
         Map result = [:]
         domainClass.properties.findAll { it.persistent }.each { GrailsDomainClassProperty property ->
             if (property.oneToMany) {

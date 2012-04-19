@@ -26,3 +26,73 @@ Dex = new Backbone.Marionette.Application({
         return url;
     }
 });
+
+Dex.StackableRegion = Backbone.Marionette.Region.extend({
+
+    constructor: function() {
+        this.stack = [];
+        Backbone.Marionette.Region.prototype.constructor.apply(this, arguments);
+    },
+
+    push: function(view) {
+        this.ensureEl();
+        this.stack.push(view);
+        if (this.currentView) {
+            this.currentView.$el.hide();
+            this.currentView = view;
+            this.open(view, 'append');
+        }
+    },
+
+    pop: function() {
+        this.stack.pop();
+        this.close();
+        if (this.stack.length) {
+            this.currentView = this.stack[this.stack.length - 1];
+            this.currentView.$el.show();
+        }
+    },
+
+    show: function(view, appendMethod){
+        this.ensureEl();
+
+        this.close();
+        this.open(view, appendMethod);
+
+        this.currentView = view;
+    }
+});
+
+var testing = {
+
+    showDomain: function() {
+
+    },
+
+    showInstance: function(fullName, id) {
+
+    },
+
+    showProperty: function() {
+
+    },
+
+    processRoute: function() {
+        var tokens = Backbone.history.getFragment().split('/');
+
+    }
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
