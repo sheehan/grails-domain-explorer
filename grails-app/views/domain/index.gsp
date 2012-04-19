@@ -42,13 +42,36 @@
 
 <script id="domain-template" type="text/template">
   <div class="header"></div>
-  %{--<div class="toolbar">--}%
-    %{--<div class="btn-group" data-toggle="buttons-radio">--}%
-      %{--<button class="btn overview">Overview</button>--}%
-      %{--<button class="btn list">List</button>--}%
-    %{--</div>--}%
-  %{--</div>--}%
+  <div class="toolbar"></div>
   <div class="content"></div>
+</script>
+
+<script id="domain-list-toolbar" type="text/template">
+  <div class="btn-group">
+    <button class="btn">
+      <i class="icon-chevron-left"></i>
+      Back
+    </button>
+  </div>
+</script>
+
+<script id="domain-instance-toolbar" type="text/template">
+  <div class="btn-group">
+    <button class="btn">
+      <i class="icon-chevron-left"></i>
+      Back
+    </button>
+  </div>
+  <div class="btn-group">
+    <button class="btn">
+      <i class="icon-pencil"></i>
+      Edit
+    </button>
+    <button class="btn">
+      <i class="icon-trash"></i>
+      Delete
+    </button>
+  </div>
 </script>
 
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/less-1.3.0.min.js')}"></script>

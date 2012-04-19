@@ -70,6 +70,7 @@ Dex.Domain = (function (Dex, Backbone) {
 
         regions: {
             header: '.header',
+            toolbar: '.toolbar',
             content: '.content'
         },
 
@@ -102,6 +103,9 @@ Dex.Domain = (function (Dex, Backbone) {
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
 
+            var toolbarView = new Domain.ListToolbarView();
+            this.toolbar.show(toolbarView);
+
             var view = new Domain.ListView({
                 model: this.model,
                 domainType: this.domainType
@@ -113,6 +117,9 @@ Dex.Domain = (function (Dex, Backbone) {
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
 
+            var toolbarView = new Domain.InstanceToolbarView();
+            this.toolbar.show(toolbarView);
+
             var view = new Domain.Instance.ShowView({
                 model: this.model,
                 domainType: this.domainType
@@ -121,8 +128,14 @@ Dex.Domain = (function (Dex, Backbone) {
         }
     });
 
-    Domain.OverviewView = Backbone.Marionette.ItemView.extend({
-        template: '#domain-overview-template'
+    Domain.ListToolbarView = Backbone.Marionette.ItemView.extend({
+        template: '#domain-list-toolbar',
+        className: 'btn-toolbar'
+    });
+
+    Domain.InstanceToolbarView = Backbone.Marionette.ItemView.extend({
+        template: '#domain-instance-toolbar',
+        className: 'btn-toolbar'
     });
 
     Domain.DomainListItemView = Backbone.Marionette.ItemView.extend({
@@ -193,41 +206,8 @@ Dex.Domain = (function (Dex, Backbone) {
     Domain.DomainInstanceModel = Backbone.Model.extend({});
 
     Domain.DomainInstanceCollection = Backbone.Collection.extend({
-        url: function () {
-            return Dex.createLink('domain', 'listEntities', {fullName: this.domainTypeModel.get('fullName')});
-        },
-
-        initialize: function (options) {
-            var that = this;
-            this.on('reset', function (collection) {
-                that.each(function (model) {
-                    model.domainType = that.domainTypeModel;
-                });
-            });
-        },
-
-        model: Domain.DomainInstanceModel,
-
-        fetchByDomainType: function (domainTypeModel) {
-            this.domainTypeModel = domainTypeModel;
-            return this.fetch();
-        }
+        model: Domain.DomainInstanceModel
     });
-
-    Domain.showDomain = function (fullName) {
-        var model = new Domain.DomainModel({
-            fullName: fullName
-        });
-
-        model.fetch().done(function () {
-            var view = new Domain.DomainView({
-                model: model
-            });
-            Dex.layout.main.show(view);
-        });
-
-        Backbone.history.navigate(fullName);
-    };
 
     Domain.showDomainRoute = function (fullName) {
         Domain.show();
