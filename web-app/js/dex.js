@@ -63,27 +63,6 @@ Dex.StackableRegion = Backbone.Marionette.Region.extend({
     }
 });
 
-var testing = {
-
-    showDomain: function() {
-
-    },
-
-    showInstance: function(fullName, id) {
-
-    },
-
-    showProperty: function() {
-
-    },
-
-    processRoute: function() {
-        var tokens = Backbone.history.getFragment().split('/');
-
-    }
-
-};
-
 
 
 

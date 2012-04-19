@@ -77,7 +77,7 @@
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/jquery.layout-latest.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/underscore-min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/backbone-min.js')}"></script>
-<script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/backbone.marionette2.js')}"></script>
+<script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/backbone.marionette.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'dex.jqueryplugins.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'bootstrap/js', file: 'bootstrap.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'dex.js')}"></script>

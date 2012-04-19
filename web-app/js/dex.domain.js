@@ -1,6 +1,19 @@
 Dex.Domain = (function (Dex, Backbone) {
     var Domain = {};
 
+    Domain.show = function() {
+        var fragment = Backbone.history.getFragment();
+        var link = Dex.createLink('domain', 'fromPath', { path: fragment });
+        $.getJSON(link).done(function(resp) {
+            if (resp.isCollection) {
+                // show collection
+//                var collection = new
+            } else {
+                // show instance
+            }
+        });
+    };
+
     Domain.DomainModel = Backbone.Model.extend({
         url: function () {
             return Dex.createLink('domain', 'domainType', {fullName: this.get('fullName')})

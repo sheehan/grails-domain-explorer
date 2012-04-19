@@ -1,14 +1,15 @@
-// Backbone.Marionette v0.7.0
+// Backbone.Marionette v0.7.1
 //
 // Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT License
 //
 // Documentation and Full License Available at:
 // http://github.com/derickbailey/backbone.marionette
+
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
-  Marionette.version = "0.7.0";
+  Marionette.version = "0.7.1";
 
   // Marionette.View
   // ---------------
@@ -44,12 +45,12 @@ Backbone.Marionette = (function(Backbone, _, $){
     // for you. You can specify an `onClose` method in your view to
     // add custom code that is called after the view is closed.
     close: function(){
-      this.beforeClose && this.beforeClose();
+      if (this.beforeClose) { this.beforeClose(); }
 
       this.unbindAll();
       this.remove();
 
-      this.onClose && this.onClose();
+      if (this.onClose) { this.onClose(); }
       this.trigger('close');
       this.unbind();
     }
@@ -103,24 +104,34 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
 
       var deferredRender = $.Deferred();
-      var template = this.getTemplateSelector();
       var deferredData = this.serializeData();
 
-      this.beforeRender && this.beforeRender();
+      if (this.beforeRender) { this.beforeRender(); }
       this.trigger("item:before:render", that);
 
       $.when(deferredData).then(function(data) {
-        var asyncRender = Marionette.Renderer.render(template, data);
+
+        var asyncRender = that.renderHtml(data);
+
         $.when(asyncRender).then(function(html){
           that.$el.html(html);
-          that.onRender && that.onRender();
+          if (that.onRender) { that.onRender(); }
           that.trigger("item:rendered", that);
           that.trigger("render", that);
           deferredRender.resolve();
         });
+
       });
 
       return deferredRender.promise();
+    },
+
+    // Render the data for this item view in to some HTML.
+    // Override this method to replace the specific way in
+    // which an item view has it's data rendered in to html.
+    renderHtml: function(data) {
+      var template = this.getTemplateSelector();
+      return Marionette.Renderer.render(template, data);
     },
 
     // Override the default close event to add a few
@@ -170,21 +181,24 @@ Backbone.Marionette = (function(Backbone, _, $){
       var promises = [];
       var ItemView = this.getItemView();
 
-      this.beforeRender && this.beforeRender();
+      if (this.beforeRender) { this.beforeRender(); }
       this.trigger("collection:before:render", this);
 
       this.closeChildren();
-      this.collection && this.collection.each(function(item){
-        var promise = that.addItemView(item, ItemView);
-        promises.push(promise);
-      });
+
+      if (this.collection) {
+        this.collection.each(function(item){
+          var promise = that.addItemView(item, ItemView);
+          promises.push(promise);
+        });
+      }
 
       deferredRender.done(function(){
-        this.onRender && this.onRender();
+        if (this.onRender) { this.onRender(); }
         this.trigger("collection:rendered", this);
       });
 
-      $.when(promises).then(function(){
+      $.when.apply(this, promises).then(function(){
         deferredRender.resolveWith(that);
       });
 
@@ -359,6 +373,10 @@ Backbone.Marionette = (function(Backbone, _, $){
       err.name = "NoElError";
       throw err;
     }
+
+    if (this.initialize){
+      this.initialize.apply(this, arguments);
+    }
   };
 
   _.extend(Marionette.Region.prototype, Backbone.Events, {
@@ -378,7 +396,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     },
 
     ensureEl: function(){
-      if (!this.$el || this.$el.length == 0){
+      if (!this.$el || this.$el.length === 0){
         this.$el = this.getEl(this.el);
       }
     },
@@ -397,7 +415,7 @@ Backbone.Marionette = (function(Backbone, _, $){
 
       $.when(view.render()).then(function () {
         that.$el[appendMethod](view.el);
-        view.onShow && view.onShow();
+        if (view.onShow) { view.onShow(); }
         view.trigger("show");
         that.trigger("view:show", view);
       });
@@ -409,7 +427,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       var view = this.currentView;
       if (!view){ return; }
 
-      view.close && view.close();
+      if (view.close) { view.close(); }
       this.trigger("view:closed", view);
 
       delete this.currentView;
@@ -511,16 +529,18 @@ Backbone.Marionette = (function(Backbone, _, $){
 
     processAppRoutes: function(controller, appRoutes){
       var method, methodName;
-      var route, routesLength;
+      var route, routesLength, i;
       var routes = [];
       var router = this;
 
       for(route in appRoutes){
-        routes.unshift([route, appRoutes[route]]);
+        if (appRoutes.hasOwnProperty(route)){
+          routes.unshift([route, appRoutes[route]]);
+        }
       }
 
       routesLength = routes.length;
-      for (var i = 0; i < routesLength; i++){
+      for (i = 0; i < routesLength; i++){
         route = routes[i][0];
         methodName = routes[i][1];
         method = _.bind(controller[methodName], controller);
@@ -565,9 +585,9 @@ Backbone.Marionette = (function(Backbone, _, $){
     // addRegions({something: "#someRegion"})
     // addRegions{{something: Region.extend({el: "#someRegion"}) });
     addRegions: function(regions){
-      var regionValue, regionObj;
+      var regionValue, regionObj, region;
 
-      for(var region in regions){
+      for(region in regions){
         if (regions.hasOwnProperty(region)){
           regionValue = regions[region];
     
@@ -576,7 +596,7 @@ Backbone.Marionette = (function(Backbone, _, $){
               el: regionValue
             });
           } else {
-            regionObj = new regionValue;
+            regionObj = new regionValue();
           }
 
           this[region] = regionObj;
@@ -602,7 +622,7 @@ Backbone.Marionette = (function(Backbone, _, $){
       context = context || this;
       obj.on(eventName, callback, context);
 
-      if (!this.bindings) this.bindings = [];
+      if (!this.bindings) { this.bindings = []; }
 
       this.bindings.push({ 
         obj: obj, 
@@ -712,6 +732,17 @@ Backbone.Marionette = (function(Backbone, _, $){
     // such as asynchronous loading from a server.
     loadTemplate: function(templateId, callback){
       var template = $(templateId).html();
+
+      // Make sure we have a template before trying to compile it
+      if (!template || template.length === 0){
+        var msg = "Could not find template: '" + templateId + "'";
+        var err = new Error(msg);
+        err.name = "NoTemplateError";
+        throw err;
+      }
+
+      template = _.template(template);
+
       callback.call(this, template);
     },
 
@@ -723,9 +754,11 @@ Backbone.Marionette = (function(Backbone, _, $){
     // specified templates from the cache:
     // `clear("#t1", "#t2", "...")`
     clear: function(){
+      var i;
       var length = arguments.length;
+
       if (length > 0){
-        for(var i=0; i<length; i++){
+        for(i=0; i<length; i++){
           delete this.templates[arguments[i]];
         }
       } else {
@@ -762,18 +795,11 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Default implementation uses underscore.js templates. Override
     // this method to use your own templating engine.
     renderTemplate: function(template, data){
-      if (!template || template.length === 0){
-        var msg = "A template must be specified";
-        var err = new Error(msg);
-        err.name = "NoTemplateError";
-        throw err;
-      }
-
-      var html = _.template(template, data);
+      var html = template(data);
       return html;
     }
 
-  }
+  };
 
   // Helpers
   // -------
@@ -794,4 +820,3 @@ Backbone.Marionette = (function(Backbone, _, $){
   return Marionette;
 })(Backbone, _, window.jQuery || window.Zepto || window.ender);
 
-;

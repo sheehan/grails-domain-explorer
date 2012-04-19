@@ -35,12 +35,11 @@ class DomainController {
     def domainType = {
         GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.fullName)
         Map json = domainClassToMap(domainClass)
-        println json
         render json as JSON
     }
 
     def fromPath = {
-        List tokens = params.fragment.split('/').toList().reverse()
+        List tokens = params.path.split('/').toList().reverse()
 
         String fullName = tokens.pop()
         GrailsDomainClass domainClass = grailsApplication.getDomainClass(fullName)
@@ -73,8 +72,6 @@ class DomainController {
         }
 
         Boolean isCollection = result instanceof Collection
-        println result
-        println isCollection
         Map json = [
             clazz: domainClassToMap(domainClass),
             isCollection: isCollection,
