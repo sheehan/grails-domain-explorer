@@ -4,8 +4,7 @@ html {
 
 body {
 /*padding-top: 40px;*/
-  height: 100%;
-//  padding: 10px;
+  height: 100%; //  padding: 10px;
 }
 
 .layout {
@@ -18,9 +17,9 @@ body {
 }
 
 .section(){
- .header {
+  .header {
     border-radius: 10px 10px 0 0;
-    background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #ccc 100%);
+    background-image: -moz-linear-gradient(center top, #F5F5F5 0%, #ccc 100%);
     border-bottom: 1px solid #aaa;
     padding: 10px;
   }
@@ -28,7 +27,7 @@ body {
   border: 1px solid #aaa;
   box-shadow: 0 0 2px #aaa;
   & > .footer {
-      padding: 10px;
+    padding: 10px;
   }
 }
 
@@ -44,8 +43,7 @@ body {
   overflow: hidden;
   #list {
     margin: 0 5px 0 10px;
-    .section;
-//    margin: 10px 5px 10px 10px;
+    .section; //    margin: 10px 5px 10px 10px;
     height: 100%;
     padding: 0;
     .header {
@@ -54,11 +52,9 @@ body {
       & > ul {
         margin: 0;
         li {
-          list-style-type: none;
-//          border-top: 1px solid #fff;
-//          border-bottom: 1px solid #aaa;
-          cursor: pointer;
-//          background-color: #eee;
+          list-style-type: none; //          border-top: 1px solid #fff;
+        //          border-bottom: 1px solid #aaa;
+          cursor: pointer; //          background-color: #eee;
           & > a {
             display: block;
             padding: 10px 10px;
@@ -68,8 +64,7 @@ body {
             }
           }
           .count {
-            color: #777;
-//            font-weight: bold;
+            color: #777; //            font-weight: bold;
             float: right;
           }
           &.active a {
@@ -101,41 +96,48 @@ body {
 
   .domainView {
     & > .header {
+      ul.breadcrumb {
+        background: none repeat scroll 0 0 transparent;
+        border: medium none;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        li {
+          text-shadow: none;
+        }
+      }
     }
     & > .toolbar {
       padding: 5px 10px;
       border-bottom: 1px solid #aaa;
     }
     & > .content {
-      & > table tr {
-        cursor: pointer;
+      & > table {
+        margin: 0;
+        tr {
+          cursor: pointer;
+        }
       }
     }
   }
 
-  .showView {
-    height: 100%;
-    & > .content {
-      padding: 20px 0;
-      .form-horizontal {
-        .control-label {
-          padding-top: 0;
-          width: 175px;
-        }
-        .controls {
-          margin-left: 195px;
-        }
-      }
+  .view-instance.form-horizontal {
+    padding: 20px 0;
+    .control-label {
+      padding-top: 0;
+      width: 175px;
+    }
+    .controls {
+      margin-left: 195px;
     }
   }
 }
 
 .instanceValue {
-  &.oneToMany {
-//    background-color: #777777;
-//    border-radius: 20px 20px 20px 20px;
-//    color: #FFFFFF;
-//    padding: 5px 10px;
+  &.oneToMany { //    background-color: #777777;
+  //    border-radius: 20px 20px 20px 20px;
+  //    color: #FFFFFF;
+  //    padding: 5px 10px;
     white-space: nowrap;
   }
   &.null {

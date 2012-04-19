@@ -11,6 +11,7 @@
 </head>
 
 <body>
+
 <script id="layout-template" type="text/template">
   <section id="head-wrapper">
     <div class="navbar">
@@ -29,35 +30,30 @@
     </section>
   </section>
 </script>
+
 <script id="domain-count-item-template" type="text/template">
   <a href="#"><span class="name">{{name}}</span><span class="count">{{count}}</span></a>
 </script>
+
 <script id="domain-count-section-template" type="text/template">
   <div class="header">Domains</div>
   <div class="content"><ul></ul></div>
 </script>
+
 <script id="domain-template" type="text/template">
-  <div class="header">
-    <span class="name">{{name}}</span>
-    <span class="count">({{count}})</span>
-  </div>
-
-  <div class="toolbar">
-    <div class="btn-group" data-toggle="buttons-radio">
-      <button class="btn overview">Overview</button>
-      <button class="btn list">List</button>
-    </div>
-  </div>
-
+  <div class="header"></div>
+  %{--<div class="toolbar">--}%
+    %{--<div class="btn-group" data-toggle="buttons-radio">--}%
+      %{--<button class="btn overview">Overview</button>--}%
+      %{--<button class="btn list">List</button>--}%
+    %{--</div>--}%
+  %{--</div>--}%
   <div class="content"></div>
 </script>
+
 <script id="domain-overview-template" type="text/template">
   overview {{name}}
 </script>
-<script id="domain-create-template" type="text/template">
-  create {{name}}
-</script>
-
 
 <script id="domain-instance-show-section-template" type="text/template">
   <div class="header">

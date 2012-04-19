@@ -24,9 +24,14 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
     });
 
     Instance.ShowView = Backbone.Marionette.ItemView.extend({
-        className: 'form-horizontal',
+        className: 'form-horizontal view-instance',
+
+        initialize: function(options) {
+            this.domainType = options.domainType;
+        },
+
         renderHtml: function () {
-            var properties = this.model.domainType.get('properties');
+            var properties = this.domainType.get('properties');
             var html = _.collect(properties,
             function (property) {
                 var valueHtml = '',

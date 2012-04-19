@@ -19,7 +19,7 @@ Dex.DomainList = (function (Dex, Backbone) {
 
         _handleClick: function (event) {
             event.preventDefault();
-            Dex.vent.trigger("domain:show", this.model.get('fullName'));
+            Backbone.history.navigate(this.model.get('fullName'), {trigger: true});
         }
     });
 
