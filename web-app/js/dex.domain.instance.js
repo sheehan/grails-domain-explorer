@@ -1,28 +1,6 @@
 Dex.Domain.Instance = (function (Dex, Backbone) {
     var Instance = {};
 
-    Instance.ShowSectionView = Backbone.Marionette.Layout.extend({
-        template: '#domain-instance-show-section-template',
-        className: 'showView',
-
-        regions: {
-            content: '.content'
-        },
-
-        resize: function () {
-            this.$el.find('.content').sizeToFit();
-        },
-
-        onRender: function () {
-            this.$el.find('.header .name').html(this.model.domainType.get('name') + ': ');
-            var view = new Instance.ShowView({
-                model: this.model
-            });
-            this.content.show(view);
-        }
-
-    });
-
     Instance.ShowView = Backbone.Marionette.ItemView.extend({
         className: 'form-horizontal view-instance',
 
@@ -40,7 +18,7 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
                     if (value == 0) {
                         valueHtml = '<span class="instanceValue oneToMany">0</span>';
                     } else {
-                        valueHtml = '<span class="instanceValue oneToMany"><a href="#">' + value + '</a></span>';
+                        valueHtml = '<span class="instanceValue oneToMany"><a href="#" data-append-path="'+property.name+'">' + value + '</a></span>';
                     }
                 } else if(value === null) {
                     valueHtml = '<span class="instanceValue null">' + value + '</span>';
@@ -50,6 +28,15 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
                 return '<div class="control-group"><label class="control-label">' + property.name + ':</label><div class="controls">' + valueHtml + '</div></div>';
             }, this).join('');
             return html;
+        },
+
+        onRender: function() {
+            this.$('a').click(function(event) {
+                event.preventDefault();
+                var fragment = Backbone.history.getFragment();
+                var path = $(this).data('appendPath');
+                Backbone.history.navigate(fragment + '/' + path, {trigger: true});
+            });
         }
     });
 

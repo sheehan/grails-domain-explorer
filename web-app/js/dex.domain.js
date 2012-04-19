@@ -30,20 +30,31 @@ Dex.Domain = (function (Dex, Backbone) {
     Domain.DomainHeaderView = Backbone.Marionette.ItemView.extend({
         renderHtml: function (data) {
             var tokens = Backbone.history.getFragment().split('/'),
-            html = '';
+            html = '',
+            path = '';
             _.each(tokens, function (token, index) {
+                path += token;
                 var isFirst = index === 0,
-                isLast = index === tokens.length - 1;
+                    isLast = index === tokens.length - 1;
                 if (isFirst) {
                     token = _.last(token.split('.'));
                 }
-                var itemHtml = '<a href="#">' + token + '</a>';
+                var itemHtml = '<a href="#" data-path="' + path + '">' + token + '</a>';
                 if (!isLast) {
                     itemHtml += ' <span class="divider">/</span>'
+                    path += '/';
                 }
                 html += '<li class="' + (isLast ? 'active' : '') + '">' + itemHtml + '</li>';
             });
             return '<ul class="breadcrumb">' + html + '</ul>';
+        },
+
+        onRender: function() {
+            this.$('a').click(function(event) {
+                event.preventDefault();
+                var path = $(this).data('path');
+                Backbone.history.navigate(path, {trigger: true});
+            });
         }
     });
 
