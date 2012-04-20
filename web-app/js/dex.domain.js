@@ -147,11 +147,13 @@ Dex.Domain = (function (Dex, Backbone) {
             function (property) {
                 var valueHtml = '',
                 value = this.model.get(property.name);
-                if (value === null) {
+                if (property.oneToMany || property.manyToMany) {
+                    valueHtml = '<span class="instanceValue oneToMany">[' + value + ']</span>';
+                } else if (value === null) {
                     valueHtml = '<span class="instanceValue null">' + value + '</span>';
                 } else if (property.oneToOne || property.manyToOne) {
                     var className = _.last(property.type.split('.'));
-                    valueHtml = '<span class="nowrap">' + className + ': ' + value + '</span>'; // TODO ??
+                    valueHtml = '<span class="nowrap">' + className + ': ' + value + '</span>';
                 } else {
                     valueHtml = value;
                 }
@@ -225,6 +227,10 @@ Dex.Domain = (function (Dex, Backbone) {
         appendRoute: function(token) {
             var fragment = Backbone.history.getFragment();
             Domain.router.navigate(fragment + '/' + token, {trigger: true});
+        },
+
+        back: function() {
+            window.history.back();
         }
     });
 

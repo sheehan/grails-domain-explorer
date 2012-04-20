@@ -47,12 +47,6 @@
 </script>
 
 <script id="domain-list-toolbar" type="text/template">
-  %{--<div class="btn-group">--}%
-    %{--<button class="btn">--}%
-      %{--<i class="icon-arrow-left"></i>--}%
-      %{--Back--}%
-    %{--</button>--}%
-  %{--</div>--}%
   <div class="btn-group page-controls">
     <button class="btn">
       <i class="icon-chevron-left"></i>
@@ -64,12 +58,6 @@
 </script>
 
 <script id="domain-instance-toolbar" type="text/template">
-  <div class="btn-group">
-    <button class="btn">
-      <i class="icon-chevron-left"></i>
-      Back
-    </button>
-  </div>
   <div class="btn-group">
     <button class="btn">
       <i class="icon-pencil"></i>

@@ -4,7 +4,7 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
     Instance.ShowView = Backbone.Marionette.ItemView.extend({
         className: 'form-horizontal view-instance',
 
-        initialize: function(options) {
+        initialize: function (options) {
             this.domainType = options.domainType;
         },
 
@@ -15,15 +15,12 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
                 var valueHtml = '',
                 value = this.model.get(property.name);
                 if (property.oneToMany || property.manyToMany) {
-                    if (value == 0) {
-                        valueHtml = '<span class="instanceValue oneToMany">0</span>';
-                    } else {
-                        valueHtml = '<span class="instanceValue oneToMany"><a href="#" data-append-path="'+property.name+'">' + value + '</a></span>';
-                    }
-                } else if(value === null) {
+                    valueHtml = '<span class="instanceValue oneToMany"><a href="#" data-append-path="' + property.name + '">[' + value + ']</a></span>';
+                } else if (value === null) {
                     valueHtml = '<span class="instanceValue null">' + value + '</span>';
                 } else if (property.oneToOne || property.manyToOne) {
-                    valueHtml = '<a href="#" data-append-path="'+property.name+'">' + value + '</a>';
+                    var className = _.last(property.type.split('.'));
+                    valueHtml = '<a href="#" data-append-path="' + property.name + '"><span class="nowrap">' + className + ': ' + value + '</span></a>';
                 } else {
                     valueHtml = value;
                 }
@@ -32,8 +29,8 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
             return html;
         },
 
-        onRender: function() {
-            this.$('a').click(function(event) {
+        onRender: function () {
+            this.$('a').click(function (event) {
                 event.preventDefault();
                 var fragment = Backbone.history.getFragment();
                 var path = $(this).data('appendPath');

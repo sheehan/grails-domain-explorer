@@ -26,18 +26,6 @@ class DomainController {
         render json as JSON
     }
 
-    def listEntities = {
-        GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.fullName)
-        def json = domainClass.clazz.list(max: 50).collect { domainInstanceToMap it, domainClass }
-        render json as JSON
-    }
-
-    def domainType = {
-        GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.fullName)
-        Map json = domainClassToMap(domainClass)
-        render json as JSON
-    }
-
     def fromPath = {
         List tokens = params.path.split('/').toList().reverse()
 
