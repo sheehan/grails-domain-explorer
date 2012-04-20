@@ -38,7 +38,7 @@ Dex.DomainList = (function (Dex, Backbone) {
         },
 
         resize: function() {
-            this.$el.find('.content').sizeToFit();
+            Dex.DomUtil.sizeHeightToFillParent(this.$el.children('.content'));
         },
 
         highlightActiveView: function () {

@@ -110,6 +110,7 @@
 <script type="text/javascript" src="${resource(dir: 'js', file: 'dex.jqueryplugins.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'bootstrap/js', file: 'bootstrap.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'dex.js')}"></script>
+<script type="text/javascript" src="${resource(dir: 'js', file: 'dex.domutil.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'dex.domainlist.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'dex.domain.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'dex.domain.instance.js')}"></script>

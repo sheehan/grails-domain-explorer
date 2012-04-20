@@ -21,10 +21,10 @@
                 north__spacing_open: 0,
                 west__paneSelector: '#list-wrapper',
                 west__size: 350,
-                center__paneSelector: '#main-wrapper'
+                center__paneSelector: '#main-wrapper',
+                onresize: _.bind(this.resize, this)
             });
             _.each(this.regionManagers, function (manager, name) {
-                // TODO $(window).resize();
                 manager.on('view:show', function (view) {
                     that.$el.layout().resizeAll();
                     view.resize && view.resize();
@@ -32,6 +32,13 @@
                         view.resize && view.resize();
                     });
                 });
+            });
+        },
+
+        resize: function() {
+            _.each(this.regionManagers, function(manager, name) {
+                var view = manager.currentView;
+                view && view.resize && view.resize();
             });
         }
     });

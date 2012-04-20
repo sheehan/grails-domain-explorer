@@ -138,7 +138,7 @@ class DomainController {
             if (property.oneToMany || property.manyToMany) {
                 result[property.name] = entity[property.name]?.size() ?: 0
             } else if (property.association && (property.oneToOne || property.manyToOne)) {
-                result[property.name] = entity.id
+                result[property.name] = entity[property.name]?.id
             } else {
                 result[property.name] = entity[property.name]?.toString()
             }

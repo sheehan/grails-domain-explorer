@@ -1,5 +1,3 @@
-"use strict";
-
 Dex.Domain = (function (Dex, Backbone) {
     var Domain = {};
 
@@ -81,7 +79,7 @@ Dex.Domain = (function (Dex, Backbone) {
         },
 
         resize: function () {
-            this.$el.children('.content').sizeToFit();
+            Dex.DomUtil.sizeHeightToFillParent(this.$el.children('.content'));
         },
 
         onRender: function () {
