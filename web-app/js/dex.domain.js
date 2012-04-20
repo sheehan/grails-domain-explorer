@@ -62,10 +62,7 @@ Dex.Domain = (function (Dex, Backbone) {
 
         className: 'domainView',
 
-        events: {
-//            'click .overview': 'showOverview',
-//            'click .list': 'showList'
-        },
+        events: {},
 
         regions: {
             header: '.header',

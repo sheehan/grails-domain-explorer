@@ -6,6 +6,10 @@
 
         className: 'layout',
 
+        initialize: function() {
+            _.bindAll(this, 'resize');
+        },
+
         regions: {
             list: "#list-wrapper",
             main: "#main-wrapper #main .content"
@@ -27,20 +31,18 @@
             _.each(this.regionManagers, function (manager, name) {
                 manager.on('view:show', function (view) {
                     that.$el.layout().resizeAll();
-                    view.resize && view.resize();
-                    view.on("render", function () {
-                        view.resize && view.resize();
-                    });
+                    view && view.resize && view.resize();
+
                 });
             });
         },
 
-        resize: function() {
+        resize: _.debounce(function() {
             _.each(this.regionManagers, function(manager, name) {
                 var view = manager.currentView;
                 view && view.resize && view.resize();
             });
-        }
+        }, 100)
     });
 
     Dex.addInitializer(function () {
