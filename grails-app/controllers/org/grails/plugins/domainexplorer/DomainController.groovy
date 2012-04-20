@@ -52,22 +52,30 @@ class DomainController {
             result = domainClass.clazz.list(max: 50)
         }
 
+        // TODO clean up this mess!!
+        List maps = [[domainClass: domainClass]]
+
         while (tokens) {
             String next = tokens.pop()
             Boolean isLast = tokens.empty
             if (next.isLong()) {
                 lastId = next as Long
-                if (isLast) {
-                    result = domainClass.clazz.get(next)
-                }
+                maps[-1].id = lastId
             } else {
                 property = domainClass.properties.find { it.name == next }
-                if (isLast) {
-                    def obj = domainClass.clazz.get(lastId)
-                    // TODO if collection, need to add max, pagination params
-                    result = obj[next]
-                }
+
                 domainClass = property.referencedDomainClass
+                maps << [domainClass: domainClass, domainProperty: property]
+            }
+            if (isLast) {
+                Integer index = maps.findLastIndexOf { it.id }
+                Map map = maps[index]
+                result = map.domainClass.clazz.get(map.id)
+                if (maps.size() > index + 1) {
+                    maps[(index + 1)..-1].each { m ->
+                        result = result[m.domainProperty.name]
+                    }
+                }
             }
         }
 
@@ -87,7 +95,7 @@ class DomainController {
     private Map domainClassToMap(GrailsDomainClass domainClass) {
         Map constrainedProperties = domainClass.constrainedProperties
 
-        List properties = domainClass.properties.findAll { it.persistent }.collect { GrailsDomainClassProperty property ->
+        List properties = getProperties(domainClass).collect { GrailsDomainClassProperty property ->
             Map m = [
                 name: property.name,
                 type: property.referencedPropertyType,
@@ -114,7 +122,7 @@ class DomainController {
 //                    m.constraints = cp.properties
             }
             m
-        }.sort { it.name == 'id' ? '' : it.name }
+        }
 
         [
             name: domainClass.name,
@@ -126,13 +134,22 @@ class DomainController {
 
     private Map domainInstanceToMap(entity, GrailsDomainClass domainClass) {
         Map result = [:]
-        domainClass.properties.findAll { it.persistent }.each { GrailsDomainClassProperty property ->
-            if (property.oneToMany) {
+        getProperties(domainClass).each { GrailsDomainClassProperty property ->
+            if (property.oneToMany || property.manyToMany) {
                 result[property.name] = entity[property.name]?.size() ?: 0
             } else {
                 result[property.name] = entity[property.name]?.toString()
             }
         }
         result
+    }
+
+    private getProperties(GrailsDomainClass domainClass) {
+        List props = domainClass.persistentProperties
+        props << domainClass.identifier
+        if (domainClass.version) {
+            props << domainClass.version
+        }
+        props.sort { it.name == 'id' ? '' : it.name }
     }
 }

@@ -14,7 +14,7 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
             function (property) {
                 var valueHtml = '',
                 value = this.model.get(property.name);
-                if (property.oneToMany) {
+                if (property.oneToMany || property.manyToMany) {
                     if (value == 0) {
                         valueHtml = '<span class="instanceValue oneToMany">0</span>';
                     } else {

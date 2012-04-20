@@ -3,8 +3,7 @@
 Dex.Domain = (function (Dex, Backbone) {
     var Domain = {};
 
-    Domain.show = function () {
-        var fragment = Backbone.history.getFragment();
+    Domain.show = function (fragment) {
         var link = Dex.createLink('domain', 'fromPath', { path: fragment });
         $.getJSON(link).done(function (resp) {
             var model, view, domainType;
@@ -37,7 +36,7 @@ Dex.Domain = (function (Dex, Backbone) {
             _.each(tokens, function (token, index) {
                 path += token;
                 var isFirst = index === 0,
-                    isLast = index === tokens.length - 1;
+                isLast = index === tokens.length - 1;
                 if (isFirst) {
                     token = _.last(token.split('.'));
                 }
@@ -51,11 +50,11 @@ Dex.Domain = (function (Dex, Backbone) {
             return '<ul class="breadcrumb">' + html + '</ul>';
         },
 
-        onRender: function() {
-            this.$('a').click(function(event) {
+        onRender: function () {
+            this.$('a').click(function (event) {
                 event.preventDefault();
                 var path = $(this).data('path');
-                Backbone.history.navigate(path, {trigger: true});
+                Domain.router.navigate(path, {trigger: true});
             });
         }
     });
@@ -82,7 +81,6 @@ Dex.Domain = (function (Dex, Backbone) {
         },
 
         resize: function () {
-            console.log('content %o', this.$el.children('.content'));
             this.$el.children('.content').sizeToFit();
         },
 
@@ -93,14 +91,6 @@ Dex.Domain = (function (Dex, Backbone) {
                 this.showInstance();
             }
         },
-
-//        showOverview: function () {
-//            this.$('.overview').button('toggle');
-//            var view = new Domain.OverviewView({
-//                model: this.model
-//            });
-//            this.content.show(view);
-//        },
 
         showList: function () {
             var headerView = new Domain.DomainHeaderView({model: this.model});
@@ -153,8 +143,7 @@ Dex.Domain = (function (Dex, Backbone) {
         },
 
         _handleRowClick: function () {
-            var fragment = Backbone.history.getFragment();
-            Backbone.history.navigate(fragment + '/' + this.model.id, {trigger: true});
+            Domain.router.appendRoute(this.model.id);
         },
 
         renderHtml: function (data) {
@@ -207,7 +196,7 @@ Dex.Domain = (function (Dex, Backbone) {
     });
 
     Domain.EmptyView = Backbone.Marionette.ItemView.extend({
-        renderHtml: function(data) {
+        renderHtml: function (data) {
             return 'select some shit';
         }
     });
@@ -218,21 +207,26 @@ Dex.Domain = (function (Dex, Backbone) {
         model: Domain.DomainInstanceModel
     });
 
-    Domain.showDomainRoute = function (fragment) {
-        if (fragment) {
-            Domain.show();
-        } else {
-            var view = new Domain.EmptyView();
-            Dex.layout.main.show(view);
-        }
-//        Dex.vent.trigger("domain:show", fullName);
-    };
-
-    Dex.vent.on("domain:show", Domain.show);
-
-    var Router = Backbone.Marionette.AppRouter.extend({
-        appRoutes: {
+    var Router = Backbone.Router.extend({
+        routes: {
             "*fragment": "showDomainRoute"
+        },
+
+        showDomainRoute: function (fragment) {
+            var fullName;
+            if (fragment) {
+                Domain.show(fragment);
+                fullName = fragment.split('/')[0];
+            } else {
+                var view = new Domain.EmptyView();
+                Dex.layout.main.show(view);
+            }
+            Dex.vent.trigger("domain:show", fullName);
+        },
+
+        appendRoute: function(token) {
+            var fragment = Backbone.history.getFragment();
+            Domain.router.navigate(fragment + '/' + token, {trigger: true});
         }
     });
 
