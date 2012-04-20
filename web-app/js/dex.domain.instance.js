@@ -22,6 +22,8 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
                     }
                 } else if(value === null) {
                     valueHtml = '<span class="instanceValue null">' + value + '</span>';
+                } else if (property.oneToOne || property.manyToOne) {
+                    valueHtml = '<a href="#" data-append-path="'+property.name+'">' + value + '</a>';
                 } else {
                     valueHtml = value;
                 }
@@ -41,7 +43,6 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
     });
 
     Instance.showDomainInstance = function (model) {
-        console.log('showDomainInstance: %o', model);
         Dex.layout.main.show(new Instance.ShowSectionView({model: model}));
     };
 

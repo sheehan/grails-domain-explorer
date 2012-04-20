@@ -47,10 +47,18 @@
 </script>
 
 <script id="domain-list-toolbar" type="text/template">
-  <div class="btn-group">
+  %{--<div class="btn-group">--}%
+    %{--<button class="btn">--}%
+      %{--<i class="icon-arrow-left"></i>--}%
+      %{--Back--}%
+    %{--</button>--}%
+  %{--</div>--}%
+  <div class="btn-group page-controls">
     <button class="btn">
       <i class="icon-chevron-left"></i>
-      Back
+    </button>
+    <button class="btn">
+      <i class="icon-chevron-right"></i>
     </button>
   </div>
 </script>
@@ -71,6 +79,24 @@
       <i class="icon-trash"></i>
       Delete
     </button>
+  </div>
+</script>
+
+<script type="text/template">
+  <div class="modal" id="myModal">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">×</a>
+      <h3>You sure?</h3>
+    </div>
+
+    <div class="modal-body">
+      <p>You sure about that motherfucker?</p>
+    </div>
+
+    <div class="modal-footer">
+      <a href="#" class="btn">Cancel</a>
+      <a href="#" class="btn btn-primary">Delete</a>
+    </div>
   </div>
 </script>
 

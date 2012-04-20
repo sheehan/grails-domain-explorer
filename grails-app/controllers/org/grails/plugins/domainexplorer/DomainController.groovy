@@ -74,9 +74,13 @@ class DomainController {
         Boolean isCollection = result instanceof Collection
         Map json = [
             clazz: domainClassToMap(domainClass),
-            isCollection: isCollection,
-            value: isCollection ? result.collect { domainInstanceToMap it, domainClass } : domainInstanceToMap(result, domainClass)
+            isCollection: isCollection
         ]
+        if (isCollection) {
+            json.value = result.toList().sort { it.id }.collect { domainInstanceToMap it, domainClass }
+        } else {
+            json.value = domainInstanceToMap(result, domainClass)
+        }
         render json as JSON
     }
 

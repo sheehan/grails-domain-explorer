@@ -5,6 +5,7 @@ html {
 body {
 /*padding-top: 40px;*/
   height: 100%; //  padding: 10px;
+  background: url("../images/white_plaster.png") repeat scroll 0 0 transparent;
 }
 
 .layout {
@@ -18,17 +19,17 @@ body {
 
 .section(){
   .header {
-    border-radius: 10px 10px 0 0;
     background-image: -moz-linear-gradient(center top, #F5F5F5 0%, #ccc 100%);
     border-bottom: 1px solid #aaa;
     padding: 10px;
   }
-  border-radius: 10px;
-  border: 1px solid #aaa;
-  box-shadow: 0 0 2px #aaa;
+//  border-radius: 10px;
+  border: 4px solid #888;
+  box-shadow: 0 0 2px #555;
   & > .footer {
     padding: 10px;
   }
+  background-color: #fff;
 }
 
 #head-wrapper {
@@ -38,11 +39,14 @@ body {
   }
 }
 
+@section-padding: 20px;
+
 #list-wrapper {
-  padding: 10px 0 10px;
+  background-color: transparent;
+  padding: @section-padding 0 @section-padding;
   overflow: hidden;
   #list {
-    margin: 0 5px 0 10px;
+    margin: 0 (@section-padding / 2) 0 @section-padding;
     .section; //    margin: 10px 5px 10px 10px;
     height: 100%;
     padding: 0;
@@ -52,9 +56,8 @@ body {
       & > ul {
         margin: 0;
         li {
-          list-style-type: none; //          border-top: 1px solid #fff;
-        //          border-bottom: 1px solid #aaa;
-          cursor: pointer; //          background-color: #eee;
+          list-style-type: none;
+          cursor: pointer;
           & > a {
             display: block;
             padding: 10px 10px;
@@ -64,7 +67,7 @@ body {
             }
           }
           .count {
-            color: #777; //            font-weight: bold;
+            color: #777;
             float: right;
           }
           &.active a {
@@ -80,7 +83,8 @@ body {
 }
 
 #main-wrapper {
-  padding: 10px 10px 10px 5px;
+  background-color: transparent;
+  padding: @section-padding @section-padding @section-padding @section-padding / 2;
   overflow: hidden;
   #main {
     height: 100%;
@@ -111,6 +115,10 @@ body {
       padding: 5px 10px;
       border-bottom: 1px solid #aaa;
       .btn-toolbar {
+        overflow: hidden;
+        .page-controls {
+          float: right;
+        }
         margin: 0;
       }
     }
