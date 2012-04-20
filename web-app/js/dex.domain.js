@@ -154,6 +154,9 @@ Dex.Domain = (function (Dex, Backbone) {
                 value = this.model.get(property.name);
                 if (value === null) {
                     valueHtml = '<span class="instanceValue null">' + value + '</span>';
+                } else if (property.oneToOne || property.manyToOne) {
+                    var className = _.last(property.type.split('.'));
+                    valueHtml = '<span class="nowrap">' + className + ': ' + value + '</span>'; // TODO ??
                 } else {
                     valueHtml = value;
                 }

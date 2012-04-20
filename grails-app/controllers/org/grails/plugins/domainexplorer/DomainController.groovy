@@ -137,6 +137,8 @@ class DomainController {
         getProperties(domainClass).each { GrailsDomainClassProperty property ->
             if (property.oneToMany || property.manyToMany) {
                 result[property.name] = entity[property.name]?.size() ?: 0
+            } else if (property.association && (property.oneToOne || property.manyToOne)) {
+                result[property.name] = entity.id
             } else {
                 result[property.name] = entity[property.name]?.toString()
             }
