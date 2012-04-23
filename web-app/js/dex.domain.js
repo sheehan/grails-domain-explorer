@@ -1,26 +1,13 @@
 Dex.Domain = (function (Dex, Backbone) {
     var Domain = {};
 
-    Domain.show = function (fragment) {
-        var link = Dex.createLink('domain', 'fromPath', { path: fragment });
-        $.getJSON(link).done(function (resp) {
-            var model, view, domainType;
-            if (resp.isCollection) {
-                model = new Domain.DomainInstanceCollection(resp.value);
-            } else {
-                model = new Domain.DomainInstanceModel(resp.value);
-            }
-            domainType = new Domain.DomainModel(resp.clazz);
-            view = new Domain.DomainView({
-                model: model,
-                domainType: domainType,
-                isCollection: resp.isCollection
-            });
-            Dex.layout.main.show(view);
-        });
-    };
-
     Domain.DomainModel = Backbone.Model.extend({});
+
+    Domain.DomainInstanceModel = Backbone.Model.extend({});
+
+    Domain.DomainInstanceCollection = Backbone.Collection.extend({
+        model: Domain.DomainInstanceModel
+    });
 
     Domain.DomainSectionView = Backbone.Model.extend({
         className: 'domainView'
@@ -201,11 +188,24 @@ Dex.Domain = (function (Dex, Backbone) {
         }
     });
 
-    Domain.DomainInstanceModel = Backbone.Model.extend({});
-
-    Domain.DomainInstanceCollection = Backbone.Collection.extend({
-        model: Domain.DomainInstanceModel
-    });
+    Domain.show = function (fragment) {
+        var link = Dex.createLink('domain', 'fromPath', { path: fragment });
+        $.getJSON(link).done(function (resp) {
+            var model, view, domainType;
+            if (resp.isCollection) {
+                model = new Domain.DomainInstanceCollection(resp.value);
+            } else {
+                model = new Domain.DomainInstanceModel(resp.value);
+            }
+            domainType = new Domain.DomainModel(resp.clazz);
+            view = new Domain.DomainView({
+                model: model,
+                domainType: domainType,
+                isCollection: resp.isCollection
+            });
+            Dex.layout.main.show(view);
+        });
+    };
 
     var Router = Backbone.Router.extend({
         routes: {

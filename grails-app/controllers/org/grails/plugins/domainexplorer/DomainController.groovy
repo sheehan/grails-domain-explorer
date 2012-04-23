@@ -102,12 +102,31 @@ class DomainController {
                 inherited: property.inherited,
                 owningSide: property.owningSide,
                 circular: property.circular,
-                embedded: property.embedded,
-//                    derived: property.derived,
+                embedded: property.embedded
             ]
             ConstrainedProperty cp = constrainedProperties[property.name]
             if (cp) {
-//                    m.constraints = cp.properties
+                m.constraints = [
+                    format: cp.format,
+                    inList: cp.inList?.toString(),
+                    matches: cp.propertyType == String.class ? cp.matches : null,
+                    max: cp.max?.toString(),
+                    maxSize: cp.maxSize?.toString(),
+                    min: cp.min?.toString(),
+                    minSize: cp.minSize?.toString(),
+                    order: cp.order,
+                    range: cp.range?.toString(),
+                    scale: cp.scale?.toString(),
+                    size: cp.size?.toString(),
+                    widget: cp.widget,
+                    blank: cp.blank,
+                    creditCard: cp.propertyType == String.class ? cp.creditCard : null,
+                    display: cp.display,
+                    editable: cp.editable,
+                    email: cp.propertyType == String.class ? cp.email : null,
+                    nullable: cp.nullable,
+                    url: cp.propertyType == String.class ? cp.url : null
+                ]
             }
             m
         }

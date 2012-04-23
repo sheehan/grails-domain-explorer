@@ -1,8 +1,7 @@
 Dex.DomainList = (function (Dex, Backbone) {
     var DomainList = {};
 
-    DomainList.DomainCount = Backbone.Model.extend({
-    });
+    DomainList.DomainCount = Backbone.Model.extend({});
 
     DomainList.DomainCountCollection = Backbone.Collection.extend({
         url: function() { return Dex.createLink('domain', 'list') },

@@ -27,6 +27,14 @@ Dex = new Backbone.Marionette.Application({
     }
 });
 
+Dex.bind("initialize:after", function (options) {
+    if (Backbone.history) {
+        Backbone.history.start();
+    }
+});
+
+
+
 Dex.StackableRegion = Backbone.Marionette.Region.extend({
 
     constructor: function() {

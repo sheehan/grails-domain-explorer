@@ -39,12 +39,6 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
         }
     });
 
-    Instance.showDomainInstance = function (model) {
-        Dex.layout.main.show(new Instance.ShowSectionView({model: model}));
-    };
-
-    Dex.vent.on("domainInstance:show", Instance.showDomainInstance);
-
     return Instance;
 })(Dex, Backbone);
 

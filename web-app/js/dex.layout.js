@@ -52,9 +52,3 @@
         });
     });
 })(Dex, Backbone, $);
-
-Dex.bind("initialize:after", function (options) {
-    if (Backbone.history) {
-        Backbone.history.start();
-    }
-});
