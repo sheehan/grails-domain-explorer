@@ -1,6 +1,6 @@
 # Grails Domain Explorer Plugin
 
-Purpose is to provide the functionality of a database tool as well as that of Grails scaffolding, including...
+Purpose is to provide the functionality of a database tool as well as that of Grails scaffolding, including:
 
 * Inspecting class metadata (fields, constraints, ...)
 * Viewing class relationships
