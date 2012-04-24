@@ -33,7 +33,14 @@ Dex.bind("initialize:after", function (options) {
     }
 });
 
+Backbone.Marionette.TemplateCache.loadTemplate = function (template, callback) {
+    var compiledTemplate = Handlebars.compile($(template).html());
+    callback.call(this, compiledTemplate);
+};
 
+Backbone.Marionette.Renderer.renderTemplate = function(template, data) {
+    return template(data);
+}
 
 Dex.StackableRegion = Backbone.Marionette.Region.extend({
 

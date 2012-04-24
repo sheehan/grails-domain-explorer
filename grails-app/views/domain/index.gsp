@@ -92,6 +92,7 @@
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/jquery-1.7.1.min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/jquery-ui-1.8.18.custom.min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/jquery.layout-latest.js')}"></script>
+<script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/handlebars-1.0.0.beta.6.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/underscore-min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/backbone-min.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/backbone.marionette.js')}"></script>
