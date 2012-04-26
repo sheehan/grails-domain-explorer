@@ -50,5 +50,6 @@
         Dex.layout.render().done(function () {
             $("body").prepend(Dex.layout.el);
         });
+        Dex.content.show(Dex.layout);
     });
 })(Dex, Backbone, $);

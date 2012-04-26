@@ -26,6 +26,21 @@ class DomainController {
         render json as JSON
     }
 
+    def rest = {
+        switch(request.method){
+            case "POST":
+                break
+            case "GET":
+                break
+            case "PUT":
+                break
+            case "DELETE":
+
+                break
+        }
+        render 'aaa'
+    }
+
     def fromPath = {
         List tokens = params.path.split('/').toList().reverse()
 

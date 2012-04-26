@@ -27,15 +27,23 @@ Dex = new Backbone.Marionette.Application({
     }
 });
 
+
+Dex.bind("initialize:before", function (options) {
+    Dex.addRegions({
+        content: "#main-content",
+        modal: Dex.Modal.ModalRegion
+    });
+    console.log('d');
+});
+
 Dex.bind("initialize:after", function (options) {
     if (Backbone.history) {
         Backbone.history.start();
     }
 });
 
-Backbone.Marionette.TemplateCache.loadTemplate = function (template, callback) {
-    var compiledTemplate = Handlebars.compile($(template).html());
-    callback.call(this, compiledTemplate);
+Backbone.Marionette.TemplateCache.compileTemplate = function(rawTemplate){
+    return Handlebars.compile(rawTemplate);
 };
 
 Backbone.Marionette.Renderer.renderTemplate = function(template, data) {

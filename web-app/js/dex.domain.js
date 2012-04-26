@@ -3,7 +3,11 @@ Dex.Domain = (function (Dex, Backbone) {
 
     Domain.DomainModel = Backbone.Model.extend({});
 
-    Domain.DomainInstanceModel = Backbone.Model.extend({});
+    Domain.DomainInstanceModel = Backbone.Model.extend({
+        urlRoot: function() {
+            return Dex.createLink('domain', 'rest');
+        }
+    });
 
     Domain.DomainInstanceCollection = Backbone.Collection.extend({
         model: Domain.DomainInstanceModel
@@ -89,10 +93,17 @@ Dex.Domain = (function (Dex, Backbone) {
         },
 
         showInstance: function () {
+            var that = this;
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
 
             var toolbarView = new Domain.InstanceToolbarView();
+            toolbarView.on('delete', function() {
+                var confirmDeleteView = new Domain.ConfirmDeleteView();
+                confirmDeleteView.render();
+                Dex.modal.show(confirmDeleteView);
+//                that.model.destroy();
+            });
             this.toolbar.show(toolbarView);
 
             var view = new Domain.Instance.ShowView({
@@ -110,10 +121,20 @@ Dex.Domain = (function (Dex, Backbone) {
 
     Domain.InstanceToolbarView = Backbone.Marionette.ItemView.extend({
         template: '#domain-instance-toolbar',
-        className: 'btn-toolbar'
+        className: 'btn-toolbar',
+
+        events: {
+            'click .delete': '_handleDeleteClick'
+        },
+
+        _handleDeleteClick: function(event) {
+            event.preventDefault();
+            this.trigger('delete');
+        }
     });
 
     Domain.DomainListItemView = Backbone.Marionette.ItemView.extend({
+        template: '#domain-list-item-view-template',
         tagName: 'tr',
 
         events: {
@@ -128,27 +149,17 @@ Dex.Domain = (function (Dex, Backbone) {
             Domain.router.appendRoute(this.model.id);
         },
 
-        renderHtml: function (data) {
-            var properties = this.domainType.get('properties');
-            return _.collect(properties,
-            function (property) {
-                var valueHtml = '',
-                value = this.model.get(property.name);
-                if (property.oneToMany || property.manyToMany) {
-                    valueHtml = '<span class="instanceValue oneToMany">[' + value + ']</span>';
-                } else if (value === null) {
-                    valueHtml = '<span class="instanceValue null">' + value + '</span>';
-                } else if (property.oneToOne || property.manyToOne) {
-                    var className = _.last(property.type.split('.'));
-                    valueHtml = '<span class="nowrap">' + className + ': ' + value + '</span>';
-                } else {
-                    valueHtml = value;
+        serializeData: function(){
+            return _.map(this.domainType.toJSON().properties, function(property) {
+                return {
+                    property: property,
+                    value: this.model.get(property.name)
                 }
-                return '<td>' + valueHtml + '</td>';
-            }, this).join('');
+            }, this);
         }
 
     });
+
 
     Domain.ListView = Backbone.Marionette.CompositeView.extend({
         itemView: Domain.DomainListItemView,
@@ -187,6 +198,11 @@ Dex.Domain = (function (Dex, Backbone) {
             return 'select some shit';
         }
     });
+
+    Domain.ConfirmDeleteView = Backbone.Marionette.ItemView.extend({
+        template: '#confirm-delete-template'
+    });
+
 
     Domain.show = function (fragment) {
         var link = Dex.createLink('domain', 'fromPath', { path: fragment });
@@ -235,9 +251,25 @@ Dex.Domain = (function (Dex, Backbone) {
     });
 
     Dex.addInitializer(function () {
-        Domain.router = new Router({
-            controller: Domain
-        });
+        Domain.router = new Router({});
+    });
+
+
+    Handlebars.registerHelper('property_value_cell', function() {
+        var property = this.property,
+            value = this.value,
+            valueHtml;
+        if (property.oneToMany || property.manyToMany) {
+            valueHtml = '<span class="instanceValue oneToMany">[' + value + ']</span>';
+        } else if (value === null) {
+            valueHtml = '<span class="instanceValue null">' + value + '</span>';
+        } else if (property.oneToOne || property.manyToOne) {
+            var className = _.last(property.type.split('.'));
+            valueHtml = '<span class="nowrap">' + className + ': ' + value + '</span>';
+        } else {
+            valueHtml = value;
+        }
+        return new Handlebars.SafeString(valueHtml);
     });
 
     return Domain;

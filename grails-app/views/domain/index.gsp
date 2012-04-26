@@ -12,6 +12,9 @@
 
 <body>
 
+<div id="main-content"></div>
+<div id="modal"></div>
+
 <script id="layout-template" type="text/template">
   <section id="head-wrapper">
     <div class="navbar">
@@ -63,14 +66,20 @@
       <i class="icon-pencil"></i>
       Edit
     </button>
-    <button class="btn">
+    <button class="btn delete">
       <i class="icon-trash"></i>
       Delete
     </button>
   </div>
 </script>
 
-<script type="text/template">
+<script id="domain-list-item-view-template" type="text/template">
+  {{#each this}}
+    <td>{{property_value_cell}}</td>
+  {{/each}}
+</script>
+
+<script id="confirm-delete-template" type="text/template">
   <div class="modal" id="myModal">
     <div class="modal-header">
       <a class="close" data-dismiss="modal">×</a>
@@ -99,6 +108,7 @@
 <script type="text/javascript" src="${resource(dir: 'bootstrap/js', file: 'bootstrap.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'dex.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'dex.domutil.js')}"></script>
+<script type="text/javascript" src="${resource(dir: 'js', file: 'dex.modal.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'dex.domainlist.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'dex.domain.js')}"></script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'dex.domain.instance.js')}"></script>
