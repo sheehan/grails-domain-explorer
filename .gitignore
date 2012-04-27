@@ -2,3 +2,5 @@ bookstore/.idea
 bookstore/Bookstore-grailsPlugins.iml
 bookstore/Bookstore.iml
 bookstore/domainExplorer-inplacePlugin.iml
+bookstore/.settings/
+bookstore/.project
