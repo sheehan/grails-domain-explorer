@@ -35,10 +35,11 @@ class DomainController {
             case "PUT":
                 break
             case "DELETE":
-//                grailsApplication.
+                Class clazz = grailsApplication.getClassForName(params.className)
+                clazz.get(params.id).delete()
                 break
         }
-        render 'aaa'
+        render [:] as JSON
     }
 
     def fromPath = {
