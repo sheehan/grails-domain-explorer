@@ -1,6 +1,14 @@
+Closure rand(List list) {
+    Random random = new Random()
+    return { -> list[random.nextInt(list.size())] }
+}
+
 testDataConfig {
     sampleData {
-        
+        'bookstore.Address' {
+            List address1List = ['123 Fake St', '846 1st Ave', '55531 Alberta Place']
+            address1 = rand(address1List)
+        }
     }
 }
 

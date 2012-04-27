@@ -33,7 +33,6 @@ Dex.bind("initialize:before", function (options) {
         content: "#main-content",
         modal: Dex.Modal.ModalRegion
     });
-    console.log('d');
 });
 
 Dex.bind("initialize:after", function (options) {
@@ -48,43 +47,43 @@ Backbone.Marionette.TemplateCache.compileTemplate = function(rawTemplate){
 
 Backbone.Marionette.Renderer.renderTemplate = function(template, data) {
     return template(data);
-}
+};
 
-Dex.StackableRegion = Backbone.Marionette.Region.extend({
-
-    constructor: function() {
-        this.stack = [];
-        Backbone.Marionette.Region.prototype.constructor.apply(this, arguments);
-    },
-
-    push: function(view) {
-        this.ensureEl();
-        this.stack.push(view);
-        if (this.currentView) {
-            this.currentView.$el.hide();
-            this.currentView = view;
-            this.open(view, 'append');
-        }
-    },
-
-    pop: function() {
-        this.stack.pop();
-        this.close();
-        if (this.stack.length) {
-            this.currentView = this.stack[this.stack.length - 1];
-            this.currentView.$el.show();
-        }
-    },
-
-    show: function(view, appendMethod){
-        this.ensureEl();
-
-        this.close();
-        this.open(view, appendMethod);
-
-        this.currentView = view;
-    }
-});
+//Dex.StackableRegion = Backbone.Marionette.Region.extend({
+//
+//    constructor: function() {
+//        this.stack = [];
+//        Backbone.Marionette.Region.prototype.constructor.apply(this, arguments);
+//    },
+//
+//    push: function(view) {
+//        this.ensureEl();
+//        this.stack.push(view);
+//        if (this.currentView) {
+//            this.currentView.$el.hide();
+//            this.currentView = view;
+//            this.open(view, 'append');
+//        }
+//    },
+//
+//    pop: function() {
+//        this.stack.pop();
+//        this.close();
+//        if (this.stack.length) {
+//            this.currentView = this.stack[this.stack.length - 1];
+//            this.currentView.$el.show();
+//        }
+//    },
+//
+//    show: function(view, appendMethod){
+//        this.ensureEl();
+//
+//        this.close();
+//        this.open(view, appendMethod);
+//
+//        this.currentView = view;
+//    }
+//});
 
 
 
