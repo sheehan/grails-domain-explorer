@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Bookstore.iml" filepath="$PROJECT_DIR$/Bookstore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Bookstore-grailsPlugins.iml" filepath="$PROJECT_DIR$/Bookstore-grailsPlugins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/domainExplorer-inplacePlugin.iml" filepath="$PROJECT_DIR$/domainExplorer-inplacePlugin.iml" />
+    </modules>
+  </component>
+</project>
+
