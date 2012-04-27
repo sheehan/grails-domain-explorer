@@ -91,8 +91,8 @@
     </div>
 
     <div class="modal-footer">
-      <a href="#" class="btn">Cancel</a>
-      <a href="#" class="btn btn-primary">Delete</a>
+      <a href="#" class="btn cancel">Cancel</a>
+      <a href="#" class="btn btn-primary delete">Delete</a>
     </div>
   </div>
 </script>

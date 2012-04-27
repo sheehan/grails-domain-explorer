@@ -35,7 +35,7 @@ class DomainController {
             case "PUT":
                 break
             case "DELETE":
-
+//                grailsApplication.
                 break
         }
         render 'aaa'
@@ -155,7 +155,9 @@ class DomainController {
     }
 
     private Map domainInstanceToMap(entity, GrailsDomainClass domainClass) {
-        Map result = [:]
+        Map result = [
+            className: domainClass.fullName
+        ]
         getProperties(domainClass).each { GrailsDomainClassProperty property ->
             if (property.oneToMany || property.manyToMany) {
                 result[property.name] = entity[property.name]?.size() ?: 0

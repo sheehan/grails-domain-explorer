@@ -4,8 +4,8 @@ Dex.Domain = (function (Dex, Backbone) {
     Domain.DomainModel = Backbone.Model.extend({});
 
     Domain.DomainInstanceModel = Backbone.Model.extend({
-        urlRoot: function() {
-            return Dex.createLink('domain', 'rest');
+        urlRoot: function () {
+            return Dex.createLink('domain/rest/' + this.get('className'));
         }
     });
 
@@ -98,11 +98,13 @@ Dex.Domain = (function (Dex, Backbone) {
             this.header.show(headerView);
 
             var toolbarView = new Domain.InstanceToolbarView();
-            toolbarView.on('delete', function() {
+            toolbarView.on('delete', function () {
                 var confirmDeleteView = new Domain.ConfirmDeleteView();
                 confirmDeleteView.render();
+                confirmDeleteView.on('delete', function () {
+                    that.model.destroy();
+                });
                 Dex.modal.show(confirmDeleteView);
-//                that.model.destroy();
             });
             this.toolbar.show(toolbarView);
 
@@ -127,7 +129,7 @@ Dex.Domain = (function (Dex, Backbone) {
             'click .delete': '_handleDeleteClick'
         },
 
-        _handleDeleteClick: function(event) {
+        _handleDeleteClick: function (event) {
             event.preventDefault();
             this.trigger('delete');
         }
@@ -149,8 +151,8 @@ Dex.Domain = (function (Dex, Backbone) {
             Domain.router.appendRoute(this.model.id);
         },
 
-        serializeData: function(){
-            return _.map(this.domainType.toJSON().properties, function(property) {
+        serializeData: function () {
+            return _.map(this.domainType.toJSON().properties, function (property) {
                 return {
                     property: property,
                     value: this.model.get(property.name)
@@ -200,7 +202,20 @@ Dex.Domain = (function (Dex, Backbone) {
     });
 
     Domain.ConfirmDeleteView = Backbone.Marionette.ItemView.extend({
-        template: '#confirm-delete-template'
+        template: '#confirm-delete-template',
+        events: {
+            'click .cancel': '_handleCancelClick',
+            'click .delete': '_handleDeleteClick'
+        },
+        _handleCancelClick: function (event) {
+            event.preventDefault();
+            this.close();
+        },
+        _handleDeleteClick: function (event) {
+            event.preventDefault();
+            this.trigger('delete');
+            this.close();
+        }
     });
 
 
@@ -240,12 +255,12 @@ Dex.Domain = (function (Dex, Backbone) {
             Dex.vent.trigger("domain:show", fullName);
         },
 
-        appendRoute: function(token) {
+        appendRoute: function (token) {
             var fragment = Backbone.history.getFragment();
             Domain.router.navigate(fragment + '/' + token, {trigger: true});
         },
 
-        back: function() {
+        back: function () {
             window.history.back();
         }
     });
@@ -255,10 +270,10 @@ Dex.Domain = (function (Dex, Backbone) {
     });
 
 
-    Handlebars.registerHelper('property_value_cell', function() {
+    Handlebars.registerHelper('property_value_cell', function () {
         var property = this.property,
-            value = this.value,
-            valueHtml;
+        value = this.value,
+        valueHtml;
         if (property.oneToMany || property.manyToMany) {
             valueHtml = '<span class="instanceValue oneToMany">[' + value + ']</span>';
         } else if (value === null) {
