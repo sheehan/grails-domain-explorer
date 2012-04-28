@@ -6,6 +6,11 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
 
         initialize: function (options) {
             this.domainType = options.domainType;
+            this.model.bind('destroy', function () {
+                // TODO modal
+                var deleteSuccessView = new Instance.DeleteSuccessView();
+                Dex.modal.show(deleteSuccessView);
+            });
         },
 
         renderHtml: function () {
@@ -36,6 +41,18 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
                 var path = $(this).data('appendPath');
                 Backbone.history.navigate(fragment + '/' + path, {trigger: true});
             });
+        }
+    });
+
+    Instance.DeleteSuccessView = Backbone.Marionette.ItemView.extend({
+        template: '#delete-success-template',
+        events: {
+            'click .ok': '_handleOkClick'
+        },
+        _handleOkClick: function (event) {
+            event.preventDefault();
+            this.close();
+            window.history.back();
         }
     });
 
