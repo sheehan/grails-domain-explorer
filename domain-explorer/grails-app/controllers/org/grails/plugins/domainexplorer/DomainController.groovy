@@ -4,6 +4,7 @@ import grails.converters.JSON
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import org.codehaus.groovy.grails.commons.GrailsDomainClassProperty
 import org.codehaus.groovy.grails.validation.ConstrainedProperty
+import org.springframework.web.servlet.support.RequestContextUtils
 
 class DomainController {
 
@@ -27,19 +28,121 @@ class DomainController {
     }
 
     def rest = {
-        switch(request.method){
+        switch (request.method) {
             case "POST":
+                update()
                 break
             case "GET":
+                show()
                 break
             case "PUT":
+                create()
                 break
             case "DELETE":
-                Class clazz = grailsApplication.getClassForName(params.className)
-                clazz.get(params.id).delete()
+                delete()
                 break
         }
-        render [:] as JSON
+    }
+
+
+    private show() {
+        def data = retrieveRecord()
+        render text: data.result as JSON, contentType: 'application/json', status: data.status
+    }
+
+    private create() {
+        def result = [ success: true ]
+        def status = 200
+        def entity = grailsApplication.getClassForName(params.className)
+        if (entity) {
+            def obj = entity.newInstance()
+            obj.properties = request.JSON.data
+            obj.validate()
+            if (obj.hasErrors()) {
+                status = 500
+                result.message = extractErrors(obj).join(";")
+                result.success = false
+            } else {
+                result.data = obj.save(flush: true)
+            }
+        } else {
+            result.success = false
+            result.message = "Entity ${params.className} not found"
+            status = 500
+        }
+        render text: result as JSON, contentType: 'application/json', status: status
+    }
+
+    private update() {
+        def data = retrieveRecord()
+        if (data.result.success) {
+            data.result.data.properties = request.JSON.data
+            data.result.data.validate()
+            if (data.result.data.hasErrors()) {
+                data.status = 500
+                data.result.message = extractErrors(data.result.data).join(";")
+                data.result.success = false
+            } else {
+                data.result.data = data.result.data.save(flush: true)
+            }
+        }
+        render text: data.result as JSON, contentType: 'application/json', status: data.status
+    }
+
+    private delete() {
+        def data = retrieveRecord()
+        try {
+            if (data.result.success) {
+                data.result.data.delete(flush: true)
+            }
+        } catch (Exception e) {
+            data.result.success = false
+            data.result.message = e.message
+            data.result.status = 500
+        }
+        render text: data.result as JSON, contentType: 'application/json', status: data.status
+    }
+
+    private retrieveRecord() {
+        def result = [ success: true ]
+        def status = 200
+        def entity = grailsApplication.getClassForName(params.className)
+        if (entity) {
+            def obj = entity.get(params.id)
+            if (obj) {
+                result.data = obj
+            } else {
+                result.success = false
+                result.message = "Object with id=${params.id} not found"
+                status = 404
+            }
+        } else {
+            result.success = false
+            result.message = "Entity ${params.className} not found"
+            status = 500
+        }
+
+        [ result: result, status: status ]
+    }
+
+    def messageSource
+
+    private extractErrors(model) {
+        def locale = RequestContextUtils.getLocale(request)
+        model.errors.fieldErrors.collect { error ->
+            messageSource.getMessage(error, locale)
+        }
+    }
+
+    private void restDelete(jsonResponse) {
+        Class clazz = grailsApplication.getClassForName(params.className)
+        def object = clazz.get(params.id)
+        if (object) {
+            object.delete(flush: true)
+            jsonResponse.success = true
+        } else {
+            response.status = 404
+        }
     }
 
     def fromPath = {

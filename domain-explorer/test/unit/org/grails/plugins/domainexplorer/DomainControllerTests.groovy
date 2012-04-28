@@ -11,7 +11,8 @@ import org.junit.*
 @TestFor(DomainController)
 class DomainControllerTests {
 
-    void testSomething() {
+    @Test
+    void rest_Delete() {
        fail "Implement me"
     }
 }
