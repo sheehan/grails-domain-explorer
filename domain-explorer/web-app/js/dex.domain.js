@@ -106,9 +106,27 @@ Dex.Domain = (function (Dex, Backbone) {
                 });
                 Dex.modal.show(confirmDeleteView);
             });
+            toolbarView.on('edit', function () {
+                that.showEditInstance();
+            });
             this.toolbar.show(toolbarView);
 
             var view = new Domain.Instance.ShowView({
+                model: this.model,
+                domainType: this.domainType
+            });
+            this.content.show(view);
+        },
+
+        showEditInstance: function() {
+            var that = this;
+            var headerView = new Domain.DomainHeaderView({model: this.model});
+            this.header.show(headerView);
+
+//            var toolbarView = new Domain.InstanceToolbarView();
+//            this.toolbar.show(toolbarView);
+
+            var view = new Domain.Instance.EditView({
                 model: this.model,
                 domainType: this.domainType
             });
@@ -126,12 +144,18 @@ Dex.Domain = (function (Dex, Backbone) {
         className: 'btn-toolbar',
 
         events: {
+            'click .edit': '_handleEditClick',
             'click .delete': '_handleDeleteClick'
         },
 
         _handleDeleteClick: function (event) {
             event.preventDefault();
             this.trigger('delete');
+        },
+
+        _handleEditClick: function (event) {
+            event.preventDefault();
+            this.trigger('edit');
         }
     });
 
