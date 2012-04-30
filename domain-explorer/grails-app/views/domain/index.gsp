@@ -75,7 +75,13 @@
 
 <script id="domain-list-item-view-template" type="text/template">
   {{#each this}}
-    <td>{{property_value_cell}}</td>
+  <td>{{property_value_cell}}</td>
+  {{/each}}
+</script>
+
+<script id="domain-instance-view-template" type="text/template">
+  {{#each this}}
+  <div class="control-group"><label class="control-label">{{property.name}}:</label><div class="controls">{{property_value}}</div></div>
   {{/each}}
 </script>
 
