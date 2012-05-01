@@ -266,6 +266,7 @@ class DomainController {
             if (property.oneToMany || property.manyToMany) {
                 result[property.name] = entity[property.name]?.size() ?: 0
             } else if (property.association && (property.oneToOne || property.manyToOne)) {
+                // TODO embedded
                 result[property.name] = entity[property.name]?.id
             } else {
                 result[property.name] = entity[property.name]?.toString()
@@ -275,11 +276,11 @@ class DomainController {
     }
 
     private getProperties(GrailsDomainClass domainClass) {
-        List props = domainClass.persistentProperties
-        props << domainClass.identifier
+        List props = [domainClass.identifier]
         if (domainClass.version) {
             props << domainClass.version
         }
-        props.sort { it.name == 'id' ? '' : it.name }
+        props.addAll domainClass.persistentProperties.sort { it.name }
+        props
     }
 }

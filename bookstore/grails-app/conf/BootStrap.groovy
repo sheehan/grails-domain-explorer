@@ -1,5 +1,7 @@
-import grails.util.Environment
 import bookstore.Address
+import bookstore.Author
+import grails.util.Environment
+import human.Arm
 
 class BootStrap {
 
@@ -7,6 +9,8 @@ class BootStrap {
         if (Environment.current == Environment.DEVELOPMENT) {
             1000.times {
                 Address.build()
+                Arm.build()
+                Author.build()
             }
         }
     }

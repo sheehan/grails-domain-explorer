@@ -67,17 +67,23 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
 
     Handlebars.registerHelper('property_edit', function () {
         var property = this.property,
-            value = 0,
-            valueHtml;
-        if (property.oneToMany || property.manyToMany) {
-            valueHtml = '<span class="instanceValue oneToMany"><a href="#" data-append-path="' + property.name + '">[' + value + ']</a></span>';
-        } else if (value === null) {
-            valueHtml = '<span class="instanceValue null">' + value + '</span>';
-        } else if (property.oneToOne || property.manyToOne) {
-            var className = _.last(property.type.split('.'));
-            valueHtml = '<a href="#" data-append-path="' + property.name + '"><span class="nowrap">' + className + ': ' + value + '</span></a>';
-        } else {
+            value = this.value,
+            valueHtml = '';
+        if (_.include(['id', 'version'], property.name)) {
             valueHtml = value;
+        } else if (property.oneToMany || property.manyToMany) {
+//            valueHtml = '<span class="instanceValue oneToMany"><a href="#" data-append-path="' + property.name + '">[' + value + ']</a></span>';
+        } else if (property.association) {
+            var className = _.last(property.type.split('.'));
+            valueHtml = className + ': ' + value;
+        } else {
+            if (property.type === 'java.lang.String') {
+                var stringVal = value == null ? '' : value;
+                valueHtml = '<input type="text" value="'+stringVal+'" />';
+            }
+            else {
+                valueHtml = property.type;
+            }
         }
         return new Handlebars.SafeString(valueHtml);
     });
