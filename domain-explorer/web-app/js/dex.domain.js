@@ -79,10 +79,14 @@ Dex.Domain = (function (Dex, Backbone) {
         },
 
         showList: function () {
+            var that = this;
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
 
             var toolbarView = new Domain.ListToolbarView();
+            toolbarView.on('create', function() {
+                that.showCreateInstance();
+            });
             this.toolbar.show(toolbarView);
 
             var view = new Domain.ListView({
@@ -118,6 +122,21 @@ Dex.Domain = (function (Dex, Backbone) {
             this.content.show(view);
         },
 
+        showCreateInstance: function() {
+            var that = this;
+            var headerView = new Domain.DomainHeaderView({model: this.model});
+            this.header.show(headerView);
+
+//            var toolbarView = new Domain.InstanceToolbarView();
+//            this.toolbar.show(toolbarView);
+
+            var view = new Domain.Instance.EditView({
+                model: this.model,
+                domainType: this.domainType
+            });
+            this.content.show(view);
+        },
+
         showEditInstance: function() {
             var that = this;
             var headerView = new Domain.DomainHeaderView({model: this.model});
@@ -136,7 +155,16 @@ Dex.Domain = (function (Dex, Backbone) {
 
     Domain.ListToolbarView = Backbone.Marionette.ItemView.extend({
         template: '#domain-list-toolbar',
-        className: 'btn-toolbar'
+        className: 'btn-toolbar',
+
+        events: {
+            'click .create': '_handleCreateClick'
+        },
+
+        _handleCreateClick: function (event) {
+            event.preventDefault();
+            this.trigger('create');
+        }
     });
 
     Domain.InstanceToolbarView = Backbone.Marionette.ItemView.extend({
@@ -220,9 +248,8 @@ Dex.Domain = (function (Dex, Backbone) {
     });
 
     Domain.EmptyView = Backbone.Marionette.ItemView.extend({
-        renderHtml: function (data) {
-            return 'select some shit';
-        }
+        template: '#empty-template',
+        className: 'emptyView'
     });
 
     Domain.ConfirmDeleteView = Backbone.Marionette.ItemView.extend({

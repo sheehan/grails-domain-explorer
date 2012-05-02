@@ -12,7 +12,7 @@
 
         regions: {
             list: "#list-wrapper",
-            main: "#main-wrapper #main .content"
+            main: "#main-wrapper #main"
         },
 
         onRender: function () {

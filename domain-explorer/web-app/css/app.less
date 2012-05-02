@@ -20,6 +20,11 @@ body {
   padding: 0;
 }
 
+#list-wrapper-resizer { //  opacity: 0;
+  &:hover { //    opacity: 1;
+  }
+}
+
 .section(){
   .header {
     background-image: -moz-linear-gradient(center top, #F5F5F5 0%, #ccc 100%); // TODO use mixin
@@ -27,7 +32,7 @@ body {
     padding: 10px;
   }
 //  border-radius: 10px;
-  border: 4px solid #888;
+//  border: 4px solid #888;
   box-shadow: 0 0 2px #555;
   & > .footer {
     padding: 10px;
@@ -42,7 +47,7 @@ body {
   }
 }
 
-@section-padding: 20px;
+@section-padding: 0;
 
 #list-wrapper {
   background-color: transparent;
@@ -91,17 +96,27 @@ body {
   overflow: hidden;
   #main {
     height: 100%;
-    & > .content {
+    &  > .domainView {
       height: 100%;
-      &  > .domainView {
-        height: 100%;
+    }
+    &  > .emptyView {
+      height: 100%;
+      & > .instruction {
+        color: #999999;
+        font-size: 25px;
+        line-height: 25px;
+        margin-top: -10px;
+        position: absolute;
+        text-align: center;
+        top: 50%;
+        width: 100%;
       }
     }
-    .section;
     padding: 0;
   }
 
   .domainView {
+    .section;
     & > .header {
       ul.breadcrumb {
         background: none repeat scroll 0 0 transparent;
@@ -160,19 +175,11 @@ body {
   }
 }
 
-#list-wrapper-resizer {
-  opacity: 0;
-  &:hover {
-    opacity: 1;
-  }
-}
-
 .nowrap {
   white-space: nowrap;
 }
 
-.hi {
-//  .section();
+.hi { //  .section();
   margin-bottom: 10px;
   padding: 5px;
 }

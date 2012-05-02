@@ -28,7 +28,7 @@
   <section id="list-wrapper"></section>
   <section id="main-wrapper">
     <section id="main" class="ui-layout-content">
-      <div class="content"></div>
+      %{--<div class="content"></div>--}%
       %{--<div class="footer">&nbsp;</div>--}%
     </section>
   </section>
@@ -46,10 +46,14 @@
 <script id="domain-template" type="text/template">
   <div class="header"></div>
   <div class="toolbar"></div>
-  <div class="content ss"></div>
+  <div class="content"></div>
 </script>
 
 <script id="domain-list-toolbar" type="text/template">
+  <button class="btn create">
+    <i class="icon-plus"></i>
+    Create
+  </button>
   <div class="btn-group page-controls">
     <button class="btn">
       <i class="icon-chevron-left"></i>
@@ -99,7 +103,7 @@
     </div>
 
     <div class="modal-body">
-      <p>You sure about that motherfucker?</p>
+      <p>You sure about that?</p>
     </div>
 
     <div class="modal-footer">
@@ -124,6 +128,10 @@
       <a href="#" class="btn btn-primary ok">OK</a>
     </div>
   </div>
+</script>
+
+<script id="empty-template" type="text/template">
+  <div class="instruction">Select a domain</div>
 </script>
 
 <script type="text/javascript" src="${resource(dir: 'js', file: 'vendor/less-1.3.0.min.js')}"></script>
