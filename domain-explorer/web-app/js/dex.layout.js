@@ -29,7 +29,7 @@
                 west__closable: false,
                 center__paneSelector: '#main-wrapper',
                 east__paneSelector: '#class-wrapper ',
-                east__size: 350,
+                east__size: 450,
                 east__closable: false,
                 onresize: _.bind(this.resize, this)
             });

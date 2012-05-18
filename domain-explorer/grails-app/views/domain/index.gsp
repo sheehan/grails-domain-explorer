@@ -153,7 +153,7 @@
 </script>
 
 <script id="domain-type-property-view-template" type="text/template">
-  <td>{{name}}</td><td>{{type}}</td><td></td>
+  <td>{{name}}</td><td>{{type}}</td><td>{{nullable}}</td>
 </script>
 
 <script id="domain-type-content-view-template" type="text/template">

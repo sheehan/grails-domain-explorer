@@ -141,6 +141,10 @@ Dex.DomainType = (function (Dex, Backbone) {
 
     });
 
+    Handlebars.registerHelper('nullable', function () {
+        return (this.constraints && this.constraints.nullable) ? 'true' : 'false';
+    });
+
     return DomainType;
 })(Dex, Backbone);
 
