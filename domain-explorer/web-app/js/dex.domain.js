@@ -200,7 +200,7 @@ Dex.Domain = (function (Dex, Backbone) {
         },
 
         _handleRowClick: function () {
-//            Domain.router.appendRoute(this.model.id);
+            Domain.router.appendRoute(this.model.id);
         },
 
         serializeData: function () {
