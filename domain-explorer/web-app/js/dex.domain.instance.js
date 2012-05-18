@@ -20,7 +20,7 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
         _handleLinkClick: function (event) {
             event.preventDefault();
             var fragment = Backbone.history.getFragment();
-            var path = $(this).data('appendPath');
+            var path = $(event.currentTarget).data('appendPath');
             Backbone.history.navigate(fragment + '/' + path, {trigger: true});
         },
 
