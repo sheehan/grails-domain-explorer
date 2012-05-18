@@ -1,6 +1,6 @@
-// Backbone.Marionette v0.7.2
+// Backbone.Marionette v0.8.1
 //
-// Copyright (C)2011 Derick Bailey, Muted Solutions, LLC
+// Copyright (C)2012 Derick Bailey, Muted Solutions, LLC
 // Distributed Under MIT License
 //
 // Documentation and Full License Available at:
@@ -9,7 +9,7 @@
 Backbone.Marionette = (function(Backbone, _, $){
   var Marionette = {};
 
-  Marionette.version = "0.7.2";
+  Marionette.version = "0.8.1";
 
   // Marionette.View
   // ---------------
@@ -49,12 +49,30 @@ Backbone.Marionette = (function(Backbone, _, $){
     serializeData: function(){
       var data;
 
-      if (this.model) { data = this.model.toJSON(); }
+      if (this.model) { 
+        data = this.model.toJSON(); 
+      }
       else if (this.collection) {
         data = { items: this.collection.toJSON() };
       }
 
+      data = this.mixinTemplateHelpers(data);
+
       return data;
+    },
+
+    // Mix in template helper methods. Looks for a
+    // `templateHelpers` attribute, which can either be an
+    // object literal, or a function that returns an object
+    // literal. All methods and attributes from this object
+    // are copies to the object passed in.
+    mixinTemplateHelpers: function(target){
+      target = target || {};
+      var templateHelpers = this.templateHelpers;
+      if (_.isFunction(templateHelpers)){
+        templateHelpers = templateHelpers.call(this);
+      }
+      return _.extend(target, templateHelpers);
     },
 
     // Default `close` implementation, for removing a view from the
@@ -104,27 +122,33 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
 
       var deferredRender = $.Deferred();
-      var deferredData = this.serializeData();
 
-      if (this.beforeRender) { this.beforeRender(); }
-      this.trigger("item:before:render", that);
+      var beforeRenderDone = function() {
+        that.trigger("before:render", that);
+        that.trigger("item:before:render", that);
 
-      $.when(deferredData).then(function(data) {
+        var deferredData = that.serializeData();
+        $.when(deferredData).then(dataSerialized);
+      } 
 
+      var dataSerialized = function(data){
         var asyncRender = that.renderHtml(data);
+        $.when(asyncRender).then(templateRendered);
+      }
 
-        $.when(asyncRender).then(function(html){
-          that.$el.html(html);
-          var onRenderPromise = {};
-          if (that.onRender) { onRenderPromise = that.onRender(); }
-          $.when(onRenderPromise).then(function() {
-            that.trigger("item:rendered", that);
-            that.trigger("render", that);
-            deferredRender.resolve();
-          });
-        });
+      var templateRendered = function(html){
+        that.$el.html(html);
+        callDeferredMethod(that.onRender, onRenderDone, that);
+      }
 
-      });
+      var onRenderDone = function(){
+        that.trigger("render", that);
+        that.trigger("item:rendered", that);
+
+        deferredRender.resolve();
+      }
+
+      callDeferredMethod(this.beforeRender, beforeRenderDone, this);
 
       return deferredRender.promise();
     },
@@ -229,6 +253,18 @@ Backbone.Marionette = (function(Backbone, _, $){
       var that = this;
 
       var view = this.buildItemView(item, ItemView);
+      this.bindTo(view, "all", function(){
+
+        // get the args, prepend the event name
+        // with "itemview:" and insert the child view
+        // as the first event arg (after the event name)
+        var args = slice.call(arguments);
+        args[0] = "itemview:" + args[0];
+        args.splice(1, 0, view);
+
+        that.trigger.apply(that, args);
+      });
+
       this.storeChild(view);
       this.trigger("item:added", view);
 
@@ -472,6 +508,12 @@ Backbone.Marionette = (function(Backbone, _, $){
       Backbone.Marionette.ItemView.prototype.close.call(this, arguments);
     },
 
+    // Initialize the regions that have been defined in a
+    // `regions` attribute on this layout. The key of the
+    // hash becomes an attribute on the layout object directly.
+    // For example: `regions: { menu: ".menu-container" }`
+    // will product a `layout.menu` object which is a region
+    // that controls the `.menu-container` DOM element.
     initializeRegions: function () {
       var that = this;
       _.each(this.regions, function (selector, name) {
@@ -487,6 +529,9 @@ Backbone.Marionette = (function(Backbone, _, $){
       });
     },
 
+    // Close all of the regions that have been opened by
+    // this layout. This method is called when the layout
+    // itself is closed.
     closeRegions: function () {
       var that = this;
       _.each(this.regionManagers, function (manager, name) {
@@ -508,7 +553,7 @@ Backbone.Marionette = (function(Backbone, _, $){
   // Configure an AppRouter with `appRoutes`.
   //
   // App routers can only take one `controller` object. 
-  // It is reocmmended that you divide your controller
+  // It is recommended that you divide your controller
   // objects in to smaller peices of related functionality
   // and have multiple routers / controllers, instead of
   // just one giant router and controller.
@@ -545,7 +590,16 @@ Backbone.Marionette = (function(Backbone, _, $){
       for (i = 0; i < routesLength; i++){
         route = routes[i][0];
         methodName = routes[i][1];
-        method = _.bind(controller[methodName], controller);
+        method = controller[methodName];
+
+        if (!method){
+          var msg = "Method '" + methodName + "' was not found on the controller";
+          var err = new Error(msg);
+          err.name = "NoMethodError";
+          throw err;
+        }
+
+        method = _.bind(method, controller);
         router.route(route, methodName, method);
       }
     }
@@ -604,6 +658,55 @@ Backbone.Marionette = (function(Backbone, _, $){
           this[region] = regionObj;
         }
       }
+    },
+
+    // Add modules to the application, providing direct
+    // access to your applicaiton object, Backbone, 
+    // Marionette, jQuery and Underscore as parameters 
+    // to a callback function.
+    module: function(moduleNames, moduleDefinition){
+      var moduleName, module, moduleOverride;
+      var parentModule = this;
+      var moduleNames = moduleNames.split(".");
+
+      // Loop through all the parts of the module definition
+      var length = moduleNames.length;
+      for(var i = 0; i < length; i++){
+
+        // only run the module definition if this is the
+        // last module in the chaing: "Foo.Bar.Baz" only 
+        // runs the module definition for the "Baz" module
+        var defineModule = (i === length-1);
+
+        // Get the module name, and check if it exists on
+        // the current parent already
+        moduleName = moduleNames[i];
+        module = parentModule[moduleName];
+
+        if (!module){ 
+          // Create the module
+          module = new Marionette.Application();
+
+          // Build the module definition if this is the last
+          // module specified in the . chain
+          if (defineModule && moduleDefinition){
+            moduleOverride = moduleDefinition(module, this, Backbone, Marionette, jQuery, _);
+            // Override it if necessary
+            if (moduleOverride){
+              module = moduleOverride;
+            }
+          }
+          
+          // And attach it to the parent module
+          parentModule[moduleName] = module;
+        }
+
+        // Reset the parent module so that the next child
+        // in the list will be added to the correct parent
+        parentModule = module;
+      }
+
+      return module;
     }
   });
 
@@ -642,19 +745,19 @@ Backbone.Marionette = (function(Backbone, _, $){
     // returned from the `bindTo` method call. 
     unbindFrom: function(binding){
       binding.obj.off(binding.eventName, binding.callback);
-      var index = _.indexOf(this.bindings, binding);
-      Array.remove(this.bindings, index);
+      this.bindings = _.reject(this.bindings, function(bind){return bind === binding});
     },
 
     // Unbind all of the events that we have stored.
     unbindAll: function () {
       var that = this;
 
-      _.each(this.bindings, function (binding, index) {
+      // The `unbindFrom` call removes elements from the array
+      // while it is being iterated, so clone it first.
+      var bindings = _.map(this.bindings, _.identity);
+      _.each(bindings, function (binding, index) {
         that.unbindFrom(binding);
       });
-
-      this.bindings = [];
     }
   };
 
@@ -701,7 +804,7 @@ Backbone.Marionette = (function(Backbone, _, $){
     // Assumes the event aggregator itself is the 
     // object being bound to.
     bindTo: function(eventName, callback, context){
-      Marionette.BindTo.bindTo.call(this, this, eventName, callback, context);
+      return Marionette.BindTo.bindTo.call(this, this, eventName, callback, context);
     }
   });
 
@@ -841,14 +944,17 @@ Backbone.Marionette = (function(Backbone, _, $){
   _.extend(Marionette.Application.prototype, Marionette.BindTo);
   _.extend(Marionette.Region.prototype, Marionette.BindTo);
 
-  // Array Remove - By John Resig (MIT Licensed)
-  if (!Array.remove){
-    Array.remove = function(array, from, to) {
-      var rest = array.slice((to || from) + 1 || array.length);
-      array.length = from < 0 ? array.length + from : from;
-      return array.push.apply(array, rest);
-    };
+  // A simple wrapper method for deferring a callback until 
+  // after another method has been called, passing the
+  // results of the first method to the second. Uses jQuery's
+  // deferred / promise objects, and $.when/then to make it
+  // work.
+  var callDeferredMethod = function(fn, callback, context){
+    var promise;
+    if (fn) { promise = fn.call(context); }
+    $.when(promise).then(callback);
   }
+
 
   return Marionette;
 })(Backbone, _, window.jQuery || window.Zepto || window.ender);

@@ -199,6 +199,17 @@ class DomainController {
         render json as JSON
     }
 
+    def listInstances = {
+        GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.fullName)
+        Object result = domainClass.clazz.list(max: 50)
+
+        Map json = [
+            clazz: domainClassToMap(domainClass),
+            list: result.toList().sort { it.id }.collect { domainInstanceToMap it, domainClass }
+        ]
+        render json as JSON
+    }
+
     private Map domainClassToMap(GrailsDomainClass domainClass) {
         Map constrainedProperties = domainClass.constrainedProperties
 
@@ -275,7 +286,7 @@ class DomainController {
         result
     }
 
-    private getProperties(GrailsDomainClass domainClass) {
+    private List getProperties(GrailsDomainClass domainClass) {
         List props = [domainClass.identifier]
         if (domainClass.version) {
             props << domainClass.version

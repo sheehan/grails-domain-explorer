@@ -81,7 +81,6 @@ Dex.DomainList = (function (Dex, Backbone) {
         });
     });
 
-
     Dex.vent.bind("domain:show", DomainList.showDomain);
 
     Dex.bind("initialize:after", function (options) {

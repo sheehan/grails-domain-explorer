@@ -200,7 +200,7 @@ Dex.Domain = (function (Dex, Backbone) {
         },
 
         _handleRowClick: function () {
-            Domain.router.appendRoute(this.model.id);
+//            Domain.router.appendRoute(this.model.id);
         },
 
         serializeData: function () {
@@ -273,19 +273,26 @@ Dex.Domain = (function (Dex, Backbone) {
     Domain.show = function (fragment) {
         var link = Dex.createLink('domain', 'fromPath', { path: fragment });
         $.getJSON(link).done(function (resp) {
-            var model, view, domainType;
-            if (resp.isCollection) {
-                model = new Domain.DomainInstanceCollection(resp.value);
-            } else {
-                model = new Domain.DomainInstanceModel(resp.value);
-            }
-            domainType = new Domain.DomainModel(resp.clazz);
-            view = new Domain.DomainView({
-                model: model,
-                domainType: domainType,
-                isCollection: resp.isCollection
+            var view = new Dex.DomainType.DomainTypeView({
+                model: new Domain.DomainModel(resp.clazz)
             });
-            Dex.layout.main.show(view);
+            Dex.layout.clazz.show(view);
+
+            (function() {
+                var model, view, domainType;
+                if (resp.isCollection) {
+                    model = new Domain.DomainInstanceCollection(resp.value);
+                } else {
+                    model = new Domain.DomainInstanceModel(resp.value);
+                }
+                domainType = new Domain.DomainModel(resp.clazz);
+                view = new Domain.DomainView({
+                    model: model,
+                    domainType: domainType,
+                    isCollection: resp.isCollection
+                });
+                Dex.layout.main.show(view);
+            }());
         });
     };
 

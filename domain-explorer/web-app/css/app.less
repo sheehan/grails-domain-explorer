@@ -94,11 +94,8 @@ body {
   background-color: transparent;
   padding: @section-padding @section-padding @section-padding @section-padding / 2;
   overflow: hidden;
-  #main {
-    height: 100%;
-    &  > .domainView {
-      height: 100%;
-    }
+//  #main {
+//    height: 100%;
     &  > .emptyView {
       height: 100%;
       & > .instruction {
@@ -108,58 +105,69 @@ body {
         margin-top: -10px;
         position: absolute;
         text-align: center;
+        text-shadow: 1px 1px #FFFFFF;
         top: 50%;
         width: 100%;
       }
     }
     padding: 0;
-  }
+//  }
 
-  .domainView {
-    .section;
-    & > .header {
-      ul.breadcrumb {
-        background: none repeat scroll 0 0 transparent;
-        border: medium none;
-        margin: 0;
-        padding: 0;
-        box-shadow: none;
-        li {
-          text-shadow: none;
-        }
-      }
-    }
-    & > .toolbar {
-      padding: 5px 10px;
-      border-bottom: 1px solid #aaa;
-      .btn-toolbar {
-        overflow: hidden;
-        .page-controls {
-          float: right;
-        }
-        margin: 0;
-      }
-    }
-    & > .content {
-      & > table {
-        margin: 0;
-        tr {
-          cursor: pointer;
-        }
+
+}
+
+.domainView {
+  .section;
+  height: 100%;
+  & > .header {
+    ul.breadcrumb {
+      background: none repeat scroll 0 0 transparent;
+      border: medium none;
+      margin: 0;
+      padding: 0;
+      box-shadow: none;
+      li {
+        text-shadow: none;
       }
     }
   }
+  & > .content {
+    & > table {
+      margin: 0;
+      tr {
+        cursor: pointer;
+      }
+    }
+  }
+}
 
-  .view-instance.form-horizontal,
-  .edit-instance.form-horizontal {
-    padding: 20px 0;
-    .control-label {
-      padding-top: 0;
-      width: 175px;
+
+.toolbar {
+  padding: 5px;
+  border-bottom: 1px solid #aaa;
+  .btn-toolbar {
+    overflow: hidden;
+    .page-controls {
+      float: right;
     }
-    .controls {
-      margin-left: 195px;
-    }
+    margin: 0;
+  }
+}
+
+.domainTypeView {
+  .section;
+  height: 100%;
+}
+
+.view-instance.form-horizontal,
+.edit-instance.form-horizontal {
+  padding: 20px 0;
+  .control-label {
+    padding-top: 0;
+    width: 175px;
+  }
+  .controls {
+    margin-left: 195px;
   }
 }
 

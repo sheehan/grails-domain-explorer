@@ -12,7 +12,8 @@
 
         regions: {
             list: "#list-wrapper",
-            main: "#main-wrapper #main"
+            main: "#main-wrapper",
+            clazz: "#class-wrapper"
         },
 
         onRender: function () {
@@ -25,7 +26,11 @@
                 north__spacing_open: 0,
                 west__paneSelector: '#list-wrapper',
                 west__size: 350,
+                west__closable: false,
                 center__paneSelector: '#main-wrapper',
+                east__paneSelector: '#class-wrapper ',
+                east__size: 350,
+                east__closable: false,
                 onresize: _.bind(this.resize, this)
             });
             _.each(this.regionManagers, function (manager, name) {
