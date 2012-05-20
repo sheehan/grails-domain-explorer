@@ -18,7 +18,7 @@ Dex = new Backbone.Marionette.Application({
                 url += '/' + params.id;
                 delete params.id;
             }
-            var queryString = $.param(params, true);
+            var queryString = jQuery.param(params, true);
             if (queryString.length > 0) {
                 url += '?' + queryString;
             }
@@ -36,17 +36,11 @@ Dex.bind("initialize:before", function (options) {
 });
 
 Dex.bind("initialize:after", function (options) {
-    if (Backbone.history) {
-        Backbone.history.start();
-    }
+    Backbone.history && Backbone.history.start();
 });
 
 Backbone.Marionette.TemplateCache.compileTemplate = function(rawTemplate){
     return Handlebars.compile(rawTemplate);
-};
-
-Backbone.Marionette.Renderer.renderTemplate = function(template, data) {
-    return template(data);
 };
 
 //Dex.StackableRegion = Backbone.Marionette.Region.extend({
