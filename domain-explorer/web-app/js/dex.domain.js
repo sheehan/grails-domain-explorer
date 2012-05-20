@@ -142,8 +142,14 @@ Dex.Domain = (function (Dex, Backbone) {
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
 
-//            var toolbarView = new Domain.InstanceToolbarView();
-//            this.toolbar.show(toolbarView);
+            var toolbarView = new Domain.EditInstanceToolbarView();
+            toolbarView.on('save', function () {
+                console.log('TODO');
+            });
+            toolbarView.on('cancel', function () {
+                that.showInstance();
+            });
+            this.toolbar.show(toolbarView);
 
             var view = new Domain.Instance.EditView({
                 model: this.model,
@@ -171,19 +177,19 @@ Dex.Domain = (function (Dex, Backbone) {
         template: '#domain-instance-toolbar',
         className: 'btn-toolbar',
 
-        events: {
-            'click .edit': '_handleEditClick',
-            'click .delete': '_handleDeleteClick'
-        },
+        triggers: {
+            'click .edit': 'edit',
+            'click .delete': 'delete'
+        }
+    });
 
-        _handleDeleteClick: function (event) {
-            event.preventDefault();
-            this.trigger('delete');
-        },
+    Domain.EditInstanceToolbarView = Backbone.Marionette.ItemView.extend({
+        template: '#domain-edit-instance-toolbar',
+        className: 'btn-toolbar',
 
-        _handleEditClick: function (event) {
-            event.preventDefault();
-            this.trigger('edit');
+        triggers: {
+            'click .save': 'save',
+            'click .cancel': 'cancel'
         }
     });
 

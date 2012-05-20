@@ -80,6 +80,19 @@
   </div>
 </script>
 
+<script id="domain-edit-instance-toolbar" type="text/template">
+  <div class="btn-group">
+    <button class="btn save">
+      <i class="icon-ok"></i>
+      Save
+    </button>
+    <button class="btn cancel">
+      <i class="icon-remove"></i>
+      Cancel
+    </button>
+  </div>
+</script>
+
 <script id="domain-list-item-view-template" type="text/template">
   {{#each this}}
   <td>{{property_value_cell}}</td>
