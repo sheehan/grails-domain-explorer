@@ -77,6 +77,10 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
                     var stringVal = value == null ? '' : value;
                     valueHtml = '<input type="text" value="'+stringVal+'" />';
                     break;
+                case 'boolean':
+                    var stringVal = value == null ? '' : value;
+                    valueHtml = '<input type="checkbox" ' + (value === 'true' ? 'checked' : '') + ' />';
+                    break;
                 default :
                     valueHtml = 'property type not supported yet: ' + property.view;
             }

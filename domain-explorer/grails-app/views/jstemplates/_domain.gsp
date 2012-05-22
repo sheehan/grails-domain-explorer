@@ -19,8 +19,6 @@
   </div>
 </script>
 
-
-
 <script id="domain-list-item-view-template" type="text/template">
   {{#each this}}
   <td>{{property_value_cell}}</td>

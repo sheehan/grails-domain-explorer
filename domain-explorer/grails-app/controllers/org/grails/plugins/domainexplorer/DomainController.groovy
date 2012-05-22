@@ -284,10 +284,12 @@ class DomainController {
             return 'file'
         } else if (property.manyToOne || property.oneToOne) {
             return 'manyToOne'
-        } else if ((property.oneToMany && !property.bidirectional) || (property.manyToMany && property.isOwningSide())) {
+        } else if ((property.oneToMany /*&& !property.bidirectional*/) || (property.manyToMany /*&& property.isOwningSide()*/)) {
             return 'manyToMany'
         } else if (property.oneToMany) {
             return 'oneToMany'
+        } else if (property.embedded) {
+            return 'embedded'
         }
         return 'string'
     }

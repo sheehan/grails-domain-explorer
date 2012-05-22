@@ -2,6 +2,7 @@ package bookstore
 
 class Invoice {
     String cardNumber
+    boolean paid
     
     static hasMany = [books: Book]
     static belongsTo = [Customer, Book]
