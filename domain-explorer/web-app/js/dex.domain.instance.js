@@ -71,18 +71,14 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
             valueHtml = '';
         if (_.include(['id', 'version'], property.name)) {
             valueHtml = value;
-        } else if (property.oneToMany || property.manyToMany) {
-//            valueHtml = '<span class="instanceValue oneToMany"><a href="#" data-append-path="' + property.name + '">[' + value + ']</a></span>';
-        } else if (property.association) {
-            var className = _.last(property.type.split('.'));
-            valueHtml = className + ': ' + value;
         } else {
-            if (property.type === 'java.lang.String') {
-                var stringVal = value == null ? '' : value;
-                valueHtml = '<input type="text" value="'+stringVal+'" />';
-            }
-            else {
-                valueHtml = property.type;
+            switch (property.view) {
+                case 'string':
+                    var stringVal = value == null ? '' : value;
+                    valueHtml = '<input type="text" value="'+stringVal+'" />';
+                    break;
+                default :
+                    valueHtml = 'property type not supported yet: ' + property.view;
             }
         }
         return new Handlebars.SafeString(valueHtml);

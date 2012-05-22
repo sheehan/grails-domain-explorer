@@ -134,17 +134,6 @@ class DomainController {
         }
     }
 
-    private void restDelete(jsonResponse) {
-        Class clazz = grailsApplication.getClassForName(params.className)
-        def object = clazz.get(params.id)
-        if (object) {
-            object.delete(flush: true)
-            jsonResponse.success = true
-        } else {
-            response.status = 404
-        }
-    }
-
     def fromPath = {
         List tokens = params.path.split('/').toList().reverse()
 
@@ -217,6 +206,7 @@ class DomainController {
             Map m = [
                 name: property.name,
                 type: property.referencedPropertyType,
+                view: determinePropertyView(property),
                 persistent: property.persistent,
                 optional: property.optional,
                 identity: property.identity,
@@ -267,6 +257,39 @@ class DomainController {
             count: domainClass.clazz.count(),
             properties: properties
         ]
+    }
+
+    private String determinePropertyView(GrailsDomainClassProperty property) {
+        if (property.type == Boolean || property.type == boolean) {
+            return 'boolean'
+        } else if (property.type && Number.isAssignableFrom(property.type) || (property.type?.isPrimitive() && property.type != boolean)) {
+            return 'number'
+        } else if (property.type == String) {
+            return 'string'
+        } else if (property.type == Date || property.type == java.sql.Date || property.type == java.sql.Time || property.type == Calendar) {
+            return 'date'
+        } else if (property.type == URL) {
+            return 'string'
+        } else if (property.type && property.isEnum()) {
+            return 'enum'
+        } else if (property.type == TimeZone) {
+            return 'timeZone'
+        } else if (property.type == Locale) {
+            return 'locale'
+        } else if (property.type == Currency) {
+            return 'currency'
+        } else if (property.type == ([] as Byte[]).class) { //TODO: Bug in groovy means i have to do this :(
+            return 'file'
+        } else if (property.type == ([] as byte[]).class) { //TODO: Bug in groovy means i have to do this :(
+            return 'file'
+        } else if (property.manyToOne || property.oneToOne) {
+            return 'manyToOne'
+        } else if ((property.oneToMany && !property.bidirectional) || (property.manyToMany && property.isOwningSide())) {
+            return 'manyToMany'
+        } else if (property.oneToMany) {
+            return 'oneToMany'
+        }
+        return 'string'
     }
 
     private Map domainInstanceToMap(entity, GrailsDomainClass domainClass) {
