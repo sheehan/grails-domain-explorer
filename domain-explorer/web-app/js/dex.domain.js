@@ -6,6 +6,15 @@ Dex.Domain = (function (Dex, Backbone) {
     Domain.DomainInstanceModel = Backbone.Model.extend({
         urlRoot: function () {
             return Dex.createLink('domain/rest/' + this.get('className'));
+        },
+
+        updateWithData: function(data) {
+            var url = this.urlRoot() + '/' + this.id;
+            $.ajax({
+                url: url,
+                type: 'PUT',
+                data: JSON.stringify(data)
+            });
         }
     });
 
@@ -141,7 +150,9 @@ Dex.Domain = (function (Dex, Backbone) {
 
             var toolbarView = new Domain.Instance.EditToolbarView();
             toolbarView.on('save', function () {
-                that.model.save();
+                var data = Backbone.Syphon.serialize(view);
+                console.log(data);
+                that.model.updateWithData(data);
             });
             toolbarView.on('cancel', function () {
                 that.showInstance();

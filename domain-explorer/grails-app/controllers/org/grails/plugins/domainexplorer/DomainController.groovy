@@ -76,7 +76,7 @@ class DomainController {
     private update() {
         def data = retrieveRecord()
         if (data.result.success) {
-            data.result.data.properties = request.JSON.data
+            data.result.data.properties = request.JSON
             data.result.data.validate()
             if (data.result.data.hasErrors()) {
                 data.status = 500
@@ -86,7 +86,8 @@ class DomainController {
                 data.result.data = data.result.data.save(flush: true)
             }
         }
-        render text: data.result as JSON, contentType: 'application/json', status: data.status
+        response.status = data.status
+        render data.result as JSON
     }
 
     private delete() {

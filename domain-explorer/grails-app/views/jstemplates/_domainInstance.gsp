@@ -31,7 +31,9 @@
 </script>
 
 <script id="domain-instance-edit-template" type="text/template">
-  {{#each this}}
-  <div class="control-group"><label class="control-label">{{property.name}}:</label><div class="controls">{{property_edit}}</div></div>
-  {{/each}}
+  <form>
+    {{#each this}}
+      <div class="control-group"><label class="control-label">{{property.name}}:</label><div class="controls">{{property_edit}}</div></div>
+    {{/each}}
+  </form>
 </script>
