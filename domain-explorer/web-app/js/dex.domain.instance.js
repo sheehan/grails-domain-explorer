@@ -1,6 +1,27 @@
 Dex.Domain.Instance = (function (Dex, Backbone) {
     var Instance = {};
 
+
+    Instance.ToolbarView = Backbone.Marionette.ItemView.extend({
+        template: '#domain-instance-toolbar',
+        className: 'btn-toolbar',
+
+        triggers: {
+            'click .edit': 'edit',
+            'click .delete': 'delete'
+        }
+    });
+
+    Instance.EditToolbarView = Backbone.Marionette.ItemView.extend({
+        template: '#domain-edit-instance-toolbar',
+        className: 'btn-toolbar',
+
+        triggers: {
+            'click .save': 'save',
+            'click .cancel': 'cancel'
+        }
+    });
+
     Instance.ShowView = Backbone.Marionette.ItemView.extend({
         template: '#domain-instance-view-template',
         className: 'form-horizontal view-instance',
@@ -43,7 +64,11 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
         },
 
         serializeData: function () {
-            return _.map(this.domainType.toJSON().properties, function (property) {
+            var props = this.domainType.get('properties');
+            props = _.reject(props, function(property) {
+                return property.view == 'associationMany'; // || _.include(['id', 'version', 'dateCreated', 'lastUpdated'], property.name) ;
+            });
+            return _.map(props, function (property) {
                 return {
                     property: property,
                     value: this.model.get(property.name)
@@ -69,17 +94,30 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
         var property = this.property,
             value = this.value,
             valueHtml = '';
-        if (_.include(['id', 'version'], property.name)) {
+        if (_.include(['id', 'version', 'dateCreated', 'lastUpdated'], property.name)) {
             valueHtml = value;
         } else {
             switch (property.view) {
                 case 'string':
-                    var stringVal = value == null ? '' : value;
-                    valueHtml = '<input type="text" value="'+stringVal+'" />';
+                case 'number':
+                    (function () {
+                        var stringVal = value == null ? '' : value;
+                        valueHtml = '<input type="text" name="'+property.name+'" value="' + stringVal + '" />';
+                    })();
                     break;
                 case 'boolean':
-                    var stringVal = value == null ? '' : value;
-                    valueHtml = '<input type="checkbox" ' + (value === 'true' ? 'checked' : '') + ' />';
+                    (function () {
+                        var stringVal = value == null ? '' : value;
+                        valueHtml = '<input type="checkbox" ' + (value === 'true' ? 'checked' : '') + ' />';
+                    })();
+                    break;
+                case 'associationOne':
+                    (function () {
+                        var stringVal = value == null ? '' : value;
+                        // retain the id for now
+                        valueHtml = '<input type="text" name="'+property.name+'.id" value="' + (value ? value : '') + '" />';
+                        valueHtml += ' (id for now)';
+                    })();
                     break;
                 default :
                     valueHtml = 'property type not supported yet: ' + property.view;

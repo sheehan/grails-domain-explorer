@@ -30,13 +30,13 @@ class DomainController {
     def rest = {
         switch (request.method) {
             case "POST":
-                update()
+                create()
                 break
             case "GET":
                 show()
                 break
             case "PUT":
-                create()
+                update()
                 break
             case "DELETE":
                 delete()
@@ -283,11 +283,11 @@ class DomainController {
         } else if (property.type == ([] as byte[]).class) { //TODO: Bug in groovy means i have to do this :(
             return 'file'
         } else if (property.manyToOne || property.oneToOne) {
-            return 'manyToOne'
+            return 'associationOne'
         } else if ((property.oneToMany /*&& !property.bidirectional*/) || (property.manyToMany /*&& property.isOwningSide()*/)) {
-            return 'manyToMany'
+            return 'associationMany'
         } else if (property.oneToMany) {
-            return 'oneToMany'
+            return 'associationMany'
         } else if (property.embedded) {
             return 'embedded'
         }

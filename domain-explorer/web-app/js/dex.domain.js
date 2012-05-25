@@ -101,7 +101,7 @@ Dex.Domain = (function (Dex, Backbone) {
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
 
-            var toolbarView = new Domain.InstanceToolbarView();
+            var toolbarView = new Domain.Instance.ToolbarView();
             toolbarView.on('delete', function () {
                 var confirmDeleteView = new Domain.ConfirmDeleteView();
                 confirmDeleteView.render();
@@ -127,9 +127,6 @@ Dex.Domain = (function (Dex, Backbone) {
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
 
-//            var toolbarView = new Domain.InstanceToolbarView();
-//            this.toolbar.show(toolbarView);
-
             var view = new Domain.Instance.EditView({
                 model: this.model,
                 domainType: this.domainType
@@ -142,9 +139,9 @@ Dex.Domain = (function (Dex, Backbone) {
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
 
-            var toolbarView = new Domain.EditInstanceToolbarView();
+            var toolbarView = new Domain.Instance.EditToolbarView();
             toolbarView.on('save', function () {
-                console.log('TODO');
+                that.model.save();
             });
             toolbarView.on('cancel', function () {
                 that.showInstance();
@@ -173,26 +170,6 @@ Dex.Domain = (function (Dex, Backbone) {
         }
     });
 
-    Domain.InstanceToolbarView = Backbone.Marionette.ItemView.extend({
-        template: '#domain-instance-toolbar',
-        className: 'btn-toolbar',
-
-        triggers: {
-            'click .edit': 'edit',
-            'click .delete': 'delete'
-        }
-    });
-
-    Domain.EditInstanceToolbarView = Backbone.Marionette.ItemView.extend({
-        template: '#domain-edit-instance-toolbar',
-        className: 'btn-toolbar',
-
-        triggers: {
-            'click .save': 'save',
-            'click .cancel': 'cancel'
-        }
-    });
-
     Domain.DomainListItemView = Backbone.Marionette.ItemView.extend({
         template: '#domain-list-item-view-template',
         tagName: 'tr',
@@ -210,7 +187,7 @@ Dex.Domain = (function (Dex, Backbone) {
         },
 
         serializeData: function () {
-            return _.map(this.domainType.toJSON().properties, function (property) {
+            return _.map(this.domainType.get('properties'), function (property) {
                 return {
                     property: property,
                     value: this.model.get(property.name)
