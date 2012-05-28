@@ -9,11 +9,16 @@ Dex.Domain = (function (Dex, Backbone) {
         },
 
         updateWithData: function(data) {
+            var that = this;
             var url = this.urlRoot() + '/' + this.id;
-            $.ajax({
+            var dfd = $.ajax({
                 url: url,
                 type: 'PUT',
                 data: JSON.stringify(data)
+            });
+
+            dfd.done(function(data) {
+                that.set(data.data);
             });
         }
     });

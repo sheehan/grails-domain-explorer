@@ -87,6 +87,9 @@ class DomainController {
             }
         }
         response.status = data.status
+
+        GrailsDomainClass domainClass = grailsApplication.getDomainClass(params.className)
+        data.result.data = domainInstanceToMap(data.result.data, domainClass)
         render data.result as JSON
     }
 
