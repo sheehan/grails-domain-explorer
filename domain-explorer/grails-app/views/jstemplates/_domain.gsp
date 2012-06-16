@@ -1,5 +1,6 @@
 <script id="domain-template" type="text/template">
   <div class="header"></div>
+  <div class="hql"></div>
   <div class="toolbar"></div>
   <div class="content"></div>
 </script>
@@ -62,4 +63,14 @@
 
 <script id="empty-template" type="text/template">
   <div class="instruction">No domain selected</div>
+</script>
+
+<script id="domain-hql-section" type="text/template">
+  <textarea>from Address address order by id</textarea>
+  <div class="controls">
+    <label>max</label>
+    <input type="text" name="max" value="50" />
+    <label>offset</label>
+    <input type="text" name="offset" value="0" />
+  </div>
 </script>
