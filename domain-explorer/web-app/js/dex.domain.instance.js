@@ -1,6 +1,24 @@
 Dex.Domain.Instance = (function (Dex, Backbone) {
     var Instance = {};
 
+    var ErrorModel = Backbone.Model.extend();
+    var ErrorCollection = Backbone.Collection.extend({
+        model: ErrorModel
+    });
+
+    var ErrorsView = Backbone.Marionette.ItemView.extend({
+        initialize: function(options) {
+            this.errors = options.errors;
+        },
+        renderHtml: function() {
+            var html = '<ul>';
+            _.each(this.errors, function(error) {
+                html += '<li>'+error+'</li>'
+            });
+            html += '</ul>';
+            return html;
+        }
+    });
 
     Instance.ToolbarView = Backbone.Marionette.ItemView.extend({
         template: '#domain-instance-toolbar',
@@ -24,7 +42,7 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
 
     Instance.ShowView = Backbone.Marionette.ItemView.extend({
         template: '#domain-instance-view-template',
-        className: 'form-horizontal view-instance',
+        className: 'view-instance',
 
         events: {
             'click a': '_handleLinkClick'
@@ -55,12 +73,16 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
         }
     });
 
-    Instance.EditView = Backbone.Marionette.ItemView.extend({
+    Instance.EditView = Backbone.Marionette.Layout.extend({
         template: '#domain-instance-edit-template',
-        className: 'form-horizontal edit-instance',
+        className: 'edit-instance',
 
         initialize: function (options) {
             this.domainType = options.domainType;
+        },
+
+        regions: {
+            errors: '.errors'
         },
 
         serializeData: function () {
@@ -74,6 +96,15 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
                     value: this.model.get(property.name)
                 }
             }, this);
+        },
+
+        setSaving: function(isSaving) {
+            this.$el.toggleClass('saving', isSaving);
+        },
+
+        showErrors: function(errors) {
+            console.log('errors: %o', errors);
+            this.errors.show(new ErrorsView({errors: errors}));
         }
     });
 

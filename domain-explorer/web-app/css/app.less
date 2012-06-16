@@ -131,6 +131,9 @@ body {
       }
     }
   }
+  & > .hql {
+    border-bottom: 1px solid #aaa;
+  }
   & > .content {
     & > table {
       margin: 0;
@@ -159,16 +162,51 @@ body {
   height: 100%;
 }
 
-.view-instance.form-horizontal,
-.edit-instance.form-horizontal {
-  padding: 20px 0;
-  .control-label {
-    padding-top: 0;
-    width: 175px;
+.view-instance,
+.edit-instance {
+  min-height: 100%;
+  position: relative;
+  .form-horizontal {
+    padding: 20px 0;
+    .control-label {
+      padding-top: 0;
+      width: 175px;
+    }
+    .controls {
+      margin-left: 195px;
+    }
   }
-  .controls {
-    margin-left: 195px;
+  .message-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+    .message {
+      position: absolute;
+      line-height: 20px;
+      top: 50%;
+      margin-top: -10px;
+      text-align: center;
+      width: 100%;
+    }
   }
+  &.saving {
+    .message-overlay {
+      display: block;
+    }
+    .form-horizontal {
+      display: none;
+    }
+  }
+  .errors {
+    li {
+//      list-style-type: none;
+      padding: 7px 0;
+    }
+  }
+
 }
 
 .instanceValue {
@@ -190,4 +228,31 @@ body {
 .hi { //  .section();
   margin-bottom: 10px;
   padding: 5px;
+}
+
+.boxsizingBorder {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.hql-view {
+  padding: 10px;
+  textarea {
+    .boxsizingBorder;
+    width: 100%;
+    font-family: monospace;
+  }
+  .controls {
+    label {
+      display: inline;
+      margin-left: 10px;
+    }
+    input {
+      display: inline;
+      width: 50px;
+      margin: 0;
+    }
+    text-align: right;
+  }
 }

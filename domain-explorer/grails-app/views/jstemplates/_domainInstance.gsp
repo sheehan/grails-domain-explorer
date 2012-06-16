@@ -25,15 +25,19 @@
 </script>
 
 <script id="domain-instance-view-template" type="text/template">
+  <div class="form-horizontal">
   {{#each this}}
   <div class="control-group"><label class="control-label">{{property.name}}:</label><div class="controls">{{property_value}}</div></div>
   {{/each}}
+  </div>
 </script>
 
 <script id="domain-instance-edit-template" type="text/template">
-  <form>
+  <div class="errors"></div>
+  <form class="form-horizontal">
     {{#each this}}
       <div class="control-group"><label class="control-label">{{property.name}}:</label><div class="controls">{{property_edit}}</div></div>
     {{/each}}
   </form>
+  <div class="message-overlay"><div class="message">Saving...</div></div>
 </script>

@@ -80,7 +80,7 @@ class DomainController {
             data.result.data.validate()
             if (data.result.data.hasErrors()) {
                 data.status = 500
-                data.result.message = extractErrors(data.result.data).join(";")
+                data.result.errors = extractErrors(data.result.data)
                 data.result.success = false
             } else {
                 data.result.data = data.result.data.save(flush: true)
