@@ -1,3 +1,9 @@
+.boxsizingBorder {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 html {
   height: 100%;
 }
@@ -15,6 +21,7 @@ body {
   height: 100%;
 }
 
+@section-padding: 10px;
 .ui-layout-pane {
   border: none;
   padding: 0;
@@ -25,7 +32,16 @@ body {
   }
 }
 
+#list-wrapper,
+#main-wrapper,
+#class-wrapper {
+  background-color: transparent;
+  padding: @section-padding;
+}
+
 .section(){
+  .boxsizingBorder();
+//  padding: @section-padding;
   .header {
     background-image: -moz-linear-gradient(center top, #F5F5F5 0%, #ccc 100%); // TODO use mixin
     border-bottom: 1px solid #aaa;
@@ -47,15 +63,11 @@ body {
   }
 }
 
-@section-padding: 0;
 
 #list-wrapper {
-  background-color: transparent;
-  padding: @section-padding 0 @section-padding;
   overflow: hidden;
   #list {
-    margin: 0 (@section-padding / 2) 0 @section-padding;
-    .section; //    margin: 10px 5px 10px 10px;
+    .section;
     height: 100%;
     padding: 0;
     .header {
@@ -91,11 +103,7 @@ body {
 }
 
 #main-wrapper {
-  background-color: transparent;
-  padding: @section-padding @section-padding @section-padding @section-padding / 2;
   overflow: hidden;
-//  #main {
-//    height: 100%;
     &  > .emptyView {
       height: 100%;
       & > .instruction {
@@ -110,10 +118,6 @@ body {
         width: 100%;
       }
     }
-    padding: 0;
-//  }
-
-
 }
 
 .domainView {
@@ -210,10 +214,7 @@ body {
 }
 
 .instanceValue {
-  &.oneToMany { //    background-color: #777777;
-  //    border-radius: 20px 20px 20px 20px;
-  //    color: #FFFFFF;
-  //    padding: 5px 10px;
+  &.oneToMany {
     white-space: nowrap;
   }
   &.null {
@@ -223,17 +224,6 @@ body {
 
 .nowrap {
   white-space: nowrap;
-}
-
-.hi { //  .section();
-  margin-bottom: 10px;
-  padding: 5px;
-}
-
-.boxsizingBorder {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
 }
 
 .hql-view {
