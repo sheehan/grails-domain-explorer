@@ -1,5 +1,5 @@
-Dex.DomainList = (function (Dex, Backbone) {
-    var DomainList = {};
+Dex.module('DomainList', function(DomainList, Dex, Backbone, Marionette, $, _){
+    var Views = DomainList.Views = {};
 
     DomainList.DomainCount = Backbone.Model.extend({});
 
@@ -8,7 +8,7 @@ Dex.DomainList = (function (Dex, Backbone) {
         model: DomainList.DomainCount
     });
 
-    DomainList.DomainCountItemView = Backbone.Marionette.ItemView.extend({
+    Views.DomainCountItem = Backbone.Marionette.ItemView.extend({
         template: '#domain-count-item-template',
         tagName: 'li',
 
@@ -22,11 +22,11 @@ Dex.DomainList = (function (Dex, Backbone) {
         }
     });
 
-    DomainList.DomainCountSectionView = Backbone.Marionette.CompositeView.extend({
+    Views.DomainCountSection = Backbone.Marionette.CompositeView.extend({
         template: '#domain-count-section-template',
         tagName: 'section',
         attributes: { id: 'list', 'class': 'ui-layout-content'},
-        itemView: DomainList.DomainCountItemView,
+        itemView: Views.DomainCountItem,
 
         appendHtml: function (collectionView, itemView) {
             this.$('ul').append(itemView.el);
@@ -76,7 +76,7 @@ Dex.DomainList = (function (Dex, Backbone) {
     Dex.addInitializer(function (options) {
         DomainList.domainCountList = new DomainList.DomainCountCollection();
         DomainList.domainCountList.fetch();
-        DomainList.domainCountSectionView = new DomainList.DomainCountSectionView({
+        DomainList.domainCountSectionView = new Views.DomainCountSection({
             collection: DomainList.domainCountList
         });
     });
@@ -86,8 +86,6 @@ Dex.DomainList = (function (Dex, Backbone) {
     Dex.bind("initialize:after", function (options) {
         Dex.layout.list.show(DomainList.domainCountSectionView);
     });
-
-    return DomainList;
-})(Dex, Backbone);
+});
 
 

@@ -1,12 +1,12 @@
-Dex.Domain.Instance = (function (Dex, Backbone) {
-    var Instance = {};
-
+Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _){
+    var Views = Instance.Views = {};
+    
     var ErrorModel = Backbone.Model.extend();
     var ErrorCollection = Backbone.Collection.extend({
         model: ErrorModel
     });
 
-    var ErrorsView = Backbone.Marionette.ItemView.extend({
+    Views.Errors = Dex.ItemView.extend({
         initialize: function(options) {
             this.errors = options.errors;
         },
@@ -20,7 +20,7 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
         }
     });
 
-    Instance.ToolbarView = Backbone.Marionette.ItemView.extend({
+    Views.Toolbar = Dex.ItemView.extend({
         template: '#domain-instance-toolbar',
         className: 'btn-toolbar',
 
@@ -30,7 +30,7 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
         }
     });
 
-    Instance.EditToolbarView = Backbone.Marionette.ItemView.extend({
+    Views.EditToolbar = Dex.ItemView.extend({
         template: '#domain-edit-instance-toolbar',
         className: 'btn-toolbar',
 
@@ -40,7 +40,7 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
         }
     });
 
-    Instance.ShowView = Backbone.Marionette.ItemView.extend({
+    Views.Show = Dex.ItemView.extend({
         template: '#domain-instance-view-template',
         className: 'view-instance',
 
@@ -51,7 +51,7 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
         initialize: function (options) {
             this.domainType = options.domainType;
             this.model.bind('destroy', function () {
-                var deleteSuccessView = new Instance.DeleteSuccessView();
+                var deleteSuccessView = new Views.DeleteSuccess();
                 Dex.modal.show(deleteSuccessView);
             });
         },
@@ -73,7 +73,7 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
         }
     });
 
-    Instance.EditView = Backbone.Marionette.Layout.extend({
+    Views.Edit = Backbone.Marionette.Layout.extend({
         template: '#domain-instance-edit-template',
         className: 'edit-instance',
 
@@ -104,11 +104,11 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
 
         showErrors: function(errors) {
             console.log('errors: %o', errors);
-            this.errors.show(new ErrorsView({errors: errors}));
+            this.errors.show(new Views.Errors({errors: errors}));
         }
     });
 
-    Instance.DeleteSuccessView = Backbone.Marionette.ItemView.extend({
+    Views.DeleteSuccess = Dex.ItemView.extend({
         template: '#delete-success-template',
         events: {
             'click .ok': '_handleOkClick'
@@ -173,8 +173,6 @@ Dex.Domain.Instance = (function (Dex, Backbone) {
         }
         return new Handlebars.SafeString(valueHtml);
     });
-
-    return Instance;
-})(Dex, Backbone);
+});
 
 

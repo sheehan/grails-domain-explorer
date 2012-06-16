@@ -44,7 +44,6 @@ Dex.ItemView = Backbone.Marionette.ItemView.extend({
 
     renderHtml: function(data) {
         var template = this.getTemplate();
-        console.log(data);
         return Backbone.Marionette.Renderer.render(template, data);
     }
 });

@@ -1,23 +1,23 @@
-Dex.DomainType = (function (Dex, Backbone) {
-    var DomainType = {};
+Dex.module('DomainType', function(DomainType, Dex, Backbone, Marionette, $, _){
+    var Views = DomainType.Views = {};
 
-    DomainType.HeaderView = Dex.ItemView.extend({
+    Views.Header = Dex.ItemView.extend({
         renderHtml: function () {
             return this.model.get('name');
         }
     });
 
-    DomainType.ToolbarView = Dex.ItemView.extend({
+    Views.Toolbar = Dex.ItemView.extend({
         template: '#domain-type-toolbar-view-template'
     });
 
-    DomainType.PropertyView = Dex.ItemView.extend({
+    Views.Property = Dex.ItemView.extend({
         template: '#domain-type-property-view-template',
         tagName: 'tr'
     });
 
-    DomainType.PropertiesView = Backbone.Marionette.CompositeView.extend({
-        itemView: DomainType.PropertyView,
+    Views.Properties = Backbone.Marionette.CompositeView.extend({
+        itemView: Views.Property,
         tagName: 'table',
         className: 'table table-striped',
 
@@ -34,7 +34,7 @@ Dex.DomainType = (function (Dex, Backbone) {
         }
     });
 
-    DomainType.ContentView = Backbone.Marionette.Layout.extend({
+    Views.Content = Backbone.Marionette.Layout.extend({
         template: '#domain-type-content-view-template',
 
         regions: {
@@ -45,13 +45,13 @@ Dex.DomainType = (function (Dex, Backbone) {
         onRender: function () {
             var that = this;
 
-            var toolbarView = new DomainType.ContentToolbarView();
+            var toolbarView = new Views.ContentToolbar();
             this.toolbar.show(toolbarView);
 
             var link = Dex.createLink('domain', 'listInstances', {fullName: this.model.get('fullName')});
             $.getJSON(link).done(function (resp) {
                 var collection = new Dex.Domain.DomainInstanceCollection(resp.list);
-                var view = new Dex.Domain.ListView({
+                var view = new Dex.Domain.Views.List({
                     model: collection,
                     domainType: that.model
                 });
@@ -60,20 +60,20 @@ Dex.DomainType = (function (Dex, Backbone) {
         }
     });
 
-    DomainType.ContentToolbarView = Dex.ItemView.extend({
+    Views.ContentToolbar = Dex.ItemView.extend({
         template: '#domain-type-content-toolbar-view-template',
         className: 'btn-toolbar'
     });
 
-    DomainType.RelationsView = Dex.ItemView.extend({
+    Views.Relations = Dex.ItemView.extend({
         template: '#domain-type-relations-view-template'
     });
 
-    DomainType.QueryView = Dex.ItemView.extend({
+    Views.Query = Dex.ItemView.extend({
         template: '#domain-type-query-view-template'
     });
 
-    DomainType.DomainTypeView = Backbone.Marionette.Layout.extend({
+    Views.DomainType = Backbone.Marionette.Layout.extend({
         template: '#domain-type-template',
 
         className: 'domainTypeView',
@@ -96,7 +96,7 @@ Dex.DomainType = (function (Dex, Backbone) {
         },
 
         onRender: function () {
-            var headerView = new DomainType.HeaderView({model: this.model});
+            var headerView = new Views.Header({model: this.model});
             this.header.show(headerView);
 
 //            var toolbarView = new DomainType.ToolbarView();
@@ -107,7 +107,7 @@ Dex.DomainType = (function (Dex, Backbone) {
 
         showStructure: function () {
             this.$('button.structure').button('toggle');
-            var view = new DomainType.PropertiesView({
+            var view = new Views.Properties({
                 model: this.model
             });
             this.content.show(view);
@@ -116,7 +116,7 @@ Dex.DomainType = (function (Dex, Backbone) {
         showContent: function () {
             var that = this;
             this.$('button.content').button('toggle');
-            var view = new DomainType.ContentView({
+            var view = new Views.Content({
                 model: this.model
             });
             this.content.show(view);
@@ -124,7 +124,7 @@ Dex.DomainType = (function (Dex, Backbone) {
 
         showRelations: function () {
             this.$('button.relations').button('toggle');
-            var view = new DomainType.RelationsView({
+            var view = new Views.Relations({
                 model: this.model
             });
             this.content.show(view);
@@ -133,7 +133,7 @@ Dex.DomainType = (function (Dex, Backbone) {
 
         showQuery: function () {
             this.$('button.query').button('toggle');
-            var view = new DomainType.QueryView({
+            var view = new Views.Query({
                 model: this.model
             });
             this.content.show(view);
@@ -144,8 +144,6 @@ Dex.DomainType = (function (Dex, Backbone) {
     Handlebars.registerHelper('nullable', function () {
         return (this.constraints && this.constraints.nullable) ? 'true' : 'false';
     });
-
-    return DomainType;
-})(Dex, Backbone);
+});
 
 

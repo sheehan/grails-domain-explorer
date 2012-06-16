@@ -20,7 +20,6 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
                     dfd.resolveWith(null, [data]);
                 }).fail(function (r) {
                     var data = JSON.parse(r.responseText);
-                    console.log(data);
                     dfd.rejectWith(null, [data]);
                 });
 
@@ -129,7 +128,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
 
-            var toolbarView = new Domain.Instance.ToolbarView();
+            var toolbarView = new Domain.Instance.Views.Toolbar();
             toolbarView.on('delete', function () {
                 var confirmDeleteView = new Domain.ConfirmDeleteView();
                 confirmDeleteView.render();
@@ -143,7 +142,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
             });
             this.toolbar.show(toolbarView);
 
-            var view = new Domain.Instance.ShowView({
+            var view = new Domain.Instance.Views.Show({
                 model: this.model,
                 domainType: this.domainType
             });
@@ -155,7 +154,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
 
-            var view = new Domain.Instance.EditView({
+            var view = new Domain.Instance.Views.Edit({
                 model: this.model,
                 domainType: this.domainType
             });
@@ -167,7 +166,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
 
-            var toolbarView = new Domain.Instance.EditToolbarView();
+            var toolbarView = new Domain.Instance.Views.EditToolbar();
             toolbarView.on('save', function () {
                 view.setSaving(true);
                 var data = Backbone.Syphon.serialize(view);
@@ -186,7 +185,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
             });
             this.toolbar.show(toolbarView);
 
-            var view = new Domain.Instance.EditView({
+            var view = new Domain.Instance.Views.Edit({
                 model: this.model,
                 domainType: this.domainType
             });
@@ -294,7 +293,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
     Domain.show = function (fragment) {
         var link = Dex.createLink('domain', 'fromPath', { path: fragment });
         $.getJSON(link).done(function (resp) {
-            var view = new Dex.DomainType.DomainTypeView({
+            var view = new Dex.DomainType.Views.DomainType({
                 model: new Domain.DomainModel(resp.clazz)
             });
             Dex.layout.clazz.show(view);
@@ -365,8 +364,6 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
         }
         return new Handlebars.SafeString(valueHtml);
     });
-
-    return Domain;
 });
 
 
