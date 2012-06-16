@@ -1,5 +1,4 @@
-Dex.Domain = (function (Dex, Backbone) {
-    var Domain = {};
+Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
 
     Domain.DomainModel = Backbone.Model.extend({});
 
@@ -8,18 +7,24 @@ Dex.Domain = (function (Dex, Backbone) {
             return Dex.createLink('domain/rest/' + this.get('className'));
         },
 
-        updateWithData: function(data) {
+        updateWithData: function (data) {
+            var dfd = $.Deferred();
             var that = this;
             var url = this.urlRoot() + '/' + this.id;
-            var dfd = $.ajax({
+            $.ajax({
                 url: url,
                 type: 'PUT',
                 data: JSON.stringify(data)
-            });
+            }).done(function (data) {
+                    that.set(data.data);
+                    dfd.resolveWith(null, [data]);
+                }).fail(function (r) {
+                    var data = JSON.parse(r.responseText);
+                    console.log(data);
+                    dfd.rejectWith(null, [data]);
+                });
 
-            dfd.done(function(data) {
-                that.set(data.data);
-            });
+            return dfd;
         }
     });
 
@@ -31,15 +36,15 @@ Dex.Domain = (function (Dex, Backbone) {
         className: 'domainView'
     });
 
-    Domain.DomainHeaderView = Backbone.Marionette.ItemView.extend({
+    Domain.DomainHeaderView = Dex.ItemView.extend({
         renderHtml: function (data) {
             var tokens = Backbone.history.getFragment().split('/'),
-            html = '',
-            path = '';
+                html = '',
+                path = '';
             _.each(tokens, function (token, index) {
                 path += token;
                 var isFirst = index === 0,
-                isLast = index === tokens.length - 1;
+                    isLast = index === tokens.length - 1;
                 if (isFirst) {
                     token = _.last(token.split('.'));
                 }
@@ -62,7 +67,12 @@ Dex.Domain = (function (Dex, Backbone) {
         }
     });
 
-    Domain.DomainView = Backbone.Marionette.Layout.extend({
+    Domain.HqlView = Dex.ItemView.extend({
+        template: '#domain-hql-section',
+        className: 'hql-view'
+    });
+
+    Domain.DomainView = Marionette.Layout.extend({
         template: '#domain-template',
 
         className: 'domainView',
@@ -71,6 +81,7 @@ Dex.Domain = (function (Dex, Backbone) {
 
         regions: {
             header: '.header',
+            hql: '.hql',
             toolbar: '.toolbar',
             content: '.content'
         },
@@ -97,8 +108,11 @@ Dex.Domain = (function (Dex, Backbone) {
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
 
+            var hqlView = new Domain.HqlView();
+            this.hql.show(hqlView);
+
             var toolbarView = new Domain.ListToolbarView();
-            toolbarView.on('create', function() {
+            toolbarView.on('create', function () {
                 that.showCreateInstance();
             });
             this.toolbar.show(toolbarView);
@@ -136,7 +150,7 @@ Dex.Domain = (function (Dex, Backbone) {
             this.content.show(view);
         },
 
-        showCreateInstance: function() {
+        showCreateInstance: function () {
             var that = this;
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
@@ -148,16 +162,24 @@ Dex.Domain = (function (Dex, Backbone) {
             this.content.show(view);
         },
 
-        showEditInstance: function() {
+        showEditInstance: function () {
             var that = this;
             var headerView = new Domain.DomainHeaderView({model: this.model});
             this.header.show(headerView);
 
             var toolbarView = new Domain.Instance.EditToolbarView();
             toolbarView.on('save', function () {
+                view.setSaving(true);
                 var data = Backbone.Syphon.serialize(view);
-                console.log(data);
-                that.model.updateWithData(data);
+                var dfd = that.model.updateWithData(data);
+                dfd.done(function (data) {
+                    that.showInstance();
+                });
+                dfd.fail(function (data) {
+                    view.setSaving(false);
+                    view.showErrors(data.errors);
+                    // TODO show error message
+                });
             });
             toolbarView.on('cancel', function () {
                 that.showInstance();
@@ -172,7 +194,7 @@ Dex.Domain = (function (Dex, Backbone) {
         }
     });
 
-    Domain.ListToolbarView = Backbone.Marionette.ItemView.extend({
+    Domain.ListToolbarView = Dex.ItemView.extend({
         template: '#domain-list-toolbar',
         className: 'btn-toolbar',
 
@@ -186,7 +208,7 @@ Dex.Domain = (function (Dex, Backbone) {
         }
     });
 
-    Domain.DomainListItemView = Backbone.Marionette.ItemView.extend({
+    Domain.DomainListItemView = Dex.ItemView.extend({
         template: '#domain-list-item-view-template',
         tagName: 'tr',
 
@@ -214,7 +236,7 @@ Dex.Domain = (function (Dex, Backbone) {
     });
 
 
-    Domain.ListView = Backbone.Marionette.CompositeView.extend({
+    Domain.ListView = Marionette.CompositeView.extend({
         itemView: Domain.DomainListItemView,
         tagName: 'table',
         className: 'table table-striped',
@@ -235,9 +257,9 @@ Dex.Domain = (function (Dex, Backbone) {
         renderModel: function () {
             var properties = this.domainType.get('properties');
             var html = _.collect(properties,
-            function (property) {
-                return '<th>' + property.name + '</th>';
-            }, this).join('');
+                function (property) {
+                    return '<th>' + property.name + '</th>';
+                }, this).join('');
             return '<thead><tr>' + html + '</tr></thead><tbody></tbody>';
         },
 
@@ -246,12 +268,12 @@ Dex.Domain = (function (Dex, Backbone) {
         }
     });
 
-    Domain.EmptyView = Backbone.Marionette.ItemView.extend({
+    Domain.EmptyView = Dex.ItemView.extend({
         template: '#empty-template',
         className: 'emptyView'
     });
 
-    Domain.ConfirmDeleteView = Backbone.Marionette.ItemView.extend({
+    Domain.ConfirmDeleteView = Dex.ItemView.extend({
         template: '#confirm-delete-template',
         events: {
             'click .cancel': '_handleCancelClick',
@@ -277,7 +299,7 @@ Dex.Domain = (function (Dex, Backbone) {
             });
             Dex.layout.clazz.show(view);
 
-            (function() {
+            (function () {
                 var model, view, domainType;
                 if (resp.isCollection) {
                     model = new Domain.DomainInstanceCollection(resp.value);
@@ -329,8 +351,8 @@ Dex.Domain = (function (Dex, Backbone) {
 
     Handlebars.registerHelper('property_value_cell', function () {
         var property = this.property,
-        value = this.value,
-        valueHtml;
+            value = this.value,
+            valueHtml;
         if (property.oneToMany || property.manyToMany) {
             valueHtml = '<span class="instanceValue oneToMany">[' + value + ']</span>';
         } else if (value === null) {
@@ -345,6 +367,6 @@ Dex.Domain = (function (Dex, Backbone) {
     });
 
     return Domain;
-})(Dex, Backbone);
+});
 
 

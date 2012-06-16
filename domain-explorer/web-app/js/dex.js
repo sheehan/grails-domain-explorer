@@ -27,6 +27,28 @@ Dex = new Backbone.Marionette.Application({
     }
 });
 
+Dex.ItemView = Backbone.Marionette.ItemView.extend({
+    render: function(){
+        if (this.beforeRender){ this.beforeRender(); }
+        this.trigger("before:render", this);
+        this.trigger("item:before:render", this);
+
+        var data = this.serializeData();
+        var html = this.renderHtml(data);
+        this.$el.html(html);
+
+        if (this.onRender){ this.onRender(); }
+        this.trigger("render", this);
+        this.trigger("item:rendered", this);
+    },
+
+    renderHtml: function(data) {
+        var template = this.getTemplate();
+        console.log(data);
+        return Backbone.Marionette.Renderer.render(template, data);
+    }
+});
+
 
 Dex.bind("initialize:before", function (options) {
     Dex.addRegions({
@@ -39,7 +61,7 @@ Dex.bind("initialize:after", function (options) {
     Backbone.history && Backbone.history.start();
 });
 
-Backbone.Marionette.TemplateCache.compileTemplate = function(rawTemplate){
+Backbone.Marionette.TemplateCache.prototype.compileTemplate = function(rawTemplate){
     return Handlebars.compile(rawTemplate);
 };
 

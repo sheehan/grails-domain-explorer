@@ -52,9 +52,8 @@
 
     Dex.addInitializer(function () {
         Dex.layout = new Layout();
-        Dex.layout.render().done(function () {
-            $("body").prepend(Dex.layout.el);
-        });
+        Dex.layout.render();
+        $("body").prepend(Dex.layout.el);
         Dex.content.show(Dex.layout);
     });
 })(Dex, Backbone, $);

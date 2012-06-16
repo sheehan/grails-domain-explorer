@@ -1,17 +1,17 @@
 Dex.DomainType = (function (Dex, Backbone) {
     var DomainType = {};
 
-    DomainType.HeaderView = Backbone.Marionette.ItemView.extend({
+    DomainType.HeaderView = Dex.ItemView.extend({
         renderHtml: function () {
             return this.model.get('name');
         }
     });
 
-    DomainType.ToolbarView = Backbone.Marionette.ItemView.extend({
+    DomainType.ToolbarView = Dex.ItemView.extend({
         template: '#domain-type-toolbar-view-template'
     });
 
-    DomainType.PropertyView = Backbone.Marionette.ItemView.extend({
+    DomainType.PropertyView = Dex.ItemView.extend({
         template: '#domain-type-property-view-template',
         tagName: 'tr'
     });
@@ -60,16 +60,16 @@ Dex.DomainType = (function (Dex, Backbone) {
         }
     });
 
-    DomainType.ContentToolbarView = Backbone.Marionette.ItemView.extend({
+    DomainType.ContentToolbarView = Dex.ItemView.extend({
         template: '#domain-type-content-toolbar-view-template',
         className: 'btn-toolbar'
     });
 
-    DomainType.RelationsView = Backbone.Marionette.ItemView.extend({
+    DomainType.RelationsView = Dex.ItemView.extend({
         template: '#domain-type-relations-view-template'
     });
 
-    DomainType.QueryView = Backbone.Marionette.ItemView.extend({
+    DomainType.QueryView = Dex.ItemView.extend({
         template: '#domain-type-query-view-template'
     });
 
