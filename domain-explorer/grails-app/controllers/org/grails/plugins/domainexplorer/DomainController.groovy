@@ -51,7 +51,7 @@ class DomainController {
     }
 
     private create() {
-        def result = [ success: true ]
+        def result = [success: true]
         def status = 200
         def entity = grailsApplication.getClassForName(params.className)
         if (entity) {
@@ -76,14 +76,20 @@ class DomainController {
     private update() {
         def data = retrieveRecord()
         if (data.result.success) {
-            data.result.data.properties = request.JSON
-            data.result.data.validate()
-            if (data.result.data.hasErrors()) {
+            try {
+                data.result.data.properties = request.JSON
+                data.result.data.validate()
+                if (data.result.data.hasErrors()) {
+                    data.status = 500
+                    data.result.errors = extractErrors(data.result.data)
+                    data.result.success = false
+                } else {
+                    data.result.data = data.result.data.save(flush: true)
+                }
+            } catch (e) {
                 data.status = 500
-                data.result.errors = extractErrors(data.result.data)
+                data.result.errors = [e.message]
                 data.result.success = false
-            } else {
-                data.result.data = data.result.data.save(flush: true)
             }
         }
         response.status = data.status
@@ -108,7 +114,7 @@ class DomainController {
     }
 
     private retrieveRecord() {
-        def result = [ success: true ]
+        def result = [success: true]
         def status = 200
         def entity = grailsApplication.getClassForName(params.className)
         if (entity) {
@@ -126,7 +132,7 @@ class DomainController {
             status = 500
         }
 
-        [ result: result, status: status ]
+        [result: result, status: status]
     }
 
     def messageSource

@@ -41,3 +41,12 @@
   </form>
   <div class="message-overlay"><div class="message">Saving...</div></div>
 </script>
+
+<script id="domain-instance-errors-template" type="text/template">
+  <button class="close" data-dismiss="alert">×</button>
+  <ul>
+  {{#each this}}
+    <li>{{this}}</li>
+  {{/each}}
+  </ul>
+</script>

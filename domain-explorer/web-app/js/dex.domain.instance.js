@@ -7,16 +7,13 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
     });
 
     Views.Errors = Dex.ItemView.extend({
+        template: '#domain-instance-errors-template',
+        className: 'alert alert-error',
         initialize: function(options) {
             this.errors = options.errors;
         },
-        renderHtml: function() {
-            var html = '<ul>';
-            _.each(this.errors, function(error) {
-                html += '<li>'+error+'</li>'
-            });
-            html += '</ul>';
-            return html;
+        serializeData: function() {
+            return this.errors;
         }
     });
 
@@ -103,7 +100,6 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
         },
 
         showErrors: function(errors) {
-            console.log('errors: %o', errors);
             this.errors.show(new Views.Errors({errors: errors}));
         }
     });
@@ -146,8 +142,9 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
                     (function () {
                         var stringVal = value == null ? '' : value;
                         // retain the id for now
-                        valueHtml = '<input type="text" name="'+property.name+'.id" value="' + (value ? value : '') + '" />';
-                        valueHtml += ' (id for now)';
+                        valueHtml = '<div class="input-append"><input type="text" name="'+property.name+'.id" value="' + (value ? value : '') + '" /><button class="btn" type="button">Search</button></div>';
+//                        valueHtml = '<input type="text" name="'+property.name+'.id" value="' + (value ? value : '') + '" />';
+//                        valueHtml += ' (id for now)';
                     })();
                     break;
                 default :
