@@ -13,7 +13,7 @@ Dex = new Backbone.Marionette.Application({
         if (action) {
             url += '/' + action;
         }
-        if (params != undefined) {
+        if (params !== undefined) {
             if (params.id) {
                 url += '/' + params.id;
                 delete params.id;
@@ -60,8 +60,11 @@ Dex.bind("initialize:after", function (options) {
     Backbone.history && Backbone.history.start();
 });
 
+Backbone.Marionette.TemplateCache.prototype.loadTemplate = function(templateId){
+    return Handlebars.templates[templateId];
+};
 Backbone.Marionette.TemplateCache.prototype.compileTemplate = function(rawTemplate){
-    return Handlebars.compile(rawTemplate);
+    return rawTemplate;
 };
 
 //Dex.StackableRegion = Backbone.Marionette.Region.extend({

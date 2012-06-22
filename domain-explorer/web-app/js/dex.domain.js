@@ -67,12 +67,12 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
     });
 
     Domain.HqlView = Dex.ItemView.extend({
-        template: '#domain-hql-section',
+        template: 'domain/hqlSection',
         className: 'hql-view'
     });
 
     Domain.DomainView = Marionette.Layout.extend({
-        template: '#domain-template',
+        template: 'domain/domain',
 
         className: 'domainView',
 
@@ -194,7 +194,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
     });
 
     Domain.ListToolbarView = Dex.ItemView.extend({
-        template: '#domain-list-toolbar',
+        template: 'domain/listToolbar',
         className: 'btn-toolbar',
 
         events: {
@@ -208,7 +208,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
     });
 
     Domain.DomainListItemView = Dex.ItemView.extend({
-        template: '#domain-list-item-view-template',
+        template: 'domain/listItemView',
         tagName: 'tr',
 
         events: {
@@ -228,7 +228,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
                 return {
                     property: property,
                     value: this.model.get(property.name)
-                }
+                };
             }, this);
         }
 
@@ -268,12 +268,12 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
     });
 
     Domain.EmptyView = Dex.ItemView.extend({
-        template: '#empty-template',
+        template: 'domain/empty',
         className: 'emptyView'
     });
 
     Domain.ConfirmDeleteView = Dex.ItemView.extend({
-        template: '#confirm-delete-template',
+        template: 'domain/confirmDelete',
         events: {
             'click .cancel': '_handleCancelClick',
             'click .delete': '_handleDeleteClick'

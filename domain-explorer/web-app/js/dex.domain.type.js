@@ -8,11 +8,11 @@ Dex.module('DomainType', function(DomainType, Dex, Backbone, Marionette, $, _){
     });
 
     Views.Toolbar = Dex.ItemView.extend({
-        template: '#domain-type-toolbar-view-template'
+        template: 'type/toolbarView'
     });
 
     Views.Property = Dex.ItemView.extend({
-        template: '#domain-type-property-view-template',
+        template: 'type/propertyView',
         tagName: 'tr'
     });
 
@@ -35,7 +35,7 @@ Dex.module('DomainType', function(DomainType, Dex, Backbone, Marionette, $, _){
     });
 
     Views.Content = Backbone.Marionette.Layout.extend({
-        template: '#domain-type-content-view-template',
+        template: 'type/contentView',
 
         regions: {
             toolbar: '.toolbar',
@@ -61,20 +61,20 @@ Dex.module('DomainType', function(DomainType, Dex, Backbone, Marionette, $, _){
     });
 
     Views.ContentToolbar = Dex.ItemView.extend({
-        template: '#domain-type-content-toolbar-view-template',
+        template: 'type/contentToolbarView',
         className: 'btn-toolbar'
     });
 
     Views.Relations = Dex.ItemView.extend({
-        template: '#domain-type-relations-view-template'
+        template: 'type/relationsView'
     });
 
     Views.Query = Dex.ItemView.extend({
-        template: '#domain-type-query-view-template'
+        template: 'type/toolbarView'
     });
 
     Views.DomainType = Backbone.Marionette.Layout.extend({
-        template: '#domain-type-template',
+        template: 'type/type',
 
         className: 'domainTypeView',
 

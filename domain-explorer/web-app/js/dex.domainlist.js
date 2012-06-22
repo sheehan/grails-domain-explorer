@@ -4,12 +4,12 @@ Dex.module('DomainList', function(DomainList, Dex, Backbone, Marionette, $, _){
     DomainList.DomainCount = Backbone.Model.extend({});
 
     DomainList.DomainCountCollection = Backbone.Collection.extend({
-        url: function() { return Dex.createLink('domain', 'list') },
+        url: function() { return Dex.createLink('domain', 'list'); },
         model: DomainList.DomainCount
     });
 
     Views.DomainCountItem = Backbone.Marionette.ItemView.extend({
-        template: '#domain-count-item-template',
+        template: 'domainCount/item',
         tagName: 'li',
 
         events: {
@@ -23,7 +23,7 @@ Dex.module('DomainList', function(DomainList, Dex, Backbone, Marionette, $, _){
     });
 
     Views.DomainCountSection = Backbone.Marionette.CompositeView.extend({
-        template: '#domain-count-section-template',
+        template: 'domainCount/section',
         tagName: 'section',
         attributes: { id: 'list', 'class': 'ui-layout-content'},
         itemView: Views.DomainCountItem,

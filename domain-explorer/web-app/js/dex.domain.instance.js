@@ -7,7 +7,7 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
     });
 
     Views.Errors = Dex.ItemView.extend({
-        template: '#domain-instance-errors-template',
+        template: 'instance/errors',
         className: 'alert alert-error',
         initialize: function(options) {
             this.errors = options.errors;
@@ -18,7 +18,7 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
     });
 
     Views.Toolbar = Dex.ItemView.extend({
-        template: '#domain-instance-toolbar',
+        template: 'instance/toolbar',
         className: 'btn-toolbar',
 
         triggers: {
@@ -28,7 +28,7 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
     });
 
     Views.EditToolbar = Dex.ItemView.extend({
-        template: '#domain-edit-instance-toolbar',
+        template: 'instance/editToolbar',
         className: 'btn-toolbar',
 
         triggers: {
@@ -38,7 +38,7 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
     });
 
     Views.Show = Dex.ItemView.extend({
-        template: '#domain-instance-view-template',
+        template: 'instance/view',
         className: 'view-instance',
 
         events: {
@@ -65,13 +65,13 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
                 return {
                     property: property,
                     value: this.model.get(property.name)
-                }
+                };
             }, this);
         }
     });
 
     Views.Edit = Backbone.Marionette.Layout.extend({
-        template: '#domain-instance-edit-template',
+        template: 'instance/edit',
         className: 'edit-instance',
 
         initialize: function (options) {
@@ -91,7 +91,7 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
                 return {
                     property: property,
                     value: this.model.get(property.name)
-                }
+                };
             }, this);
         },
 
@@ -105,7 +105,7 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
     });
 
     Views.DeleteSuccess = Dex.ItemView.extend({
-        template: '#delete-success-template',
+        template: 'domain/deleteSuccess',
         events: {
             'click .ok': '_handleOkClick'
         },
@@ -128,19 +128,19 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
                 case 'string':
                 case 'number':
                     (function () {
-                        var stringVal = value == null ? '' : value;
+                        var stringVal = value === null ? '' : value;
                         valueHtml = '<input type="text" name="'+property.name+'" value="' + stringVal + '" />';
                     })();
                     break;
                 case 'boolean':
                     (function () {
-                        var stringVal = value == null ? '' : value;
+                        var stringVal = value === null ? '' : value;
                         valueHtml = '<input type="checkbox" ' + (value === 'true' ? 'checked' : '') + ' />';
                     })();
                     break;
                 case 'associationOne':
                     (function () {
-                        var stringVal = value == null ? '' : value;
+                        var stringVal = value === null ? '' : value;
                         // retain the id for now
                         valueHtml = '<div class="input-append"><input type="text" name="'+property.name+'.id" value="' + (value ? value : '') + '" /><button class="btn" type="button">Search</button></div>';
 //                        valueHtml = '<input type="text" name="'+property.name+'.id" value="' + (value ? value : '') + '" />';

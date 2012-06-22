@@ -2,7 +2,7 @@
 
     var Layout = Backbone.Marionette.Layout.extend({
 
-        template: "#layout-template",
+        template: "layout",
 
         className: 'layout',
 
