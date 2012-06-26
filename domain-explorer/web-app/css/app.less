@@ -172,12 +172,19 @@ body {
   position: relative;
   .form-horizontal {
     padding: 20px 0;
-    .control-label {
-      padding-top: 0;
-      width: 175px;
-    }
-    .controls {
-      margin-left: 195px;
+    .control-group {
+      .control-label {
+        padding-top: 0;
+        width: 175px;
+      }
+      .controls {
+        margin-left: 195px;
+      }
+      &.date {
+        select {
+          width: auto;
+        }
+      }
     }
   }
   .message-overlay {

@@ -1,3 +1,5 @@
+import org.grails.plugins.domainexplorer.JsonDateEditorRegistrar
+
 class DomainExplorerGrailsPlugin {
     // the plugin version
     def version = "0.1"
@@ -43,7 +45,7 @@ Brief summary/description of the plugin.
     }
 
     def doWithSpring = {
-        // TODO Implement runtime spring config (optional)
+        domainExplorerJsonDatePropertyEditorRegistrar(JsonDateEditorRegistrar)
     }
 
     def doWithDynamicMethods = { ctx ->

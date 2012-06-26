@@ -60,11 +60,8 @@ Dex.bind("initialize:after", function (options) {
     Backbone.history && Backbone.history.start();
 });
 
-Backbone.Marionette.TemplateCache.prototype.loadTemplate = function(templateId){
-    return Handlebars.templates[templateId];
-};
-Backbone.Marionette.TemplateCache.prototype.compileTemplate = function(rawTemplate){
-    return rawTemplate;
+Backbone.Marionette.Renderer.render = function(template, data){
+    return Handlebars.templates[template](data);
 };
 
 //Dex.StackableRegion = Backbone.Marionette.Region.extend({

@@ -95,6 +95,20 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
             }, this);
         },
 
+        serialize: function() {
+            var data = {};
+            _.each(this.$('.control-group'), function(el) {
+                var $el = $(el);
+                var $input = $el.find('input');
+                if ($el.hasClass('date')) {
+                    data[$input.prop('name')] = new Date();//.toUTCString();
+                } else {
+                    data[$input.prop('name')] = $input.val();
+                }
+            });
+            return data;
+        },
+
         setSaving: function(isSaving) {
             this.$el.toggleClass('saving', isSaving);
         },
@@ -145,6 +159,12 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
                         valueHtml = '<div class="input-append"><input type="text" name="'+property.name+'.id" value="' + (value ? value : '') + '" /><button class="btn" type="button">Search</button></div>';
 //                        valueHtml = '<input type="text" name="'+property.name+'.id" value="' + (value ? value : '') + '" />';
 //                        valueHtml += ' (id for now)';
+                    })();
+                    break;
+                case 'date':
+                    (function () {
+                        var stringVal = '';
+                        valueHtml = Handlebars.templates['date']();
                     })();
                     break;
                 default :

@@ -169,7 +169,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
             var toolbarView = new Domain.Instance.Views.EditToolbar();
             toolbarView.on('save', function () {
                 view.setSaving(true);
-                var data = Backbone.Syphon.serialize(view);
+                var data = view.serialize();
                 var dfd = that.model.updateWithData(data);
                 dfd.done(function (data) {
                     that.showInstance();
@@ -177,7 +177,6 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
                 dfd.fail(function (data) {
                     view.setSaving(false);
                     view.showErrors(data.errors);
-                    // TODO show error message
                 });
             });
             toolbarView.on('cancel', function () {

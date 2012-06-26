@@ -165,14 +165,18 @@ body {
 .edit-instance .form-horizontal {
   padding: 20px 0;
 }
-.view-instance .form-horizontal .control-label,
-.edit-instance .form-horizontal .control-label {
+.view-instance .form-horizontal .control-group .control-label,
+.edit-instance .form-horizontal .control-group .control-label {
   padding-top: 0;
   width: 175px;
 }
-.view-instance .form-horizontal .controls,
-.edit-instance .form-horizontal .controls {
+.view-instance .form-horizontal .control-group .controls,
+.edit-instance .form-horizontal .control-group .controls {
   margin-left: 195px;
+}
+.view-instance .form-horizontal .control-group.date select,
+.edit-instance .form-horizontal .control-group.date select {
+  width: auto;
 }
 .view-instance .message-overlay,
 .edit-instance .message-overlay {
