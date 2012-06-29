@@ -100,19 +100,6 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
             _.each(this.formViews, function (view) {
                 _.extend(data, view.serialize());
             });
-//            _.each(this.$('.control-group'), function (el) {
-//                var $el = $(el);
-//                var $input = $el.find('input');
-//                if ($el.hasClass('date')) {
-//                    var year = $el.find('[name=year]').val();
-//                    var month = $el.find('[name=month]').val();
-//                    var day = $el.find('[name=day]').val();
-//                    var date = new Date(year, month, day);
-//                    data[$input.prop('name')] = moment(date).format('YYYY-MM-DDTHH:mm:ss.SSSZZ');
-//                } else {
-//                    data[$input.prop('name')] = $input.val();
-//                }
-//            });
             return data;
         },
 
@@ -195,6 +182,8 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
         } else if (property.oneToOne || property.manyToOne) {
             var className = _.last(property.type.split('.'));
             valueHtml = '<a href="#" data-append-path="' + property.name + '"><span class="nowrap">' + className + ': ' + value + '</span></a>';
+        } else if (property.view == 'date') {
+            valueHtml = moment(value).utc();
         } else {
             valueHtml = value;
         }
@@ -208,10 +197,30 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
             this.property = options.property;
         },
 
+        serializeData: function() {
+            var value = this.model.get(this.property.name);
+            var mnt = moment(value);
+            return {
+                name: this.property.name,
+                value: this.model.get(this.property.name),
+                date: mnt.date(),
+                month: mnt.month(),
+                year: mnt.year()
+            };
+        },
+
+        onRender: function() {
+            var value = this.model.get(this.property.name);
+            var mnt = moment(value);
+            this.$('[name=year]').val(mnt.year());
+            this.$('[name=month]').val(mnt.month());
+            this.$('[name=day]').val(mnt.date());
+        },
+
         serialize: function () {
-            var year = this.$el.find('[name=year]').val();
-            var month = this.$el.find('[name=month]').val();
-            var day = this.$el.find('[name=day]').val();
+            var year = this.$('[name=year]').val();
+            var month = this.$('[name=month]').val();
+            var day = this.$('[name=day]').val();
             var date = new Date(year, month, day);
             var data = {};
             data[this.property.name] = moment(date).format('YYYY-MM-DDTHH:mm:ss.SSSZZ');
@@ -287,14 +296,14 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
 
         serializeData: function() {
             return {
-                name: this.property.name,
+                property: this.property,
                 value: this.model.get(this.property.name)
             };
         },
 
         serialize: function () {
             var data = {};
-            data[this.property.name] = this.$el.find('input').val();
+            data[this.property.name + '.id'] = this.$el.find('input').val();
             return data;
         }
     });

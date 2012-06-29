@@ -314,6 +314,8 @@ class DomainController {
             } else if (property.association && (property.oneToOne || property.manyToOne)) {
                 // TODO embedded
                 result[property.name] = entity[property.name]?.id
+            } else if((property.type.isAssignableFrom(Date))) {
+                result[property.name] = entity[property.name]?.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
             } else {
                 result[property.name] = entity[property.name]?.toString()
             }
