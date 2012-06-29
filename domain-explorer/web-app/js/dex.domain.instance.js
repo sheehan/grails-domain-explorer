@@ -1,6 +1,6 @@
-Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _){
+Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, _) {
     var Views = Instance.Views = {};
-    
+
     var ErrorModel = Backbone.Model.extend();
     var ErrorCollection = Backbone.Collection.extend({
         model: ErrorModel
@@ -9,10 +9,10 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
     Views.Errors = Dex.ItemView.extend({
         template: 'instance/errors',
         className: 'alert alert-error',
-        initialize: function(options) {
+        initialize: function (options) {
             this.errors = options.errors;
         },
-        serializeData: function() {
+        serializeData: function () {
             return this.errors;
         }
     });
@@ -84,7 +84,7 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
 
         serializeData: function () {
             var props = this.domainType.get('properties');
-            props = _.reject(props, function(property) {
+            props = _.reject(props, function (property) {
                 return property.view == 'associationMany'; // || _.include(['id', 'version', 'dateCreated', 'lastUpdated'], property.name) ;
             });
             return _.map(props, function (property) {
@@ -95,25 +95,74 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
             }, this);
         },
 
-        serialize: function() {
+        serialize: function () {
             var data = {};
-            _.each(this.$('.control-group'), function(el) {
-                var $el = $(el);
-                var $input = $el.find('input');
-                if ($el.hasClass('date')) {
-                    data[$input.prop('name')] = new Date();//.toUTCString();
-                } else {
-                    data[$input.prop('name')] = $input.val();
-                }
+            _.each(this.formViews, function (view) {
+                _.extend(data, view.serialize());
             });
+//            _.each(this.$('.control-group'), function (el) {
+//                var $el = $(el);
+//                var $input = $el.find('input');
+//                if ($el.hasClass('date')) {
+//                    var year = $el.find('[name=year]').val();
+//                    var month = $el.find('[name=month]').val();
+//                    var day = $el.find('[name=day]').val();
+//                    var date = new Date(year, month, day);
+//                    data[$input.prop('name')] = moment(date).format('YYYY-MM-DDTHH:mm:ss.SSSZZ');
+//                } else {
+//                    data[$input.prop('name')] = $input.val();
+//                }
+//            });
             return data;
         },
 
-        setSaving: function(isSaving) {
+        onRender: function () {
+            this.formViews = [];
+            var props = this.domainType.get('properties');
+            props = _.reject(props, function (property) {
+                return property.view == 'associationMany';// || _.include(['id', 'version', 'dateCreated', 'lastUpdated'], property.name) ;
+            });
+            var $form = this.$('form');
+            _.each(props, function (property) {
+                var View = this.getView(property);
+                if (View) {
+                    var view = new View({
+                        property: property,
+                        model: this.model
+                    });
+                    var $wrapper = $(Handlebars.templates['instance/form/controlGroup']({property: property}));
+                    view.render();
+                    $form.append($wrapper);
+                    $wrapper.find('.controls').html(view.el);
+                    this.formViews.push(view);
+                }
+            }, this);
+        },
+
+        getView: function(property) {
+            if (_.include(['id', 'version', 'dateCreated', 'lastUpdated'], property.name)) {
+                return ReadOnlyView;
+            }
+            switch (property.view) {
+                case 'string':
+                case 'number':
+                    return StringView;
+                case 'date':
+                    return DateView;
+                case 'boolean':
+                    return BooleanView;
+                case 'associationOne':
+                    return AssociationOneView;
+                default:
+                    return NotSupportedView;
+            }
+        },
+
+        setSaving: function (isSaving) {
             this.$el.toggleClass('saving', isSaving);
         },
 
-        showErrors: function(errors) {
+        showErrors: function (errors) {
             this.errors.show(new Views.Errors({errors: errors}));
         }
     });
@@ -131,47 +180,8 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
         }
     });
 
-    Handlebars.registerHelper('property_edit', function () {
-        var property = this.property,
-            value = this.value,
-            valueHtml = '';
-        if (_.include(['id', 'version', 'dateCreated', 'lastUpdated'], property.name)) {
-            valueHtml = value;
-        } else {
-            switch (property.view) {
-                case 'string':
-                case 'number':
-                    (function () {
-                        var stringVal = value === null ? '' : value;
-                        valueHtml = '<input type="text" name="'+property.name+'" value="' + stringVal + '" />';
-                    })();
-                    break;
-                case 'boolean':
-                    (function () {
-                        var stringVal = value === null ? '' : value;
-                        valueHtml = '<input type="checkbox" ' + (value === 'true' ? 'checked' : '') + ' />';
-                    })();
-                    break;
-                case 'associationOne':
-                    (function () {
-                        var stringVal = value === null ? '' : value;
-                        // retain the id for now
-                        valueHtml = '<div class="input-append"><input type="text" name="'+property.name+'.id" value="' + (value ? value : '') + '" /><button class="btn" type="button">Search</button></div>';
-//                        valueHtml = '<input type="text" name="'+property.name+'.id" value="' + (value ? value : '') + '" />';
-//                        valueHtml += ' (id for now)';
-                    })();
-                    break;
-                case 'date':
-                    (function () {
-                        var stringVal = '';
-                        valueHtml = Handlebars.templates['date']();
-                    })();
-                    break;
-                default :
-                    valueHtml = 'property type not supported yet: ' + property.view;
-            }
-        }
-        return new Handlebars.SafeString(valueHtml);
+    Views.ControlGroup = Dex.ItemView.extend({
+        template: 'instance/form/controlGroup'
     });
 
     Handlebars.registerHelper('property_value', function () {
@@ -189,6 +199,121 @@ Dex.module('Domain.Instance', function(Instance, Dex, Backbone, Marionette, $, _
             valueHtml = value;
         }
         return new Handlebars.SafeString(valueHtml);
+    });
+
+    var DateView = Dex.ItemView.extend({
+        template: 'instance/form/date',
+
+        initialize: function (options) {
+            this.property = options.property;
+        },
+
+        serialize: function () {
+            var year = this.$el.find('[name=year]').val();
+            var month = this.$el.find('[name=month]').val();
+            var day = this.$el.find('[name=day]').val();
+            var date = new Date(year, month, day);
+            var data = {};
+            data[this.property.name] = moment(date).format('YYYY-MM-DDTHH:mm:ss.SSSZZ');
+            return data;
+        }
+    });
+
+    var StringView = Dex.ItemView.extend({
+        template: 'instance/form/string',
+
+        initialize: function (options) {
+            this.property = options.property;
+        },
+
+        serializeData: function() {
+            return {
+                name: this.property.name,
+                value: this.model.get(this.property.name)
+            };
+        },
+
+        serialize: function () {
+            var data = {};
+            data[this.property.name] = this.$el.find('input').val();
+            return data;
+        }
+    });
+
+    var ReadOnlyView = Dex.ItemView.extend({
+        template: 'instance/form/readOnly',
+
+        initialize: function (options) {
+            this.property = options.property;
+        },
+
+        serializeData: function() {
+            return {
+                name: this.property.name,
+                value: this.model.get(this.property.name)
+            };
+        },
+
+        serialize: function () { return {}; }
+    });
+
+    var BooleanView = Dex.ItemView.extend({
+        template: 'instance/form/boolean',
+
+        initialize: function (options) {
+            this.property = options.property;
+        },
+
+        serializeData: function() {
+            return {
+                name: this.property.name,
+                value: this.model.get(this.property.name)
+            };
+        },
+
+        serialize: function () {
+            var data = {};
+            data[this.property.name] = this.$el.find('input').val();
+            return data;
+        }
+    });
+
+    var AssociationOneView = Dex.ItemView.extend({
+        template: 'instance/form/associationOne',
+
+        initialize: function (options) {
+            this.property = options.property;
+        },
+
+        serializeData: function() {
+            return {
+                name: this.property.name,
+                value: this.model.get(this.property.name)
+            };
+        },
+
+        serialize: function () {
+            var data = {};
+            data[this.property.name] = this.$el.find('input').val();
+            return data;
+        }
+    });
+
+    var NotSupportedView = Dex.ItemView.extend({
+        template: 'instance/form/notSupported',
+
+        initialize: function (options) {
+            this.property = options.property;
+        },
+
+        serializeData: function() {
+            return {
+                property: this.property,
+                value: this.model.get(this.property.name)
+            };
+        },
+
+        serialize: function () { return {}; }
     });
 });
 

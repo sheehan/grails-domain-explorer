@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 
 class JsonDateEditorRegistrar implements PropertyEditorRegistrar {
 
-    void registerCustomEditors(PropertyEditorRegistry registry) {
-        registry.registerCustomEditor(Date, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'T'"), true))
+    public void registerCustomEditors(PropertyEditorRegistry registry) {
+        registry.registerCustomEditor(Date, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ"), true))
     }
 }
