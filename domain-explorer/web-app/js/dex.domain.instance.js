@@ -183,7 +183,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
             var className = _.last(property.type.split('.'));
             valueHtml = '<a href="#" data-append-path="' + property.name + '"><span class="nowrap">' + className + ': ' + value + '</span></a>';
         } else if (property.view == 'date') {
-            valueHtml = moment(value).utc();
+            valueHtml = moment(value).format('DD MMM YYYY');
         } else {
             valueHtml = value;
         }

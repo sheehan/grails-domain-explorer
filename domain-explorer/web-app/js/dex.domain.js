@@ -358,6 +358,8 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
         } else if (property.oneToOne || property.manyToOne) {
             var className = _.last(property.type.split('.'));
             valueHtml = '<span class="nowrap">' + className + ': ' + value + '</span>';
+        } else if(property.view === 'date') {
+            valueHtml = moment(value).format('YYYY-MM-DD');
         } else {
             valueHtml = value;
         }
