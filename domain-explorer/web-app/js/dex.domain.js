@@ -1,4 +1,5 @@
 Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
+    var Views = Domain.Views = {};
 
     Domain.DomainModel = Backbone.Model.extend({});
 
@@ -31,11 +32,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
         model: Domain.DomainInstanceModel
     });
 
-    Domain.DomainSectionView = Backbone.Model.extend({
-        className: 'domainView'
-    });
-
-    Domain.DomainHeaderView = Dex.ItemView.extend({
+    Views.DomainHeader = Dex.ItemView.extend({
         renderHtml: function (data) {
             var tokens = Backbone.history.getFragment().split('/'),
                 html = '',
@@ -66,12 +63,12 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
         }
     });
 
-    Domain.HqlView = Dex.ItemView.extend({
+    Views.Hql = Dex.ItemView.extend({
         template: 'domain/hqlSection',
         className: 'hql-view'
     });
 
-    Domain.DomainView = Marionette.Layout.extend({
+    Views.Domain = Marionette.Layout.extend({
         template: 'domain/domain',
 
         className: 'domainView',
@@ -104,19 +101,19 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
 
         showList: function () {
             var that = this;
-            var headerView = new Domain.DomainHeaderView({model: this.model});
+            var headerView = new Views.DomainHeader({model: this.model});
             this.header.show(headerView);
 
-            var hqlView = new Domain.HqlView();
+            var hqlView = new Views.Hql();
             this.hql.show(hqlView);
 
-            var toolbarView = new Domain.ListToolbarView();
+            var toolbarView = new Views.ListToolbar();
             toolbarView.on('create', function () {
                 that.showCreateInstance();
             });
             this.toolbar.show(toolbarView);
 
-            var view = new Domain.ListView({
+            var view = new Views.List({
                 model: this.model,
                 domainType: this.domainType
             });
@@ -125,12 +122,12 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
 
         showInstance: function () {
             var that = this;
-            var headerView = new Domain.DomainHeaderView({model: this.model});
+            var headerView = new Views.DomainHeader({model: this.model});
             this.header.show(headerView);
 
             var toolbarView = new Domain.Instance.Views.Toolbar();
             toolbarView.on('delete', function () {
-                var confirmDeleteView = new Domain.ConfirmDeleteView();
+                var confirmDeleteView = new Views.ConfirmDelete();
                 confirmDeleteView.render();
                 confirmDeleteView.on('delete', function () {
                     that.model.destroy();
@@ -151,7 +148,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
 
         showCreateInstance: function () {
             var that = this;
-            var headerView = new Domain.DomainHeaderView({model: this.model});
+            var headerView = new Views.DomainHeader({model: this.model});
             this.header.show(headerView);
 
             var view = new Domain.Instance.Views.Edit({
@@ -163,7 +160,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
 
         showEditInstance: function () {
             var that = this;
-            var headerView = new Domain.DomainHeaderView({model: this.model});
+            var headerView = new Views.DomainHeader({model: this.model});
             this.header.show(headerView);
 
             var toolbarView = new Domain.Instance.Views.EditToolbar();
@@ -192,7 +189,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
         }
     });
 
-    Domain.ListToolbarView = Dex.ItemView.extend({
+    Views.ListToolbar = Dex.ItemView.extend({
         template: 'domain/listToolbar',
         className: 'btn-toolbar',
 
@@ -206,7 +203,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
         }
     });
 
-    Domain.DomainListItemView = Dex.ItemView.extend({
+    Views.DomainListItem = Dex.ItemView.extend({
         template: 'domain/listItemView',
         tagName: 'tr',
 
@@ -234,8 +231,8 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
     });
 
 
-    Domain.ListView = Marionette.CompositeView.extend({
-        itemView: Domain.DomainListItemView,
+    Views.List = Marionette.CompositeView.extend({
+        itemView: Views.DomainListItem,
         tagName: 'table',
         className: 'table table-striped',
 
@@ -266,12 +263,12 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
         }
     });
 
-    Domain.EmptyView = Dex.ItemView.extend({
+    Views.Empty = Dex.ItemView.extend({
         template: 'domain/empty',
         className: 'emptyView'
     });
 
-    Domain.ConfirmDeleteView = Dex.ItemView.extend({
+    Views.ConfirmDelete = Dex.ItemView.extend({
         template: 'domain/confirmDelete',
         events: {
             'click .cancel': '_handleCancelClick',
@@ -305,7 +302,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
                     model = new Domain.DomainInstanceModel(resp.value);
                 }
                 domainType = new Domain.DomainModel(resp.clazz);
-                view = new Domain.DomainView({
+                view = new Views.Domain({
                     model: model,
                     domainType: domainType,
                     isCollection: resp.isCollection
@@ -326,7 +323,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
                 Domain.show(fragment);
                 fullName = fragment.split('/')[0];
             } else {
-                var view = new Domain.EmptyView();
+                var view = new Views.Empty();
                 Dex.layout.main.show(view);
             }
             Dex.vent.trigger("domain:show", fullName);

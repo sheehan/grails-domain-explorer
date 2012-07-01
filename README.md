@@ -17,3 +17,11 @@ Purpose is to provide the functionality of a database tool as well as that of Gr
 * table sorting
 * table pagination
 * ...
+
+## Development
+
+### Requires
+
+* node.js
+* grunt.js
+* phantom.js

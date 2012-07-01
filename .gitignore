@@ -10,3 +10,4 @@ domain-explorer/target/
 domain-explorer/.idea/
 bookstore/target/
 bookstore/stacktrace.log
+.DS_Store

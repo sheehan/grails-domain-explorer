@@ -258,6 +258,9 @@ class DomainController {
                     url: cp.propertyType == String.class ? cp.url : null
                 ]
             }
+            if (property.embedded) {
+                m.clazz = domainClassToMap(property.component)
+            }
             m
         }
 

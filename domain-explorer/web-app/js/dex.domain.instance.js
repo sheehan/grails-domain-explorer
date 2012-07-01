@@ -111,22 +111,34 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
             });
             var $form = this.$('form');
             _.each(props, function (property) {
-                var View = this.getView(property);
-                if (View) {
-                    var view = new View({
-                        property: property,
-                        model: this.model
-                    });
-                    var $wrapper = $(Handlebars.templates['instance/form/controlGroup']({property: property}));
-                    view.render();
-                    $form.append($wrapper);
-                    $wrapper.find('.controls').html(view.el);
-                    this.formViews.push(view);
+                if (property.view == 'embedded') {
+                    var $fieldset = $(Handlebars.templates['instance/form/embedded']({property: property}));
+                    $form.append($fieldset);
+//                    var component = property
+//                    _.each();
+
+                } else {
+                    this._createFormView(property, $form);
                 }
             }, this);
         },
 
-        getView: function(property) {
+        _createFormView: function (property, $appendTo) {
+            var View = this.getView(property);
+            if (View) {
+                var view = new View({
+                    property: property,
+                    model: this.model
+                });
+                var $wrapper = $(Handlebars.templates['instance/form/controlGroup']({property: property}));
+                view.render();
+                $appendTo.append($wrapper);
+                $wrapper.find('.controls').html(view.el);
+                this.formViews.push(view);
+            }
+        },
+
+        getView: function (property) {
             if (_.include(['id', 'version', 'dateCreated', 'lastUpdated'], property.name)) {
                 return ReadOnlyView;
             }
@@ -138,6 +150,8 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
                     return DateView;
                 case 'boolean':
                     return BooleanView;
+                case 'embedded':
+                    return EmbeddedView;
                 case 'associationOne':
                     return AssociationOneView;
                 default:
@@ -197,7 +211,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
             this.property = options.property;
         },
 
-        serializeData: function() {
+        serializeData: function () {
             var value = this.model.get(this.property.name);
             var mnt = moment(value);
             return {
@@ -209,7 +223,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
             };
         },
 
-        onRender: function() {
+        onRender: function () {
             var value = this.model.get(this.property.name);
             var mnt = moment(value);
             this.$('[name=year]').val(mnt.year());
@@ -235,7 +249,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
             this.property = options.property;
         },
 
-        serializeData: function() {
+        serializeData: function () {
             return {
                 name: this.property.name,
                 value: this.model.get(this.property.name)
@@ -256,7 +270,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
             this.property = options.property;
         },
 
-        serializeData: function() {
+        serializeData: function () {
             return {
                 name: this.property.name,
                 value: this.model.get(this.property.name)
@@ -273,7 +287,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
             this.property = options.property;
         },
 
-        serializeData: function() {
+        serializeData: function () {
             return {
                 name: this.property.name,
                 value: this.model.get(this.property.name)
@@ -294,7 +308,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
             this.property = options.property;
         },
 
-        serializeData: function() {
+        serializeData: function () {
             return {
                 property: this.property,
                 value: this.model.get(this.property.name)
@@ -315,7 +329,24 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
             this.property = options.property;
         },
 
-        serializeData: function() {
+        serializeData: function () {
+            return {
+                property: this.property,
+                value: this.model.get(this.property.name)
+            };
+        },
+
+        serialize: function () { return {}; }
+    });
+
+    var EmbeddedView = Dex.ItemView.extend({
+        template: 'instance/form/embedded',
+
+        initialize: function (options) {
+            this.property = options.property;
+        },
+
+        serializeData: function () {
             return {
                 property: this.property,
                 value: this.model.get(this.property.name)
