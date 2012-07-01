@@ -288,18 +288,16 @@ class DomainController {
             return 'locale'
         } else if (property.type == Currency) {
             return 'currency'
-        } else if (property.type == ([] as Byte[]).class) { //TODO: Bug in groovy means i have to do this :(
+        } else if ((property.type == ([] as Byte[]).class) || (property.type == ([] as byte[]).class)) { //TODO: Bug in groovy means i have to do this :(
             return 'file'
-        } else if (property.type == ([] as byte[]).class) { //TODO: Bug in groovy means i have to do this :(
-            return 'file'
+        } else if (property.embedded) {
+            return 'embedded'
         } else if (property.manyToOne || property.oneToOne) {
             return 'associationOne'
         } else if ((property.oneToMany /*&& !property.bidirectional*/) || (property.manyToMany /*&& property.isOwningSide()*/)) {
             return 'associationMany'
         } else if (property.oneToMany) {
             return 'associationMany'
-        } else if (property.embedded) {
-            return 'embedded'
         }
         return 'string'
     }
@@ -309,22 +307,35 @@ class DomainController {
             className: domainClass.fullName
         ]
         getProperties(domainClass).each { GrailsDomainClassProperty property ->
-            if (property.oneToMany || property.manyToMany) {
-                result[property.name] = entity[property.name]?.size() ?: 0
-            } else if (property.association && (property.oneToOne || property.manyToOne)) {
-                // TODO embedded
-                result[property.name] = entity[property.name]?.id
-            } else if((property.type.isAssignableFrom(Date))) {
-                result[property.name] = entity[property.name]?.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-            } else {
-                result[property.name] = entity[property.name]?.toString()
+            println property?.name
+            String propertyView = determinePropertyView(property)
+            def value = entity[property.name]
+            switch (propertyView) {
+                case 'associationMany':
+                    result[property.name] = value?.size() ?: 0
+                    break
+                case 'associationOne':
+                    result[property.name] = value?.id
+                    break
+                case 'date':
+                    result[property.name] = value?.format("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+                    break
+                case 'embedded':
+                    GrailsDomainClass embeddedClass = property.component
+                    result[property.name] = value ? domainInstanceToMap(value, embeddedClass) : null
+                    break
+                default:
+                    result[property.name] = value?.toString()
             }
         }
         result
     }
 
     private List getProperties(GrailsDomainClass domainClass) {
-        List props = [domainClass.identifier]
+        List props = []
+        if (domainClass.identifier) {
+            props << domainClass.identifier
+        }
         if (domainClass.version) {
             props << domainClass.version
         }
