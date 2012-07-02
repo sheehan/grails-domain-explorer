@@ -1,25 +1,16 @@
 Dex.module('Domain', function (Domain, Dex, Backbone, Marionette, $, _) {
     var Views = Domain.Views = {};
 
-    Domain.DomainModel = Backbone.Model.extend({});
+    Domain.ClazzModel = Backbone.Model.extend({});
 
-    Domain.ClazzCache = {
-        clazzes: {},
-        get: function (fullName) {
-            return this.clazzes[fullName]
-        },
-        add: function (clazz) {
-            this.clazzes[clazz.get("fullName")] = clazz;
-        }
-    };
-
-    Domain.DomainInstanceModel = Backbone.Model.extend({
+    Domain.InstanceModel = Backbone.Model.extend({
         urlRoot: function () {
             return Dex.createLink('domain/rest/' + this.get('className'));
         },
 
-        getClazz: function () {
-            return Domain.ClazzCache.get(this.get('className'));
+        constructor: function(attributes, options) {
+            this.clazz = options.clazz;
+            Backbone.Model.prototype.constructor.apply(this, arguments);
         },
 
         updateWithData: function (data) {
@@ -39,11 +30,36 @@ Dex.module('Domain', function (Domain, Dex, Backbone, Marionette, $, _) {
                 });
 
             return dfd;
+        },
+
+        set: function(key, value, options) {
+            var attrs = key;
+            var embeddedProps = _.filter(this.clazz.get("properties"), function (property) { return property.embedded; });
+            _.each(embeddedProps, function (property) {
+                if (attrs[property.name]) {
+                    var clazz = new Domain.ClazzModel(property.clazz);
+                    attrs[property.name] = Domain.InstanceModel.create(attrs[property.name], clazz);
+                }
+            });
+            return Backbone.Model.prototype.set.apply(this, [attrs, options]);
+        }
+    }, {
+        create: function (attrs, clazz) {
+            return new Domain.InstanceModel(attrs, {clazz: clazz});
         }
     });
 
-    Domain.DomainInstanceCollection = Backbone.Collection.extend({
-        model: Domain.DomainInstanceModel
+    Domain.InstanceCollection = Backbone.Collection.extend({
+        model: Domain.InstanceModel
+    }, {
+        create: function (modelAttrs, clazz) {
+            var models = _.map(modelAttrs, function (attrs) {
+                return Domain.InstanceModel.create(attrs, clazz);
+            });
+            var collection = new Domain.InstanceCollection(models);
+            collection.referencedClazz = clazz;
+            return collection;
+        }
     });
 
     Views.DomainHeader = Dex.ItemView.extend({
@@ -281,18 +297,15 @@ Dex.module('Domain', function (Domain, Dex, Backbone, Marionette, $, _) {
     Domain.show = function (fragment) {
         var link = Dex.createLink('domain', 'fromPath', { path: fragment });
         $.getJSON(link).done(function (resp) {
-            var clazz = new Domain.DomainModel(resp.clazz);
+            var clazz = new Domain.ClazzModel(resp.clazz);
             var clazzView = new Dex.DomainType.Views.DomainType({ model: clazz });
             Dex.layout.clazz.show(clazzView);
 
             var model;
             if (resp.isCollection) {
-                model = new Domain.DomainInstanceCollection(resp.value);
-                model.referencedClazz = clazz;
-                model.each(function (item) {item.clazz = clazz;});
+                model = Domain.InstanceCollection.create(resp.value, clazz);
             } else {
-                model = new Domain.DomainInstanceModel(resp.value);
-                model.clazz = clazz;
+                model = Domain.InstanceModel.create(resp.value, clazz);
             }
             var view = new Views.Domain({
                 model: model,

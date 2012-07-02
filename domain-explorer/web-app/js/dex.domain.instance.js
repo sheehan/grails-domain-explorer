@@ -109,21 +109,22 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
                 if (property.view == 'embedded') {
                     var $fieldset = $(Handlebars.templates['instance/form/embedded']({property: property}));
                     $form.append($fieldset);
-//                    var component = property
-//                    _.each();
-
+                    var embeddedModel = this.model.get(property.name);
+                    _.each(property.clazz.properties, function(embeddedProp){
+                        this._createFormView(embeddedProp, embeddedModel, $fieldset);
+                    }, this);
                 } else {
-                    this._createFormView(property, $form);
+                    this._createFormView(property, this.model, $form);
                 }
             }, this);
         },
 
-        _createFormView: function (property, $appendTo) {
+        _createFormView: function (property, model, $appendTo) {
             var View = this.getView(property);
             if (View) {
                 var view = new View({
                     property: property,
-                    model: this.model
+                    model: model
                 });
                 var $wrapper = $(Handlebars.templates['instance/form/controlGroup']({property: property}));
                 view.render();
@@ -247,7 +248,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
         serializeData: function () {
             return {
                 name: this.property.name,
-                value: this.model.get(this.property.name)
+                value: this.model ? this.model.get(this.property.name) : null
             };
         },
 
@@ -268,7 +269,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
         serializeData: function () {
             return {
                 name: this.property.name,
-                value: this.model.get(this.property.name)
+                value: this.model ? this.model.get(this.property.name) : null
             };
         },
 
@@ -285,7 +286,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
         serializeData: function () {
             return {
                 name: this.property.name,
-                value: this.model.get(this.property.name)
+                value: this.model ? this.model.get(this.property.name) : null
             };
         },
 
@@ -306,7 +307,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
         serializeData: function () {
             return {
                 property: this.property,
-                value: this.model.get(this.property.name)
+                value: this.model ? this.model.get(this.property.name) : null
             };
         },
 
@@ -327,7 +328,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
         serializeData: function () {
             return {
                 property: this.property,
-                value: this.model.get(this.property.name)
+                value: this.model ? this.model.get(this.property.name) : null
             };
         },
 
@@ -344,7 +345,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
         serializeData: function () {
             return {
                 property: this.property,
-                value: this.model.get(this.property.name)
+                value: this.model.get(this.property.name).toJSON()
             };
         },
 
