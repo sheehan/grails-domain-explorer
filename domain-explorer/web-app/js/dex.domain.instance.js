@@ -46,7 +46,6 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
         },
 
         initialize: function (options) {
-            this.domainType = options.domainType;
             this.model.bind('destroy', function () {
                 var deleteSuccessView = new Views.DeleteSuccess();
                 Dex.modal.show(deleteSuccessView);
@@ -61,7 +60,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
         },
 
         serializeData: function () {
-            return _.map(this.domainType.toJSON().properties, function (property) {
+            return _.map(this.model.clazz.toJSON().properties, function (property) {
                 return {
                     property: property,
                     value: this.model.get(property.name)
@@ -74,16 +73,12 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
         template: 'instance/edit',
         className: 'edit-instance',
 
-        initialize: function (options) {
-            this.domainType = options.domainType;
-        },
-
         regions: {
             errors: '.errors'
         },
 
         serializeData: function () {
-            var props = this.domainType.get('properties');
+            var props = this.model.clazz.get('properties');
             props = _.reject(props, function (property) {
                 return property.view == 'associationMany'; // || _.include(['id', 'version', 'dateCreated', 'lastUpdated'], property.name) ;
             });
@@ -105,7 +100,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
 
         onRender: function () {
             this.formViews = [];
-            var props = this.domainType.get('properties');
+            var props = this.model.clazz.get('properties');
             props = _.reject(props, function (property) {
                 return property.view == 'associationMany';// || _.include(['id', 'version', 'dateCreated', 'lastUpdated'], property.name) ;
             });

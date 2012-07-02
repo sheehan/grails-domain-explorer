@@ -1,11 +1,25 @@
-Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
+Dex.module('Domain', function (Domain, Dex, Backbone, Marionette, $, _) {
     var Views = Domain.Views = {};
 
     Domain.DomainModel = Backbone.Model.extend({});
 
+    Domain.ClazzCache = {
+        clazzes: {},
+        get: function (fullName) {
+            return this.clazzes[fullName]
+        },
+        add: function (clazz) {
+            this.clazzes[clazz.get("fullName")] = clazz;
+        }
+    };
+
     Domain.DomainInstanceModel = Backbone.Model.extend({
         urlRoot: function () {
             return Dex.createLink('domain/rest/' + this.get('className'));
+        },
+
+        getClazz: function () {
+            return Domain.ClazzCache.get(this.get('className'));
         },
 
         updateWithData: function (data) {
@@ -83,7 +97,6 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
         },
 
         initialize: function (options) {
-            this.domainType = options.domainType;
             this.isCollection = options.isCollection;
         },
 
@@ -114,8 +127,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
             this.toolbar.show(toolbarView);
 
             var view = new Views.List({
-                model: this.model,
-                domainType: this.domainType
+                collection: this.model
             });
             this.content.show(view);
         },
@@ -140,8 +152,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
             this.toolbar.show(toolbarView);
 
             var view = new Domain.Instance.Views.Show({
-                model: this.model,
-                domainType: this.domainType
+                model: this.model
             });
             this.content.show(view);
         },
@@ -152,8 +163,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
             this.header.show(headerView);
 
             var view = new Domain.Instance.Views.Edit({
-                model: this.model,
-                domainType: this.domainType
+                model: this.model
             });
             this.content.show(view);
         },
@@ -182,8 +192,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
             this.toolbar.show(toolbarView);
 
             var view = new Domain.Instance.Views.Edit({
-                model: this.model,
-                domainType: this.domainType
+                model: this.model
             });
             this.content.show(view);
         }
@@ -211,16 +220,12 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
             'click': '_handleRowClick'
         },
 
-        initialize: function (options) {
-            this.domainType = options.domainType;
-        },
-
         _handleRowClick: function () {
             Domain.router.appendRoute(this.model.id);
         },
 
         serializeData: function () {
-            return _.map(this.domainType.get('properties'), function (property) {
+            return _.map(this.model.clazz.get('properties'), function (property) {
                 return {
                     property: property,
                     value: this.model.get(property.name)
@@ -236,21 +241,8 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
         tagName: 'table',
         className: 'table table-striped',
 
-        initialize: function (options) {
-            this.domainType = options.domainType;
-            this.collection = this.model;
-        },
-
-        buildItemView: function (item, ItemView) {
-            var view = new ItemView({
-                model: item,
-                domainType: this.domainType
-            });
-            return view;
-        },
-
         renderModel: function () {
-            var properties = this.domainType.get('properties');
+            var properties = this.collection.referencedClazz.get('properties');
             var html = _.collect(properties,
                 function (property) {
                     return '<th>' + property.name + '</th>';
@@ -289,26 +281,24 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
     Domain.show = function (fragment) {
         var link = Dex.createLink('domain', 'fromPath', { path: fragment });
         $.getJSON(link).done(function (resp) {
-            var view = new Dex.DomainType.Views.DomainType({
-                model: new Domain.DomainModel(resp.clazz)
-            });
-            Dex.layout.clazz.show(view);
+            var clazz = new Domain.DomainModel(resp.clazz);
+            var clazzView = new Dex.DomainType.Views.DomainType({ model: clazz });
+            Dex.layout.clazz.show(clazzView);
 
-            (function () {
-                var model, view, domainType;
-                if (resp.isCollection) {
-                    model = new Domain.DomainInstanceCollection(resp.value);
-                } else {
-                    model = new Domain.DomainInstanceModel(resp.value);
-                }
-                domainType = new Domain.DomainModel(resp.clazz);
-                view = new Views.Domain({
-                    model: model,
-                    domainType: domainType,
-                    isCollection: resp.isCollection
-                });
-                Dex.layout.main.show(view);
-            }());
+            var model;
+            if (resp.isCollection) {
+                model = new Domain.DomainInstanceCollection(resp.value);
+                model.referencedClazz = clazz;
+                model.each(function (item) {item.clazz = clazz;});
+            } else {
+                model = new Domain.DomainInstanceModel(resp.value);
+                model.clazz = clazz;
+            }
+            var view = new Views.Domain({
+                model: model,
+                isCollection: resp.isCollection
+            });
+            Dex.layout.main.show(view);
         });
     };
 
@@ -355,7 +345,7 @@ Dex.module('Domain', function(Domain, Dex, Backbone, Marionette, $, _){
         } else if (property.oneToOne || property.manyToOne) {
             var className = _.last(property.type.split('.'));
             valueHtml = '<span class="nowrap">' + className + ': ' + value + '</span>';
-        } else if(property.view === 'date') {
+        } else if (property.view === 'date') {
             valueHtml = moment(value).format('YYYY-MM-DD');
         } else {
             valueHtml = value;

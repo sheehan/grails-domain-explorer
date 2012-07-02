@@ -1,9 +1,9 @@
-describe("DomainModel", function() {
+describe("Domain", function() {
 
-    var domainModel;
+//    var domainModel;
 
     beforeEach(function() {
-        domainModel = new Dex.Domain.DomainModel();
+//        domainModel = new Dex.Domain.DomainModel();
     });
 
     describe("i dont know", function() {
