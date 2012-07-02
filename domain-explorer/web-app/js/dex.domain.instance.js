@@ -111,19 +111,20 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
                     $form.append($fieldset);
                     var embeddedModel = this.model.get(property.name);
                     _.each(property.clazz.properties, function(embeddedProp){
-                        this._createFormView(embeddedProp, embeddedModel, $fieldset);
+                        this._createFormView(embeddedProp, property.name + "." + embeddedProp.name, embeddedModel, $fieldset);
                     }, this);
                 } else {
-                    this._createFormView(property, this.model, $form);
+                    this._createFormView(property, property.name, this.model, $form);
                 }
             }, this);
         },
 
-        _createFormView: function (property, model, $appendTo) {
+        _createFormView: function (property, propertyName, model, $appendTo) {
             var View = this.getView(property);
             if (View) {
                 var view = new View({
                     property: property,
+                    propertyName: propertyName,
                     model: model
                 });
                 var $wrapper = $(Handlebars.templates['instance/form/controlGroup']({property: property}));
@@ -205,6 +206,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
 
         initialize: function (options) {
             this.property = options.property;
+            this.propertyName = options.propertyName;
         },
 
         serializeData: function () {
@@ -233,7 +235,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
             var day = this.$('[name=day]').val();
             var date = new Date(year, month, day);
             var data = {};
-            data[this.property.name] = moment(date).format('YYYY-MM-DDTHH:mm:ss.SSSZZ');
+            data[this.propertyName] = moment(date).format('YYYY-MM-DDTHH:mm:ss.SSSZZ');
             return data;
         }
     });
@@ -243,6 +245,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
 
         initialize: function (options) {
             this.property = options.property;
+            this.propertyName = options.propertyName;
         },
 
         serializeData: function () {
@@ -254,7 +257,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
 
         serialize: function () {
             var data = {};
-            data[this.property.name] = this.$el.find('input').val();
+            data[this.propertyName] = this.$el.find('input').val();
             return data;
         }
     });
@@ -264,6 +267,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
 
         initialize: function (options) {
             this.property = options.property;
+            this.propertyName = options.propertyName;
         },
 
         serializeData: function () {
@@ -281,6 +285,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
 
         initialize: function (options) {
             this.property = options.property;
+            this.propertyName = options.propertyName;
         },
 
         serializeData: function () {
@@ -292,7 +297,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
 
         serialize: function () {
             var data = {};
-            data[this.property.name] = this.$el.find('input').val();
+            data[this.propertyName] = this.$el.find('input').val();
             return data;
         }
     });
@@ -302,6 +307,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
 
         initialize: function (options) {
             this.property = options.property;
+            this.propertyName = options.propertyName;
         },
 
         serializeData: function () {
@@ -313,7 +319,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
 
         serialize: function () {
             var data = {};
-            data[this.property.name + '.id'] = this.$el.find('input').val();
+            data[this.propertyName + '.id'] = this.$el.find('input').val();
             return data;
         }
     });
@@ -323,6 +329,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
 
         initialize: function (options) {
             this.property = options.property;
+            this.propertyName = options.propertyName;
         },
 
         serializeData: function () {
@@ -340,6 +347,7 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
 
         initialize: function (options) {
             this.property = options.property;
+            this.propertyName = options.propertyName;
         },
 
         serializeData: function () {

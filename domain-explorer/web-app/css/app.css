@@ -178,6 +178,11 @@ body {
 .edit-instance .form-horizontal .control-group.date select {
   width: auto;
 }
+.view-instance .form-horizontal fieldset,
+.edit-instance .form-horizontal fieldset {
+  border-width: 1px 0 1px;
+  border-style: solid;
+}
 .view-instance .message-overlay,
 .edit-instance .message-overlay {
   display: none;
