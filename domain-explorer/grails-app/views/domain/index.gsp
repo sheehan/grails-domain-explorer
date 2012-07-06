@@ -8,6 +8,7 @@
   <link href="${resource(dir: 'bootstrap/css', file: 'bootstrap-responsive.css')}" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'layout-default-latest.css')}"/>
   <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'app.css')}">
+  <link type="image/x-icon" rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" />
 </head>
 
 <body>

@@ -120,7 +120,7 @@ function program1(depth0,data) {
   buffer += escapeExpression(stack1) + "</li>\n  ";
   return buffer;}
 
-  buffer += "<button class=\"close\" data-dismiss=\"alert\">?</button>\n<ul>\n  ";
+  buffer += "<button class=\"close\" data-dismiss=\"alert\">x</button>\n<ul>\n  ";
   stack1 = depth0;
   stack2 = helpers.each;
   tmp1 = self.program(1, program1, data);
@@ -148,7 +148,7 @@ templates['instance/form/associationOne'] = template(function (Handlebars,depth0
   stack1 = foundHelper || depth0.value;
   if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
   else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "value", { hash: {} }); }
-  buffer += escapeExpression(stack1) + "\" /><button class=\"btn\" type=\"button\">Search</button></div>";
+  buffer += escapeExpression(stack1) + "\" /><button class=\"btn\" type=\"button\">Search</button><button class=\"btn clear\" type=\"button\">Clear</button></div>";
   return buffer;});
 
 templates['instance/form/boolean'] = template(function (Handlebars,depth0,helpers,partials,data) {

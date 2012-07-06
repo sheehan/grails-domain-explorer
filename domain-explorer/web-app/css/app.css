@@ -180,8 +180,16 @@ body {
 }
 .view-instance .form-horizontal fieldset,
 .edit-instance .form-horizontal fieldset {
-  border-width: 1px 0 1px;
-  border-style: solid;
+  border: 1px solid #777;
+  margin: 10px;
+}
+.view-instance .form-horizontal fieldset legend,
+.edit-instance .form-horizontal fieldset legend {
+  margin: 0 0 0 10px;
+  border: none;
+  width: auto;
+  font-size: 16px;
+  line-height: 16px;
 }
 .view-instance .message-overlay,
 .edit-instance .message-overlay {

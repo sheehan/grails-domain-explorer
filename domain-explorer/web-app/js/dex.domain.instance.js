@@ -110,7 +110,8 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
                     var $fieldset = $(Handlebars.templates['instance/form/embedded']({property: property}));
                     $form.append($fieldset);
                     var embeddedModel = this.model.get(property.name);
-                    _.each(property.clazz.properties, function(embeddedProp){
+                    var embeddedProperties = _.reject(property.clazz.properties, function(prop){ return _.include(['id', 'version'], prop.name); });
+                    _.each(embeddedProperties, function(embeddedProp){
                         this._createFormView(embeddedProp, property.name + "." + embeddedProp.name, embeddedModel, $fieldset);
                     }, this);
                 } else {
@@ -303,6 +304,11 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
     });
 
     var AssociationOneView = Dex.ItemView.extend({
+
+        events: {
+           'click button.clear': '_handleClearClick'
+        },
+
         template: 'instance/form/associationOne',
 
         initialize: function (options) {
@@ -317,9 +323,17 @@ Dex.module('Domain.Instance', function (Instance, Dex, Backbone, Marionette, $, 
             };
         },
 
+        _handleClearClick: function(event) {
+            this.$('input').val('');
+        },
+
         serialize: function () {
+            var val = this.$el.find('input').val()
+            if (!val) {
+                val = 'null';
+            }
             var data = {};
-            data[this.propertyName + '.id'] = this.$el.find('input').val();
+            data[this.propertyName + '.id'] = val;
             return data;
         }
     });
