@@ -1,13 +1,14 @@
 define([
-  "backbone.layoutmanager"
+  "backbone.layoutmanager",
+  "backbone.marionette"
 ], function() {
 
   // Provide a global location to place configuration settings and module
   // creation.
-  var app = {
+  var app = new Backbone.Marionette.Application({
     // The root path to run the application.
     root: "/bookstore/plugins/domain-explorer-0.1/bbb/" // TODO
-  };
+  });
 
   // Localize or create a new JavaScript Template object.
   var JST = window.JST = window.JST || {};
