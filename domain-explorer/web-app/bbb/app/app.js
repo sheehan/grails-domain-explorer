@@ -1,75 +1,99 @@
 define([
-  "backbone.layoutmanager",
-  "backbone.marionette"
-], function() {
+    "backbone.layoutmanager",
+    "backbone.marionette"
+], function () {
 
-  // Provide a global location to place configuration settings and module
-  // creation.
-  var app = new Backbone.Marionette.Application({
-    // The root path to run the application.
-    root: "/bookstore/plugins/domain-explorer-0.1/bbb/" // TODO
-  });
+    // Provide a global location to place configuration settings and module
+    // creation.
+    var app = new Backbone.Marionette.Application({
 
-  // Localize or create a new JavaScript Template object.
-  var JST = window.JST = window.JST || {};
+        // The root path to run the application.
+        root: "/bookstore/plugins/domain-explorer-0.1/bbb/", // TODO,
 
-  // Configure LayoutManager with Backbone Boilerplate defaults.
-  Backbone.LayoutManager.configure({
-    // Allow LayoutManager to augment Backbone.View.prototype.
-    manage: true,
+        start: function (options) {
+            this.options = options;
+            Backbone.Marionette.Application.prototype.start.apply(this, arguments);
+        },
 
-    prefix: "app/templates/",
+        createLink: function (controller, action, params) {
+            var url = this.options.serverURL + '/' + controller;
+            if (action) {
+                url += '/' + action;
+            }
+            if (params !== undefined) {
+                if (params.id) {
+                    url += '/' + params.id;
+                    delete params.id;
+                }
+                var queryString = jQuery.param(params, true);
+                if (queryString.length > 0) {
+                    url += '?' + queryString;
+                }
+            }
+            return url;
+        }
+    });
 
-    fetch: function(path) {
-      // Concatenate the file extension.
-      path = path + ".html";
+    // Localize or create a new JavaScript Template object.
+    var JST = window.JST = window.JST || {};
 
-      // If cached, use the compiled template.
-      if (JST[path]) {
-        return JST[path];
-      }
+    // Configure LayoutManager with Backbone Boilerplate defaults.
+    Backbone.LayoutManager.configure({
+        // Allow LayoutManager to augment Backbone.View.prototype.
+        manage: true,
 
-      // Put fetch into `async-mode`.
-      var done = this.async();
+        prefix: "app/templates/",
 
-      // Seek out the template asynchronously.
-      $.get(app.root + path, function(contents) {
-        done(JST[path] = _.template(contents));
-      });
-    }
-  });
+        fetch: function (path) {
+            // Concatenate the file extension.
+            path = path + ".html";
 
-  // Mix Backbone.Events, modules, and layout management into the app object.
-  return _.extend(app, {
-    // Create a custom object with a nested Views object.
-    module: function(additionalProps) {
-      return _.extend({ Views: {} }, additionalProps);
-    },
+            // If cached, use the compiled template.
+            if (JST[path]) {
+                return JST[path];
+            }
 
-    // Helper for using layouts.
-    useLayout: function(name, options) {
-      // Enable variable arity by allowing the first argument to be the options
-      // object and omitting the name argument.
-      if (_.isObject(name)) {
-        options = name;
-      }
+            // Put fetch into `async-mode`.
+            var done = this.async();
 
-      // Ensure options is an object.
-      options = options || {};
+            // Seek out the template asynchronously.
+            $.get(app.root + path, function (contents) {
+                done(JST[path] = _.template(contents));
+            });
+        }
+    });
 
-      // If a name property was specified use that as the template.
-      if (_.isString(name)) {
-        options.template = name;
-      }
+    // Mix Backbone.Events, modules, and layout management into the app object.
+    return _.extend(app, {
+        // Create a custom object with a nested Views object.
+        module: function (additionalProps) {
+            return _.extend({ Views: {} }, additionalProps);
+        },
 
-      // Create a new Layout with options.
-      var layout = new Backbone.Layout(_.extend({
-        el: "#main"
-      }, options));
+        // Helper for using layouts.
+        useLayout: function (name, options) {
+            // Enable variable arity by allowing the first argument to be the options
+            // object and omitting the name argument.
+            if (_.isObject(name)) {
+                options = name;
+            }
 
-      // Cache the refererence.
-      return this.layout = layout;
-    }
-  }, Backbone.Events);
+            // Ensure options is an object.
+            options = options || {};
+
+            // If a name property was specified use that as the template.
+            if (_.isString(name)) {
+                options.template = name;
+            }
+
+            // Create a new Layout with options.
+            var layout = new Backbone.Layout(_.extend({
+                el: "#main"
+            }, options));
+
+            // Cache the refererence.
+            return this.layout = layout;
+        }
+    }, Backbone.Events);
 
 });
