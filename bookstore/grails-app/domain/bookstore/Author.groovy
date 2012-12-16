@@ -18,5 +18,7 @@ class Author {
         books(nullable: false, minSize: 2)
     }
 
+    void test() {}
+
 
 }

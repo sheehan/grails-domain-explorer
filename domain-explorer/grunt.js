@@ -30,6 +30,10 @@ module.exports = function (grunt) {
             ]
         },
 
+        jasmine: {
+            all: ['web-app/js/spec/**/*.html']
+        },
+
         watch: {
             files: ['web-app/css/app.less', 'web-app/templates/**/*.handlebars'],
             tasks: 'less handlebars'
@@ -38,6 +42,7 @@ module.exports = function (grunt) {
 
 
     grunt.loadNpmTasks('grunt-contrib');
+    grunt.loadNpmTasks('grunt-jasmine-task');
 
     grunt.registerMultiTask("handlebars", "Compile handlebars templates to JST file", function () {
 

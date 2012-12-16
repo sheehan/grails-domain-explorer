@@ -49,7 +49,7 @@ grails.project.dependency.resolution = {
 
         build ":tomcat:$grailsVersion"
         compile ":build-test-data:2.0.2"
-        compile ":console:1.1"
+        compile ":console:1.2"
 
 
     }

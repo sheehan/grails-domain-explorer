@@ -1,7 +1,3 @@
-_.templateSettings = {
-    interpolate : /\{\{(.+?)\}\}/g
-};
-
 Dex = new Backbone.Marionette.Application({
     start: function(options) {
         this.options = options;
@@ -64,41 +60,6 @@ Backbone.Marionette.Renderer.render = function(template, data){
     return Handlebars.templates[template](data);
 };
 
-//Dex.StackableRegion = Backbone.Marionette.Region.extend({
-//
-//    constructor: function() {
-//        this.stack = [];
-//        Backbone.Marionette.Region.prototype.constructor.apply(this, arguments);
-//    },
-//
-//    push: function(view) {
-//        this.ensureEl();
-//        this.stack.push(view);
-//        if (this.currentView) {
-//            this.currentView.$el.hide();
-//            this.currentView = view;
-//            this.open(view, 'append');
-//        }
-//    },
-//
-//    pop: function() {
-//        this.stack.pop();
-//        this.close();
-//        if (this.stack.length) {
-//            this.currentView = this.stack[this.stack.length - 1];
-//            this.currentView.$el.show();
-//        }
-//    },
-//
-//    show: function(view, appendMethod){
-//        this.ensureEl();
-//
-//        this.close();
-//        this.open(view, appendMethod);
-//
-//        this.currentView = view;
-//    }
-//});
 
 
 
