@@ -178,10 +178,11 @@ module.exports = function (grunt) {
         handlebars: {
             compile: {
                 options: {
-                    namespace: "JST"
+                    namespace: "JST",
+                    wrapped: true
                 },
                 files: {
-                    "app/templates/jst.js": ["app/templates/**/*.hbs"]
+                    "dist/debug/jst.js": ["app/templates/**/*.hbs"]
                 }
             }
         },
@@ -245,6 +246,15 @@ module.exports = function (grunt) {
     // The release task will run the debug tasks and then minify the
     // dist/debug/require.js file and CSS files.
     grunt.registerTask("release", "debug min mincss");
+
+    grunt.registerTask("jst", "Wrap handlebars with require", function() {
+        grunt.task.run("handlebars");
+
+        var src = grunt.file.read('app/templates/jst.js');
+        src = "define(['handlebars'], function (Handlebars) {\n" + src + "\n});\n";
+
+        grunt.file.write('dist/debug/jst.r.js', src);
+    });
 
     grunt.loadNpmTasks('grunt-contrib-handlebars');
 

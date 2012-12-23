@@ -2053,6 +2053,11 @@ var jam = {
             "main": "backbone.layoutmanager.js"
         },
         {
+            "name": "handlebars",
+            "location": "../vendor/jam/handlebars",
+            "main": "handlebars.js"
+        },
+        {
             "name": "jquery",
             "location": "../vendor/jam/jquery",
             "main": "jquery.js"
@@ -2102,6 +2107,11 @@ if (typeof require !== "undefined" && require.config) {
             "main": "backbone.layoutmanager.js"
         },
         {
+            "name": "handlebars",
+            "location": "../vendor/jam/handlebars",
+            "main": "handlebars.js"
+        },
+        {
             "name": "jquery",
             "location": "../vendor/jam/jquery",
             "main": "jquery.js"
@@ -2148,6 +2158,11 @@ else {
             "name": "backbone.layoutmanager",
             "location": "../vendor/jam/backbone.layoutmanager",
             "main": "backbone.layoutmanager.js"
+        },
+        {
+            "name": "handlebars",
+            "location": "../vendor/jam/handlebars",
+            "main": "handlebars.js"
         },
         {
             "name": "jquery",

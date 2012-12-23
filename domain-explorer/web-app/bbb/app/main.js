@@ -5,7 +5,7 @@ require([
     // Main Router.
     "router",
 
-    "templates/jst"
+    "templates/jst.r"
 ],
 
     function (app, Router) {
@@ -16,10 +16,6 @@ require([
         app.router.on('all', function () { console.log(arguments); });
 
         app.bind("initialize:before", function (options) {
-            app.addRegions({
-                content: "#main-content"
-//                modal: Dex.Modal.ModalRegion
-            });
         });
 
         app.bind("initialize:after", function (options) {

@@ -37,7 +37,7 @@
   <script src="require.js"></script>
   <!(endif)-->
 
-hi
+<div id="main-content"></div>
 
 <!--(if target debug)>
   <script src="require.js"></script>

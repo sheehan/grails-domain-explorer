@@ -1,11 +1,16 @@
 define([
+    "handlebars",
     "backbone.layoutmanager",
     "backbone.marionette"
-], function () {
-
+], function (Handlebars) {
     // Provide a global location to place configuration settings and module
     // creation.
     var app = new Backbone.Marionette.Application({
+
+        regions: {
+            content: '#main-content'
+//                modal: Dex.Modal.ModalRegion
+        },
 
         // The root path to run the application.
         root: "/bookstore/plugins/domain-explorer-0.1/bbb/", // TODO,
@@ -34,34 +39,9 @@ define([
         }
     });
 
-    // Localize or create a new JavaScript Template object.
-    var JST = window.JST = window.JST || {};
-
-    // Configure LayoutManager with Backbone Boilerplate defaults.
-    Backbone.LayoutManager.configure({
-        // Allow LayoutManager to augment Backbone.View.prototype.
-        manage: true,
-
-        prefix: "app/templates/",
-
-        fetch: function (path) {
-            // Concatenate the file extension.
-            path = path + ".html";
-
-            // If cached, use the compiled template.
-            if (JST[path]) {
-                return JST[path];
-            }
-
-            // Put fetch into `async-mode`.
-            var done = this.async();
-
-            // Seek out the template asynchronously.
-            $.get(app.root + path, function (contents) {
-                done(JST[path] = _.template(contents));
-            });
-        }
-    });
+    Backbone.Marionette.Renderer.render = function(template, data){
+        return JST[template](data);
+    };
 
     // Mix Backbone.Events, modules, and layout management into the app object.
     return _.extend(app, {
