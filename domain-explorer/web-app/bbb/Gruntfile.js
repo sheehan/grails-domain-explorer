@@ -187,6 +187,16 @@ module.exports = function (grunt) {
             }
         },
 
+        coffee: {
+            compile: {
+                files: grunt.file.expandMapping(['app/**/*.coffee'], 'dist/debug/', {
+                    rename: function(destBase, destPath) {
+                        return destBase + destPath.replace(/\.coffee$/, '.js');
+                    }
+                })
+            }
+        },
+
         // The watch task can be used to monitor the filesystem and execute
         // specific tasks when files are modified.  By default, the watch task is
         // available to compile CSS if you are unable to use the runtime compiler
@@ -250,12 +260,13 @@ module.exports = function (grunt) {
     grunt.registerTask("jst", "Wrap handlebars with require", function() {
         grunt.task.run("handlebars");
 
-        var src = grunt.file.read('app/templates/jst.js');
+        var src = grunt.file.read('dist/debug/jst.js');
         src = "define(['handlebars'], function (Handlebars) {\n" + src + "\n});\n";
 
         grunt.file.write('dist/debug/jst.r.js', src);
     });
 
+    grunt.loadNpmTasks('grunt-contrib-coffee');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
 
 };
