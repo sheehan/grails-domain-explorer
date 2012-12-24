@@ -5,7 +5,7 @@ require([
     // Main Router.
     "router",
 
-    "templates/jst.r"
+    "jst"
 ],
 
     function (app, Router) {
