@@ -197,13 +197,33 @@ module.exports = function (grunt) {
             }
         },
 
+        copy: {
+            compile: {
+                files: grunt.file.expandMapping(['app/**/*.js', 'vendor/**/*.js'], 'dist/debug/', {
+//                    rename: function(destBase, destPath) {
+//                        return destBase + destPath.replace(/\.coffee$/, '.js');
+//                    }
+                })
+            }
+        },
+
         // The watch task can be used to monitor the filesystem and execute
         // specific tasks when files are modified.  By default, the watch task is
         // available to compile CSS if you are unable to use the runtime compiler
         // (use if you have a custom server, PhoneGap, Adobe Air, etc.)
         watch: {
-            files: ["grunt.js", "vendor/**/*", "app/**/*"],
-            tasks: "styles"
+            js: {
+                files: ['app/**/*.js', 'vendor/**/*.js'],
+                tasks: 'copy'
+            },
+            coffee: {
+                files: ['app/**/*.coffee'],
+                tasks: 'coffee'
+            },
+            jst: {
+                files: ['app/templates/**/*.hbs'],
+                tasks: 'jst'
+            }
         },
 
         // The clean task ensures all files are removed from the dist/ directory so
@@ -267,6 +287,8 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-coffee');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
 };
