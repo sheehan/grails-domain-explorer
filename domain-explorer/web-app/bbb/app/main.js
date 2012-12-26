@@ -1,19 +1,18 @@
 require([
-    // Application.
     "app",
-
-    // Main Router.
     "router",
-
+    "modules/domain/module",
     "jst"
 ],
 
-    function (app, Router) {
+    function (app, Router, Domain) {
 
         // Define your master router on the application namespace and trigger all
         // navigation from this instance.
         app.router = new Router();
-        app.router.on('all', function () { console.log(arguments); });
+
+        new Domain.Router();
+
 
         app.bind("initialize:before", function (options) {
         });

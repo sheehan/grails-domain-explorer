@@ -9,7 +9,7 @@ require.config({
     ],
 
     paths: {
-        'jst': '../dist/debug/jst.r',
+        'jst': '../jst.r',
         'backbone.wreqr': '../vendor/backbone.marionette/backbone.wreqr',
         'backbone.eventbinder': '../vendor/backbone.marionette/backbone.eventbinder',
         'backbone.babysitter': '../vendor/backbone.marionette/backbone.babysitter',

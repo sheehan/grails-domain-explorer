@@ -30,7 +30,7 @@
 <!-- Application source. -->
 
 <!--(if target dummy)><!-->
-<script data-main="${resource(dir: 'bbb', file: '/app/config')}" src="${resource(dir: 'bbb', file: '/vendor/js/libs/require.js')}"></script>
+<script data-main="${resource(dir: 'bbb', file: '/dist/debug/app/config')}" src="${resource(dir: 'bbb', file: '/vendor/js/libs/require.js')}"></script>
 <!--<!(endif)-->
 
 <!--(if target release)>

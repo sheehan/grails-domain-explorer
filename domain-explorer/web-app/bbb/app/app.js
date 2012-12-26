@@ -7,11 +7,6 @@ define([
     // creation.
     var app = new Backbone.Marionette.Application({
 
-        regions: {
-            content: '#main-content'
-//                modal: Dex.Modal.ModalRegion
-        },
-
         // The root path to run the application.
         root: "/bookstore/plugins/domain-explorer-0.1/bbb/", // TODO,
 
@@ -37,6 +32,12 @@ define([
             }
             return url;
         }
+    });
+
+    app.addRegions({
+
+        content: '#main-content'
+//                modal: Dex.Modal.ModalRegion
     });
 
     Backbone.Marionette.Renderer.render = function(template, data){
