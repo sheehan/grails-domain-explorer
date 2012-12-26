@@ -10,7 +10,7 @@
   <!-- Application styles. -->
 
   <!--(if target dummy)><!-->
-  <link rel="stylesheet" href="${resource(dir: 'bbb', file: '/app/styles/index.css')}">
+  <link rel="stylesheet" href="${resource(dir: 'bbb', file: '/dist/debug/app/styles/app.css')}">
   <!--<!(endif)-->
 
   <!--(if target release)>
