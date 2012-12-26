@@ -179,7 +179,10 @@ module.exports = function (grunt) {
             compile: {
                 options: {
                     namespace: "JST",
-                    wrapped: true
+                    wrapped: true,
+                    processName: function(filename) {
+                        return new RegExp('^app/templates/(.*)\\.hbs').exec(filename)[1]
+                    }
                 },
                 files: {
                     "dist/debug/jst.js": ["app/templates/**/*.hbs"]
