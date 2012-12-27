@@ -188,11 +188,6 @@ module.exports = (grunt) ->
       compile:
         files: grunt.file.expandMapping(["app/**/*.js", "vendor/**/*.js"], "dist/debug/", {})
 
-
-    #                    rename: function(destBase, destPath) {
-    #                        return destBase + destPath.replace(/\.coffee$/, '.js');
-    #                    }
-
     # The watch task can be used to monitor the filesystem and execute
     # specific tasks when files are modified.  By default, the watch task is
     # available to compile CSS if you are unable to use the runtime compiler
@@ -208,7 +203,7 @@ module.exports = (grunt) ->
 
       jst:
         files: ["app/templates/**/*.hbs"]
-        tasks: "jst"
+        tasks: ["handlebars", "jst"]
 
       less:
         files: ["app/styles/**/*.less"]
@@ -259,18 +254,18 @@ module.exports = (grunt) ->
   # dist/debug/templates.js, compile all the application code into
   # dist/debug/require.js, and then concatenate the require/define shim
   # almond.js and dist/debug/templates.js into the require.js file.
-  grunt.registerTask "debug", "clean lint jst requirejs concat styles"
+  grunt.registerTask "debug", ['clean', 'less', 'copy', 'coffee', 'handlebars', 'jst']
 
   # The release task will run the debug tasks and then minify the
   # dist/debug/require.js file and CSS files.
   grunt.registerTask "release", "debug min mincss"
 
   grunt.registerTask "jst", "Wrap handlebars with require", ->
-    grunt.task.run "handlebars"
     src = grunt.file.read("dist/debug/jst.js")
     src = "define(['handlebars'], function (Handlebars) {\n" + src + "\n});\n"
     grunt.file.write "dist/debug/jst.r.js", src
 
+  grunt.loadNpmTasks "grunt-contrib-clean"
   grunt.loadNpmTasks "grunt-contrib-coffee"
   grunt.loadNpmTasks "grunt-contrib-copy"
   grunt.loadNpmTasks "grunt-contrib-handlebars"

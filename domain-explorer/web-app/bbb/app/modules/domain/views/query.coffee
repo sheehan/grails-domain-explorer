@@ -3,3 +3,9 @@ define ['backbone.marionette'], (Marionette) ->
     template: 'domain/query'
 
     className: 'view-query'
+
+    events:
+      'click button.execute': 'execute'
+
+    execute: ->
+      console.log 'execute'
