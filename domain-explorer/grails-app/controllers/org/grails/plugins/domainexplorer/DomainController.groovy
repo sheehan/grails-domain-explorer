@@ -8,7 +8,7 @@ import org.springframework.web.servlet.support.RequestContextUtils
 
 class DomainController {
 
-    def index = {
+    def index() {
         [
             json: [
                 serverURL: grailsApplication.config.grails.serverURL
@@ -16,7 +16,7 @@ class DomainController {
         ]
     }
 
-    def list = {
+    def list() {
         def json = grailsApplication.domainClasses.collect { GrailsDomainClass clazz ->
             [
                 name: clazz.name,
@@ -24,6 +24,19 @@ class DomainController {
                 count: clazz.clazz.count()
             ]
         }.sort { it.name }
+        render json as JSON
+    }
+
+    def executeQuery(String query) {
+        List result = grailsApplication.domainClasses.first().clazz.executeQuery(query, [:], [max:10, offset: 0])
+        Map json = [:]
+        if (result) {
+            GrailsDomainClass domainClass = grailsApplication.getDomainClass(result[0].class.name)
+            json.clazz = domainClassToMap(domainClass)
+            json.value = result.collect { domainInstanceToMap it, domainClass }
+        } else {
+            json.value = []
+        }
         render json as JSON
     }
 

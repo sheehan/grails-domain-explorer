@@ -1,11 +1,8 @@
-define ['backbone.marionette'], (Marionette) ->
+define ['app', 'backbone.marionette'], (app, Marionette) ->
   Marionette.ItemView.extend
     template: 'domain/query'
 
     className: 'view-query'
 
-    events:
+    triggers:
       'click button.execute': 'execute'
-
-    execute: ->
-      console.log 'execute'
