@@ -23,7 +23,8 @@ define [
           query: 'from Book'
         dfd.done (resp) ->
           items = resp.value
-          resultsView.showItems items
+          clazz = resp.clazz
+          resultsView.showItems items, clazz
 
       @queryRegion.show queryView
       @resultsRegion.show resultsView

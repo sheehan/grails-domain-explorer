@@ -9,9 +9,7 @@ define [
       '': 'index'
 
     index: ->
-      console.log 'hi matt'
       pageView = new PageView
-#      console.log app.content
       app.content.show pageView
 
   Router: Router

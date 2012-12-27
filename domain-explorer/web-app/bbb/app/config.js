@@ -13,7 +13,8 @@ require.config({
         'backbone.wreqr': '../vendor/backbone.marionette/backbone.wreqr',
         'backbone.eventbinder': '../vendor/backbone.marionette/backbone.eventbinder',
         'backbone.babysitter': '../vendor/backbone.marionette/backbone.babysitter',
-        'backbone.marionette': '../vendor/backbone.marionette/backbone.marionette'
+        'backbone.marionette': '../vendor/backbone.marionette/backbone.marionette',
+        'dataTables': '../vendor/DataTables-1.9.4/media/js/jquery.dataTables'
     },
 
     shim: {
