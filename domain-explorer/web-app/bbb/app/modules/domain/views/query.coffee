@@ -4,5 +4,8 @@ define ['app', 'backbone.marionette'], (app, Marionette) ->
 
     className: 'view-query'
 
-    triggers:
+    events:
       'click button.execute': 'execute'
+
+    execute: ->
+      @trigger 'execute', @$('textarea[name=query]').val()

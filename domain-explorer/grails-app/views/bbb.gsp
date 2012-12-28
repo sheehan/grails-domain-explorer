@@ -10,6 +10,7 @@
   <!-- Application styles. -->
 
   <!--(if target dummy)><!-->
+  <link rel="stylesheet" href="${resource(dir: 'bbb', file: '/dist/debug/app/styles/bootstrap.css')}">
   <link rel="stylesheet" href="${resource(dir: 'bbb', file: '/dist/debug/app/styles/app.css')}">
   <!--<!(endif)-->
 

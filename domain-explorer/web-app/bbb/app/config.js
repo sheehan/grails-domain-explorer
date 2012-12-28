@@ -14,7 +14,9 @@ require.config({
         'backbone.eventbinder': '../vendor/backbone.marionette/backbone.eventbinder',
         'backbone.babysitter': '../vendor/backbone.marionette/backbone.babysitter',
         'backbone.marionette': '../vendor/backbone.marionette/backbone.marionette',
-        'dataTables': '../vendor/DataTables-1.9.4/media/js/jquery.dataTables'
+        'dataTables': '../vendor/DataTables-1.9.4/media/js/jquery.dataTables',
+        'moment': '../vendor/js/libs/moment',
+        'layout': '../vendor/js/libs/jquery.layout-latest'
     },
 
     shim: {

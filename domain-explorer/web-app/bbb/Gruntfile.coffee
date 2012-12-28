@@ -186,7 +186,7 @@ module.exports = (grunt) ->
 
     copy:
       compile:
-        files: grunt.file.expandMapping(["app/**/*.js", "vendor/**/*.js"], "dist/debug/", {})
+        files: grunt.file.expandMapping(["app/**/*.js", "vendor/**/*.js", "app/styles/**/*.css"], "dist/debug/", {})
 
     # The watch task can be used to monitor the filesystem and execute
     # specific tasks when files are modified.  By default, the watch task is

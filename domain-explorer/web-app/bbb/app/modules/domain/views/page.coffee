@@ -3,6 +3,7 @@ define [
   'backbone.marionette'
   './query'
   './results'
+  'layout'
 ], (app, Marionette, QueryView, ResultsView) ->
   Marionette.Layout.extend
     template: 'domain/page'
@@ -17,10 +18,10 @@ define [
       queryView = new QueryView
       resultsView = new ResultsView
 
-      queryView.on 'execute', ->
+      queryView.on 'execute', (query) ->
         url = app.createLink('domain', 'executeQuery')
         dfd = $.post url,
-          query: 'from Book'
+          query: query
         dfd.done (resp) ->
           items = resp.value
           clazz = resp.clazz
@@ -28,4 +29,9 @@ define [
 
       @queryRegion.show queryView
       @resultsRegion.show resultsView
+
+    onShow: ->
+      @$el.layout
+        north__paneSelector: '.query-container'
+        center__paneSelector: '.results-container'
 

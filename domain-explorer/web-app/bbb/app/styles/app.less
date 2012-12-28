@@ -1,8 +1,40 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+#main-content {
+  height: 100%;
+}
+
 .page-domain {
+  height: 100%;
   .view-query {
     textarea {
       width: 100%;
       height: 200px;
+    }
+  }
+  .view-results {
+    table {
+      border-radius: 0;
+      width: 100%;
+      margin: 0;
+      td.check {
+        padding: 3px;
+        text-align: center;
+      }
+    }
+    .dataTables_scrollBody {
+      table {
+        border-top-width: 0;
+        tr:first-child td {
+          border-top-width: 0;
+        }
+      }
     }
   }
 }

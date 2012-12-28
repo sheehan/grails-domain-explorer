@@ -28,7 +28,7 @@ class DomainController {
     }
 
     def executeQuery(String query) {
-        List result = grailsApplication.domainClasses.first().clazz.executeQuery(query, [:], [max:10, offset: 0])
+        List result = grailsApplication.domainClasses.first().clazz.executeQuery(query, [:], [max:50, offset: 0])
         Map json = [:]
         if (result) {
             GrailsDomainClass domainClass = grailsApplication.getDomainClass(result[0].class.name)
