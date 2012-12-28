@@ -5,12 +5,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <title>Backbone Boilerplate</title>
+  <title>Domain Explorer</title>
 
   <!-- Application styles. -->
 
   <!--(if target dummy)><!-->
-  <link rel="stylesheet" href="${resource(dir: 'bbb', file: '/dist/debug/app/styles/bootstrap.css')}">
+  <link rel="stylesheet" href="${resource(dir: 'bbb', file: '/dist/debug/vendor/bootstrap/css/bootstrap.css')}">
   <link rel="stylesheet" href="${resource(dir: 'bbb', file: '/dist/debug/app/styles/app.css')}">
   <!--<!(endif)-->
 
