@@ -1,37 +1,24 @@
 define [
   'app'
   'backbone.marionette'
-  './query'
-  './results'
+  './search'
   'layout'
-], (app, Marionette, QueryView, ResultsView) ->
+], (app, Marionette, SearchView) ->
   Marionette.Layout.extend
     template: 'domain/page'
 
     className: 'page-domain'
 
     regions:
-      'queryRegion': '.query-container'
-      'resultsRegion': '.results-container'
+      'mainRegion': '.main-container'
 
     onRender: ->
-      queryView = new QueryView
-      resultsView = new ResultsView
+      @searchView = new SearchView
 
-      queryView.on 'execute', (query) ->
-        url = app.createLink('domain', 'executeQuery')
-        dfd = $.post url,
-          query: query
-        dfd.done (resp) ->
-          items = resp.value
-          clazz = resp.clazz
-          resultsView.showItems items, clazz
-
-      @queryRegion.show queryView
-      @resultsRegion.show resultsView
+      @mainRegion.show @searchView
 
     onShow: ->
-      @$el.layout
-        north__paneSelector: '.query-container'
-        center__paneSelector: '.results-container'
+      @searchView.resize()
+
+
 

@@ -27,8 +27,8 @@ class DomainController {
         render json as JSON
     }
 
-    def executeQuery(String query) {
-        List result = grailsApplication.domainClasses.first().clazz.executeQuery(query, [:], [max:50, offset: 0])
+    def executeQuery(String query, int max, int offset) {
+        List result = grailsApplication.domainClasses.first().clazz.executeQuery(query, [:], [max: max, offset: offset])
         Map json = [:]
         if (result) {
             GrailsDomainClass domainClass = grailsApplication.getDomainClass(result[0].class.name)
@@ -323,7 +323,6 @@ class DomainController {
             className: domainClass.fullName
         ]
         getProperties(domainClass).each { GrailsDomainClassProperty property ->
-            println property?.name
             String propertyView = determinePropertyView(property)
             def value = entity[property.name]
             switch (propertyView) {

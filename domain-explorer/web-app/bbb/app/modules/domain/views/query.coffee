@@ -4,9 +4,13 @@ define ['app', 'backbone.marionette'], (app, Marionette) ->
 
     className: 'view-query'
 
-    events:
+    triggers:
       'click .execute': 'execute'
 
-    execute: (event) ->
-      event.preventDefault()
-      @trigger 'execute', @$('textarea[name=query]').val()
+    bindings:
+      '[name=query]': 'query'
+      '[name=max]': 'max'
+      '[name=offset]': 'offset'
+
+    onRender: ->
+      @stickit()

@@ -12,8 +12,14 @@ body {
 
 .page-domain {
   height: 100%;
-  padding: 10px;
+  .main-container {
+    height: 100%;
+    .view-search {
+      height: 100%;
+    }
+  }
   .view-query {
+    padding: 0 10px 10px;
     .btn-toolbar {
       margin: 5px 0;
     }
@@ -22,13 +28,37 @@ body {
       height: 150px;
       margin: 0;
       box-sizing: border-box;
+      font-family: monospace;
+    }
+    .controls {
+      margin-top: 5px;
+      label {
+        display: inline;
+        margin-left: 10px;
+      }
+      input {
+        display: inline;
+        width: 50px;
+        margin: 0;
+      }
+      text-align: right;
     }
   }
   .view-results {
-    table {
+    padding: 0 10px 10px;
+    .btn-toolbar {
+      margin: 5px 0;
+      .btn-group.pag {
+        float: right;
+      }
+    }
+    .table-bordered thead:last-child tr:last-child > th:first-child {
       border-radius: 0;
+    }
+    table {
       width: 100%;
       margin: 0;
+      border-radius: 0;
       td.check {
         padding: 3px;
         text-align: center;
@@ -43,4 +73,10 @@ body {
       }
     }
   }
+}
+//
+.ui-layout-resizer {
+  background: #DDD;
+  border: 1px solid #BBB;
+  border-width: 0;
 }

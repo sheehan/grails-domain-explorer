@@ -9,10 +9,8 @@ define [
     className: 'view-results'
 
     showItems: (items, clazz) ->
-      @initTable(clazz)
+      @initTable clazz
       @dataTable.fnAddData items
-
-    onRender: ->
 
     initTable: (clazz) ->
       @dataTable.fnDestroy() if @dataTable
@@ -50,12 +48,12 @@ define [
 
     renderCell: (property, value) ->
       if property.oneToMany or property.manyToMany
-        valueHtml = "<span class=\"instanceValue oneToMany\">[" + value + "]</span>"
+        valueHtml = "<span class=\"instanceValue oneToMany\">[#{value}]</span>"
       else if value is null
-        valueHtml = "<span class=\"instanceValue null\">" + value + "</span>"
+        valueHtml = "<span class=\"instanceValue null\">#{value}</span>"
       else if property.oneToOne or property.manyToOne
         className = _.last(property.type.split("."))
-        valueHtml = "<span class=\"nowrap\">" + className + ": " + value + "</span>"
+        valueHtml = "<span class=\"nowrap\">#{className}: #{value}</span>"
       else if property.view is "date"
         valueHtml = moment(value).format("YYYY-MM-DD")
       else
