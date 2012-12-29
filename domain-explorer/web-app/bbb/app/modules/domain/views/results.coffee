@@ -8,11 +8,15 @@ define [
 
     className: 'view-results'
 
-    showItems: (items, clazz) ->
-      @initTable clazz
-      @dataTable.fnAddData items
+    initialize: ->
+      @bindTo @model, "change", @showItems
 
-    initTable: (clazz) ->
+    showItems: ->
+      @initTable()
+      @dataTable.fnAddData @model.get('items')
+
+    initTable: ->
+      clazz = @model.get('clazz')
       @dataTable.fnDestroy() if @dataTable
       @$('table').html ''
 

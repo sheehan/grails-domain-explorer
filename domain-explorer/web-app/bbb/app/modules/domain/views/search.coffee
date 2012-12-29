@@ -25,17 +25,14 @@ define [
 
       @resultsView = resultsView
 
-      queryView.on 'execute', () ->
+      queryView.on 'execute', ->
         queryModel.execute().done (resp) ->
-          items = resp.value
-          clazz = resp.clazz
-          resultsView.showItems items, clazz
+          resultsModel.set
+            items: resp.value
+            clazz: resp.clazz
 
       @queryRegion.show queryView
       @resultsRegion.show resultsView
-
-    onShow: ->
-      console.log 'onShow'
 
     resize: ->
       console.log @$el.is(':visible')
