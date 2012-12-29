@@ -46,9 +46,18 @@ define [
       @dataTable.fnDestroy() if @dataTable
 
     resize: ->
-      @$el.height('100%')
-      height = @$el.height() - @$('.dataTables_scrollHead').height()
-      @$('.dataTables_scrollBody').height(height)
+      $target = @$('.dataTables_scrollBody')
+      container = _.find $target.parents(), (el) -> $(el).css('position') is 'absolute'
+      if container
+        $container = $ container
+        childrenHeight = _.reduce(
+          $container.children()
+          (memo, el) -> memo + $(el).outerHeight true
+          0
+        )
+
+        difference = $container.height() - childrenHeight
+        $target.height $target.height() + difference
 
     renderCell: (property, value) ->
       if property.oneToMany or property.manyToMany
