@@ -1,8 +1,9 @@
 define [
   'backbone.marionette'
   'moment'
+  '../../util/dom-utils'
   'dataTables'
-], (Marionette, moment) ->
+], (Marionette, moment, DomUtils) ->
   Marionette.Layout.extend
     template: 'domain/results'
 
@@ -11,12 +12,19 @@ define [
     initialize: ->
       @bindTo @model, "change", @showItems
 
+    triggers:
+      'click .next': 'next'
+      'click .prev': 'prev'
+
     showItems: ->
-      @initTable()
-      @dataTable.fnAddData @model.get('items')
+      if @model.get('clazz')
+        @initTable()
+        @dataTable.fnAddData @model.get('items')
+      else
+        @$('table').html ''
 
     initTable: ->
-      clazz = @model.get('clazz')
+      clazz = @model.get 'clazz'
       @dataTable.fnDestroy() if @dataTable
       @$('table').html ''
 
@@ -46,18 +54,8 @@ define [
       @dataTable.fnDestroy() if @dataTable
 
     resize: ->
-      $target = @$('.dataTables_scrollBody')
-      container = _.find $target.parents(), (el) -> $(el).css('position') is 'absolute'
-      if container
-        $container = $ container
-        childrenHeight = _.reduce(
-          $container.children()
-          (memo, el) -> memo + $(el).outerHeight true
-          0
-        )
+      DomUtils.sizeToFitVertical @$('.dataTables_scrollBody')
 
-        difference = $container.height() - childrenHeight
-        $target.height $target.height() + difference
 
     renderCell: (property, value) ->
       if property.oneToMany or property.manyToMany
