@@ -10,30 +10,36 @@ define [
     className: 'view-results'
 
     initialize: ->
-      @bindTo @model, "change", @showItems
+      @bindTo @collection, "reset", @showItems
 
     triggers:
       'click .next': 'next'
       'click .prev': 'prev'
 
     showItems: ->
-      if @model.get('clazz')
+      if @collection.clazz
         @initTable()
-        @dataTable.fnAddData @model.get('items')
+        @dataTable.fnAddData @collection.toJSON()
+
+        start = @collection.offset + 1
+        end = start + @collection.size() - 1
+        @$('.showing').html "Showing #{start} - #{end}"
       else
         @$('table').html ''
+        @$('.showing').html ''
 
     initTable: ->
-      clazz = @model.get 'clazz'
+      clazz = @collection.clazz
       @dataTable.fnDestroy() if @dataTable
       @$('table').html ''
 
       aoColumns = []
       aoColumns.push
-        "mData": -> ''
-        "mRender": (data, type, full) -> '<input type="checkbox" />'
-        "sWidth": 15
-        "sClass": 'check'
+        mData: -> ''
+        mRender: (data, type, full) -> '<input type="checkbox" />'
+        sWidth: 15
+        sClass: 'check'
+
       for prop in clazz.properties
         do (prop) =>
           aoColumns.push
@@ -47,6 +53,9 @@ define [
         sDom: 't'
         sScrollY: "100%"
         sScrollX: "100%"
+        fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) =>
+          $(nRow).click (event) =>
+            @trigger 'row:click', aData
 
       @resize()
 
@@ -70,3 +79,4 @@ define [
       else
         valueHtml = value
       valueHtml
+

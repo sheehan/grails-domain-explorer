@@ -1,8 +1,7 @@
 define [
   'app'
   'backbone'
-  './results'
-], (app, Backbone, ResultsModel) ->
+], (app, Backbone) ->
   Backbone.Model.extend
 
     defaults:

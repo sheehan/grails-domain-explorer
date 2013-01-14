@@ -3,10 +3,11 @@ define [
   'backbone.marionette'
   './query'
   './results'
+  './show'
   '../models/query'
-  '../models/results'
+  '../collections/instances'
   'layout'
-], (app, Marionette, QueryView, ResultsView, QueryModel, ResultsModel) ->
+], (app, Marionette, QueryView, ResultsView, ShowView, QueryModel, InstanceCollection) ->
   Marionette.Layout.extend
     template: 'domain/search'
 
@@ -23,35 +24,35 @@ define [
 
     onRender: ->
       queryModel = new QueryModel
-      resultsModel = new ResultsModel
+      instances = new InstanceCollection
 
       queryView = new QueryView model: queryModel
-      resultsView = new ResultsView model: resultsModel
+      resultsView = new ResultsView collection: instances
 
       @resultsView = resultsView
 
       queryView.on 'execute', =>
-        @execute queryModel, resultsModel
+        @execute queryModel, instances
 
       resultsView.on 'next', =>
         queryModel.nextPage()
-        @execute queryModel, resultsModel
+        @execute queryModel, instances
 
       resultsView.on 'prev', =>
         queryModel.prevPage()
-        @execute queryModel, resultsModel
+        @execute queryModel, instances
+
+      resultsView.on 'row:click', (data) =>
+        showView = new ShowView()
+        app.content.push showView
 
       @queryRegion.show queryView
       @resultsRegion.show resultsView
 
-    execute: (queryModel, resultsModel) ->
-      queryModel.execute().done (resp) ->
-        resultsModel.set
-          items: resp.value
-          clazz: resp.clazz
+    execute: (queryModel, instances) ->
+      instances.search queryModel.get('query'), queryModel.get('max'), queryModel.get('offset')
 
     resize: ->
-      console.log 'hi'
       @layout = @$el.layout
         north__paneSelector: '.query-container'
         center__paneSelector: '.results-container'

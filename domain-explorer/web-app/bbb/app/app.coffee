@@ -1,4 +1,9 @@
-define ["handlebars", "backbone.layoutmanager", "backbone.marionette"], (Handlebars) ->
+define [
+  "handlebars",
+  "./modules/util/stackregion"
+  "backbone.layoutmanager",
+  "backbone.marionette"
+], (Handlebars, StackRegion) ->
 
   # Provide a global location to place configuration settings and module
   # creation.
@@ -21,7 +26,10 @@ define ["handlebars", "backbone.layoutmanager", "backbone.marionette"], (Handleb
         url += "?" + queryString  if queryString.length > 0
       url
   )
-  app.addRegions content: "#main-content"
+  app.addRegions
+    content:
+      selector:"#main-content"
+      regionType: StackRegion
 
   #                modal: Dex.Modal.ModalRegion
   Backbone.Marionette.Renderer.render = (template, data) ->
