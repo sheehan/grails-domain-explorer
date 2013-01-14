@@ -55,7 +55,8 @@ define [
         sScrollX: "100%"
         fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) =>
           $(nRow).click (event) =>
-            @trigger 'row:click', aData
+            model = @collection.find (m) => m.id is aData.id
+            @trigger 'row:click', model
 
       @resize()
 

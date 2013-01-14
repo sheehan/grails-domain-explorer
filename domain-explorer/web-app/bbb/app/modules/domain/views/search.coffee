@@ -13,11 +13,6 @@ define [
 
     className: 'view-search'
 
-    onDomRefresh: ->
-#      @resize()
-      console.log 'ref'
-#      console.log @$el.is(':visible')
-
     regions:
       'queryRegion': '.query-container'
       'resultsRegion': '.results-container'
@@ -42,8 +37,11 @@ define [
         queryModel.prevPage()
         @execute queryModel, instances
 
-      resultsView.on 'row:click', (data) =>
-        showView = new ShowView()
+      resultsView.on 'row:click', (model) =>
+        showView = new ShowView
+          model: model
+          clazz: instances.clazz
+
         app.content.push showView
 
       @queryRegion.show queryView
