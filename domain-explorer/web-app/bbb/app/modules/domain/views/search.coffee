@@ -13,42 +13,45 @@ define [
 
     className: 'view-search'
 
+    initialize: ->
+      @queryModel = new QueryModel
+      @instances = new InstanceCollection
+      Mousetrap.bind ['command+enter', 'ctrl+enter'], (event) => @execute()
+
+
     regions:
       'queryRegion': '.query-container'
       'resultsRegion': '.results-container'
 
     onRender: ->
-      queryModel = new QueryModel
-      instances = new InstanceCollection
-
-      queryView = new QueryView model: queryModel
-      resultsView = new ResultsView collection: instances
+      queryView = new QueryView model: @queryModel
+      resultsView = new ResultsView collection: @instances
 
       @resultsView = resultsView
 
       queryView.on 'execute', =>
-        @execute queryModel, instances
+        @execute()
 
       resultsView.on 'next', =>
-        queryModel.nextPage()
-        @execute queryModel, instances
+        @queryModel.nextPage()
+        @execute()
 
       resultsView.on 'prev', =>
-        queryModel.prevPage()
-        @execute queryModel, instances
+        @queryModel.prevPage()
+        @execute()
 
       resultsView.on 'row:click', (model) =>
         showView = new ShowView
           model: model
-          clazz: instances.clazz
+          clazz: @instances.clazz
 
         app.content.push showView
 
       @queryRegion.show queryView
       @resultsRegion.show resultsView
 
-    execute: (queryModel, instances) ->
-      instances.search queryModel.get('query'), queryModel.get('max'), queryModel.get('offset')
+    execute: ->
+      @instances.search @queryModel.get('query'), @queryModel.get('max'), @queryModel.get('offset')
 
     resize: ->
       @layout = @$el.layout
@@ -56,4 +59,7 @@ define [
         center__paneSelector: '.results-container'
         resizable: true
       @resultsView.resize()
+
+    onClose: ->
+      Mousetrap.unbind ['command+enter', 'ctrl+enter']
 

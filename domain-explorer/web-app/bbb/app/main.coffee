@@ -3,6 +3,7 @@ require [
   "router"
   "modules/domain/module"
   "backbone.stickit"
+  "mousetrap"
   "jst"
 ], (app, Router, Domain) ->
 

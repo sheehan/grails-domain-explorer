@@ -11,6 +11,7 @@ require.config
     "backbone.babysitter": "../vendor/backbone.marionette/backbone.babysitter"
     "backbone.marionette": "../vendor/backbone.marionette/backbone.marionette"
     "backbone.stickit": "../vendor/js/libs/backbone.stickit"
+    mousetrap: "../vendor/js/libs/mousetrap.min"
     dataTables: "../vendor/DataTables-1.9.4/media/js/jquery.dataTables"
     moment: "../vendor/js/libs/moment"
     layout: "../vendor/js/libs/jquery.layout-latest"

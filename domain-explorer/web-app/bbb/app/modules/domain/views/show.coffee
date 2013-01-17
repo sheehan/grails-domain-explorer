@@ -29,7 +29,7 @@ define [
       valueHtml = moment(value).format('DD MMM YYYY')
     else
       valueHtml = value
-      
+
     new Handlebars.SafeString(valueHtml)
 
   Marionette.Layout.extend

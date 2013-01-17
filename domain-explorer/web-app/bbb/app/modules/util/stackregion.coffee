@@ -2,65 +2,62 @@ define [
   'backbone.marionette'
 ], (Marionette) ->
 
-  Marionette.Region.extend
+  class extends Backbone.Marionette.Region
 
-    initialize: (options) ->
+    constructor: ->
+      super
       @views = []
 
-    show: (view) ->
-      while @views.length
-        topView = @peek()
-        if (topView is view)
-          @_displayView view
-          return
-        else
-          @pop()
-
-      @push view
-
+    # Return the top view (currently visible)
     peek: ->
       @views[@views.length - 1] if @views.length
 
+    # Push a view onto the stack. Previous view is hidden and the new view is shown.
     push: (view) ->
       @ensureEl()
 
-      currentView = @peek()
-      currentView?.$el?.hide()
+      topView = @peek()
+      @_hideView(topView) if topView
 
       view.render()
 
       @open view
       @_displayView view
       @views.push view
-
-    _displayView: (view) ->
       @currentView = view
-      view.$el.show()
-      Marionette.triggerMethod.call view, "show"
-      Marionette.triggerMethod.call this, "show", view
 
-
-    open: (view) ->
-      @$el.append view.el
-
+    # Pop a view from the stack
     pop: ->
       poppedView = @views.pop()
-      @closeView poppedView
+      @_closeView poppedView if poppedView
 
       @currentView = @peek()
       @_displayView @currentView if @currentView
 
+    # Pop until the view is on top. If not found, push it onto the empty stack.
+    show: (view) ->
+      @pop() while @views.length and @peek() isnt view
+
+      @push view if not @views.length
+
+    open: (view) ->
+      @$el.append view.el
+
     close: ->
       @pop() while @views.length
-
+      Marionette.triggerMethod.call this, "close"
 
     attachView: (view) ->
       @pop() while @views.length
       @views.push view
 
-    closeView: (view) ->
-      return  if not view or view.isClosed
-      view.close()  if view.close
-      Marionette.triggerMethod.call this, "close"
+    _displayView: (view) ->
+      view.$el.show()
+      Marionette.triggerMethod.call view, "show"
+      Marionette.triggerMethod.call this, "show", view
 
+    _hideView: (view) ->
+      view.$el.hide()
 
+    _closeView: (view) ->
+      view.close() if view?.close and not view.isClosed
