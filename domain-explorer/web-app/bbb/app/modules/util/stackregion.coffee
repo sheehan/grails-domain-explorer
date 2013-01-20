@@ -25,6 +25,8 @@ define [
       @_displayView view
       @views.push view
       @currentView = view
+      Marionette.triggerMethod.call view, "show"
+      Marionette.triggerMethod.call this, "show", view
 
     # Pop a view from the stack
     pop: ->
@@ -53,8 +55,6 @@ define [
 
     _displayView: (view) ->
       view.$el.show()
-      Marionette.triggerMethod.call view, "show"
-      Marionette.triggerMethod.call this, "show", view
 
     _hideView: (view) ->
       view.$el.hide()

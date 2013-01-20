@@ -2,7 +2,7 @@ define [
   "handlebars",
   "./modules/util/stackregion"
   "backbone.marionette"
-], (Handlebars, StackRegion) ->
+], (Handlebars, StackRegion, Marionette) ->
 
   # Provide a global location to place configuration settings and module
   # creation.
@@ -30,9 +30,24 @@ define [
       selector:"#main-content"
       regionType: StackRegion
 
-  #                modal: Dex.Modal.ModalRegion
-  Backbone.Marionette.Renderer.render = (template, data) ->
-    JST[template] data
+  Marionette.Renderer.render = (template, data) -> JST[template] data
+
+  # TODO hack!!
+  Marionette.ItemView::render = ->
+    @isClosed = false
+    @triggerMethod "before:render", @
+    @triggerMethod "item:before:render", @
+    data = @serializeData()
+    data = @mixinTemplateHelpers(data)
+    html = @renderHtml(data)
+    @$el.html html
+    @bindUIElements()
+    @triggerMethod "render", @
+    @triggerMethod "item:rendered", @
+
+  Marionette.ItemView::renderHtml = (data) ->
+    template = @getTemplate()
+    Marionette.Renderer.render(template, data)
 
 
   # Mix Backbone.Events, modules, and layout management into the app object.

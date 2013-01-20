@@ -5,3 +5,4 @@ define [
 ], (app, Backbone, BreadcrumbModel) ->
   Backbone.Collection.extend
     model: BreadcrumbModel
+

@@ -9,25 +9,45 @@ define [
   '../models/query'
   '../collections/instances'
   '../collections/breadcrumbs'
+  './show'
   'layout'
-], (app, _, Backbone, Marionette, QueryView, ResultsView, ShowSectionView, QueryModel, InstanceCollection, BreadcrumbCollection) ->
+], (app, _, Backbone, Marionette, QueryView, ResultsView, ShowSectionView, QueryModel, InstanceCollection, BreadcrumbCollection, ShowView) ->
 
   ShowController = Marionette.Controller.extend
     initialize: (options) ->
-      _.extend @, Backbone.Events
       @region = options.region
 
     show: (domainModel, clazz) ->
       breadcrumbs = new BreadcrumbCollection
-      showView = new ShowSectionView
+      breadcrumbs.add [
+        { label: 'Results' }
+        { label: "#{clazz.name} : #{domainModel.id}" }
+      ]
+      showSectionView = new ShowSectionView
         breadcrumbCollection: breadcrumbs
         domainModel: domainModel
         clazz: clazz
 
-      @listenTo breadcrumbs, 'xxx', =>
+      @listenTo showSectionView, 'breadcrumb:back', => @region.pop()
+
+      @listenTo showSectionView, 'breadcrumb:select', (breadcrumb) =>
+        # then @region.pop()
+        # if other clicked
+        # then showSectionView.showRegion.show theView
         console.log 'p'
 
-      @region.push showView
+      @listenTo showSectionView, 'attribute:select', (instance, attribute) =>
+        # if body link click
+        # then showSectionView.showRegion.push newView and add breadcrumb
+
+
+      @region.push showSectionView
+
+      showSectionView.showRegion.push new ShowView
+        model: domainModel
+        clazz: clazz
+
+
 
 
   Marionette.Layout.extend
@@ -47,24 +67,19 @@ define [
       @queryView = new QueryView model: @queryModel
       @resultsView = new ResultsView collection: @instances
 
-      @queryView.on 'execute', =>
+      @listenTo @queryView, 'execute', =>
         @execute()
 
-      @resultsView.on 'next', =>
+      @listenTo @resultsView, 'next', =>
         @queryModel.nextPage()
         @execute()
 
-      @resultsView.on 'prev', =>
+      @listenTo @resultsView, 'prev', =>
         @queryModel.prevPage()
         @execute()
 
-      @resultsView.on 'row:click', (model) =>
+      @listenTo @resultsView, 'row:click', (model) =>
         @showController.show model, @instances.clazz
-        showView = new ShowSectionView
-          domainModel: model
-          clazz: @instances.clazz
-
-        app.content.push showView
 
       @showController = new ShowController
         region: app.content

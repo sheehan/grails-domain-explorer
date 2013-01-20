@@ -3,9 +3,27 @@ define [
   'backbone.marionette'
 ], (app, Marionette) ->
   Marionette.Layout.extend
-    template: 'domain/breadcrumbs'
 
-    onRender: ->
-      $ul = @$('ul')
-      $ul.append '<li><a href="#">Query</a> <span class="divider">/</span></li>'
-      console.log 'f'
+    events:
+      'click li a': 'onClick'
+
+    onClick: (event) ->
+      event.preventDefault()
+      $li = $(event.currentTarget).closest('li')
+      index = @$('li').index($li)
+
+      if index is 0
+        @trigger 'back'
+
+
+    renderHtml: ->
+      items = @collection.collect (breadcrumb, index) =>
+        if index < @collection.size() - 1
+          """<li><a href="#">#{breadcrumb.get('label')}</a> <span class="divider">/</span></li>"""
+        else
+          """<li class="active">#{breadcrumb.get('label')}</li>"""
+      """
+      <ul class="breadcrumb">
+        #{items.join('')}
+      </ul>
+      """

@@ -1,27 +1,26 @@
 define [
   'app'
   'backbone.marionette'
+  "../../util/stackregion"
   './breadcrumbs'
-  './show'
-], (app, Marionette, BreadcrumbsView, ShowView) ->
+], (app, Marionette, StackRegion, BreadcrumbsView) ->
+
   Marionette.Layout.extend
     template: 'domain/view-section'
 
     regions:
       'breadcrumbsRegion':'.breadcrumbs-section'
-      'showRegion':'.show-section'
+      'showRegion':
+        selector: ".show-section"
+        regionType: StackRegion
 
     initialize: (options) ->
-      domainModel = options.domainModel
-      clazz = options.clazz
+      breadcrumbCollection = options.breadcrumbCollection
 
       @breadcrumbsView = new BreadcrumbsView
-      @showView = new ShowView
-        model: domainModel
-        clazz: clazz
+        collection: breadcrumbCollection
+
+      @listenTo @breadcrumbsView, 'back', => @trigger 'breadcrumb:back'
 
     onShow: ->
-      console.log 'show-section onShow'
       @breadcrumbsRegion.show @breadcrumbsView
-      @showRegion.show @showView
-      console.log 'show-section onShow done'
