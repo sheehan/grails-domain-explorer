@@ -1,7 +1,6 @@
 define [
   "handlebars",
   "./modules/util/stackregion"
-  "backbone.layoutmanager",
   "backbone.marionette"
 ], (Handlebars, StackRegion) ->
 

@@ -10,7 +10,7 @@ define [
     className: 'view-results'
 
     initialize: ->
-      @bindTo @collection, "reset", @showItems
+      @listenTo @collection, "reset", @showItems
 
     triggers:
       'click .next': 'next'

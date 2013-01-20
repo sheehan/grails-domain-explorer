@@ -2048,11 +2048,6 @@ var jam = {
             "main": "backbone.js"
         },
         {
-            "name": "backbone.layoutmanager",
-            "location": "../vendor/jam/backbone.layoutmanager",
-            "main": "backbone.layoutmanager.js"
-        },
-        {
             "name": "handlebars",
             "location": "../vendor/jam/handlebars",
             "main": "handlebars.js"
@@ -2082,13 +2077,8 @@ var jam = {
             ],
             "exports": "Backbone"
         },
-        "backbone.layoutmanager": {
-            "deps": [
-                "jquery",
-                "backbone",
-                "lodash"
-            ],
-            "exports": "Backbone.LayoutManager"
+        "underscore": {
+            "exports": "_"
         }
     }
 };
@@ -2102,11 +2092,6 @@ if (typeof require !== "undefined" && require.config) {
             "main": "backbone.js"
         },
         {
-            "name": "backbone.layoutmanager",
-            "location": "../vendor/jam/backbone.layoutmanager",
-            "main": "backbone.layoutmanager.js"
-        },
-        {
             "name": "handlebars",
             "location": "../vendor/jam/handlebars",
             "main": "handlebars.js"
@@ -2135,13 +2120,8 @@ if (typeof require !== "undefined" && require.config) {
             ],
             "exports": "Backbone"
         },
-        "backbone.layoutmanager": {
-            "deps": [
-                "jquery",
-                "backbone",
-                "lodash"
-            ],
-            "exports": "Backbone.LayoutManager"
+        "underscore": {
+            "exports": "_"
         }
     }
 });
@@ -2155,11 +2135,6 @@ else {
             "main": "backbone.js"
         },
         {
-            "name": "backbone.layoutmanager",
-            "location": "../vendor/jam/backbone.layoutmanager",
-            "main": "backbone.layoutmanager.js"
-        },
-        {
             "name": "handlebars",
             "location": "../vendor/jam/handlebars",
             "main": "handlebars.js"
@@ -2188,13 +2163,8 @@ else {
             ],
             "exports": "Backbone"
         },
-        "backbone.layoutmanager": {
-            "deps": [
-                "jquery",
-                "backbone",
-                "lodash"
-            ],
-            "exports": "Backbone.LayoutManager"
+        "underscore": {
+            "exports": "_"
         }
     }
 };

@@ -1,13 +1,35 @@
 define [
   'app'
+  'underscore'
+  'backbone'
   'backbone.marionette'
   './query'
   './results'
   './show-section'
   '../models/query'
   '../collections/instances'
+  '../collections/breadcrumbs'
   'layout'
-], (app, Marionette, QueryView, ResultsView, ShowSectionView, QueryModel, InstanceCollection) ->
+], (app, _, Backbone, Marionette, QueryView, ResultsView, ShowSectionView, QueryModel, InstanceCollection, BreadcrumbCollection) ->
+
+  ShowController = Marionette.Controller.extend
+    initialize: (options) ->
+      _.extend @, Backbone.Events
+      @region = options.region
+
+    show: (domainModel, clazz) ->
+      breadcrumbs = new BreadcrumbCollection
+      showView = new ShowSectionView
+        breadcrumbCollection: breadcrumbs
+        domainModel: domainModel
+        clazz: clazz
+
+      @listenTo breadcrumbs, 'xxx', =>
+        console.log 'p'
+
+      @region.push showView
+
+
   Marionette.Layout.extend
     template: 'domain/search'
 
@@ -37,11 +59,15 @@ define [
         @execute()
 
       @resultsView.on 'row:click', (model) =>
+        @showController.show model, @instances.clazz
         showView = new ShowSectionView
           domainModel: model
           clazz: @instances.clazz
 
         app.content.push showView
+
+      @showController = new ShowController
+        region: app.content
 
     onShow: ->
       @queryRegion.show @queryView
@@ -59,5 +85,6 @@ define [
       @resultsView.resize()
 
     onClose: ->
+      @showController.close()
       Mousetrap.unbind ['command+enter', 'ctrl+enter']
 

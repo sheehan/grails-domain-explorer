@@ -6,6 +6,7 @@ require.config
   deps: ["../vendor/jam/require.config", "main"]
   paths:
     jst: "../jst.r"
+    "backbone": "../vendor/backbone/backbone"
     "backbone.wreqr": "../vendor/backbone.marionette/backbone.wreqr"
     "backbone.eventbinder": "../vendor/backbone.marionette/backbone.eventbinder"
     "backbone.babysitter": "../vendor/backbone.marionette/backbone.babysitter"
@@ -17,8 +18,14 @@ require.config
     layout: "../vendor/js/libs/jquery.layout-latest"
 
   shim:
+    "backbone":
+      "deps": [
+        "jquery"
+        "lodash"
+      ]
+      "exports": "Backbone"
     "backbone.stickit":
-      deps: ['underscore', 'backbone']
+      deps: ['backbone']
 
 
 # Put shims here.

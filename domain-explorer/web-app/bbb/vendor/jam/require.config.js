@@ -1,16 +1,6 @@
 var jam = {
     "packages": [
         {
-            "name": "backbone",
-            "location": "../vendor/jam/backbone",
-            "main": "backbone.js"
-        },
-        {
-            "name": "backbone.layoutmanager",
-            "location": "../vendor/jam/backbone.layoutmanager",
-            "main": "backbone.layoutmanager.js"
-        },
-        {
             "name": "handlebars",
             "location": "../vendor/jam/handlebars",
             "main": "handlebars.js"
@@ -40,13 +30,8 @@ var jam = {
             ],
             "exports": "Backbone"
         },
-        "backbone.layoutmanager": {
-            "deps": [
-                "jquery",
-                "backbone",
-                "lodash"
-            ],
-            "exports": "Backbone.LayoutManager"
+        "underscore": {
+            "exports": "_"
         }
     }
 };
@@ -55,16 +40,6 @@ if (typeof require !== "undefined" && require.config) {
     require.config({
     "packages": [
         {
-            "name": "backbone",
-            "location": "../vendor/jam/backbone",
-            "main": "backbone.js"
-        },
-        {
-            "name": "backbone.layoutmanager",
-            "location": "../vendor/jam/backbone.layoutmanager",
-            "main": "backbone.layoutmanager.js"
-        },
-        {
             "name": "handlebars",
             "location": "../vendor/jam/handlebars",
             "main": "handlebars.js"
@@ -86,20 +61,8 @@ if (typeof require !== "undefined" && require.config) {
         }
     ],
     "shim": {
-        "backbone": {
-            "deps": [
-                "jquery",
-                "lodash"
-            ],
-            "exports": "Backbone"
-        },
-        "backbone.layoutmanager": {
-            "deps": [
-                "jquery",
-                "backbone",
-                "lodash"
-            ],
-            "exports": "Backbone.LayoutManager"
+        "underscore": {
+            "exports": "_"
         }
     }
 });
@@ -108,16 +71,6 @@ else {
     var require = {
     "packages": [
         {
-            "name": "backbone",
-            "location": "../vendor/jam/backbone",
-            "main": "backbone.js"
-        },
-        {
-            "name": "backbone.layoutmanager",
-            "location": "../vendor/jam/backbone.layoutmanager",
-            "main": "backbone.layoutmanager.js"
-        },
-        {
             "name": "handlebars",
             "location": "../vendor/jam/handlebars",
             "main": "handlebars.js"
@@ -139,20 +92,8 @@ else {
         }
     ],
     "shim": {
-        "backbone": {
-            "deps": [
-                "jquery",
-                "lodash"
-            ],
-            "exports": "Backbone"
-        },
-        "backbone.layoutmanager": {
-            "deps": [
-                "jquery",
-                "backbone",
-                "lodash"
-            ],
-            "exports": "Backbone.LayoutManager"
+        "underscore": {
+            "exports": "_"
         }
     }
 };
