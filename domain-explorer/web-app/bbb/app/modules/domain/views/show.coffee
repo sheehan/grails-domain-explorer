@@ -4,7 +4,6 @@ define [
 ], (Handlebars, Marionette) ->
 
   Handlebars.registerHelper 'property_value', ->
-    console.log 'property_value'
     property = @property
     value = @value
     valueHtml = ''

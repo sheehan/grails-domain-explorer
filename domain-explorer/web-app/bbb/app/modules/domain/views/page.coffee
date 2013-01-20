@@ -14,9 +14,9 @@ define [
 
     onRender: ->
       @searchView = new SearchView
-      @mainRegion.show @searchView
 
     onShow: ->
+      @mainRegion.show @searchView
       @searchView.resize()
 
 
