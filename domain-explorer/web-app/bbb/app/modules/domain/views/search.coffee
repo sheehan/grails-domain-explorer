@@ -18,34 +18,48 @@ define [
       @region = options.region
 
     show: (domainModel, clazz) ->
-      breadcrumbs = new BreadcrumbCollection
-      breadcrumbs.add [
+      @breadcrumbs = new BreadcrumbCollection
+      @breadcrumbs.add [
         { label: 'Results' }
-        { label: "#{clazz.name} : #{domainModel.id}" }
       ]
-      showSectionView = new ShowSectionView
-        breadcrumbCollection: breadcrumbs
+      @showSectionView = new ShowSectionView
+        breadcrumbCollection: @breadcrumbs
         domainModel: domainModel
         clazz: clazz
 
-      @listenTo showSectionView, 'breadcrumb:back', => @region.pop()
+      @listenTo @showSectionView, 'breadcrumb:back', => @region.pop()
 
-      @listenTo showSectionView, 'breadcrumb:select', (breadcrumb) =>
+      @listenTo @showSectionView, 'breadcrumb:select', (breadcrumb) =>
         # then @region.pop()
         # if other clicked
         # then showSectionView.showRegion.show theView
         console.log 'p'
 
-      @listenTo showSectionView, 'attribute:select', (instance, attribute) =>
+      @listenTo @showSectionView, 'attribute:select', (instance, attribute) =>
         # if body link click
         # then showSectionView.showRegion.push newView and add breadcrumb
 
+      @region.push @showSectionView
 
-      @region.push showSectionView
+      @pushNewShowView domainModel, clazz, "#{clazz.name} : #{domainModel.id}"
 
-      showSectionView.showRegion.push new ShowView
-        model: domainModel
+    pushNewShowView: (model, clazz, label) ->
+      @breadcrumbs.add
+        label: label
+
+      showView = new ShowView
+        model: model
         clazz: clazz
+
+      @showSectionView.showRegion.push showView
+
+      @listenTo showView, 'select:propertyOne', @onSelectPropertyOne, @
+
+
+    onSelectPropertyOne: (model, property) ->
+      model.fetchPropertyOne(property).done (instance) =>
+        @pushNewShowView instance, instance.clazz, property
+
 
 
 

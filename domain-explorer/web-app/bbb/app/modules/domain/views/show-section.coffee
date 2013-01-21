@@ -22,5 +22,6 @@ define [
 
       @listenTo @breadcrumbsView, 'back', => @trigger 'breadcrumb:back'
 
+
     onShow: ->
       @breadcrumbsRegion.show @breadcrumbsView

@@ -17,7 +17,7 @@ class DomainController {
     }
 
     def list() {
-        def json = grailsApplication.domainClasses.collect { GrailsDomainClass clazz ->
+        List json = grailsApplication.domainClasses.collect { GrailsDomainClass clazz ->
             [
                 name: clazz.name,
                 fullName: clazz.fullName,
@@ -37,6 +37,19 @@ class DomainController {
         } else {
             json.value = []
         }
+        render json as JSON
+    }
+
+    def findPropertyOne(String className, Long id, String property) {
+        GrailsDomainClass sourceDomainClass = grailsApplication.getDomainClass(className)
+        GrailsDomainClass propertyDomainClass = sourceDomainClass.properties.find { it.name == property }.referencedDomainClass
+        Class clazz = sourceDomainClass.clazz
+        Object instance = clazz.get(id)
+        Object value = instance[property]
+
+        Map json = [:]
+        json.clazz = domainClassToMap(propertyDomainClass)
+        json.value = domainInstanceToMap value, propertyDomainClass
         render json as JSON
     }
 

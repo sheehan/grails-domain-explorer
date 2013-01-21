@@ -17,8 +17,4 @@ define [
 
     execute: ->
       url = app.createLink('domain', 'executeQuery')
-      dfd = $.post url, @toJSON()
-#      dfd.done (resp) ->
-#        items = resp.value
-#        clazz = resp.clazz
-      dfd
+      $.post url, @toJSON()

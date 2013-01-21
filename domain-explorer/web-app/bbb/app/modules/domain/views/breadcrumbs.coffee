@@ -7,6 +7,9 @@ define [
     events:
       'click li a': 'onClick'
 
+    initialize: (options) ->
+      @listenTo @collection, 'add remove reset', @render, @
+
     onClick: (event) ->
       event.preventDefault()
       $li = $(event.currentTarget).closest('li')

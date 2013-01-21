@@ -9,8 +9,8 @@ define [
     valueHtml = ''
     if property.oneToMany || property.manyToMany
       valueHtml = """
-        <span class="instanceValue oneToMany">
-          <a href="#" data-append-path="#{property.name}">[#{value}]</a>
+        <span class="propertyMany">
+          <a href="#" data-property-name="#{property.name}">[#{value}]</a>
         </span>
       """
     else if value is null
@@ -20,9 +20,9 @@ define [
     else if property.oneToOne || property.manyToOne
       className = _.last(property.type.split('.'))
       valueHtml = """
-        <a href="#" data-append-path="#{property.name}">
-          <span class="nowrap">#{className}: #{value}</span>
-        </a>
+      <span class="propertyOne">
+        <a class="nowrap" href="#" data-property-name="#{property.name}">#{className}: #{value}</a>
+      </span>
       """
     else if property.view == 'date'
       valueHtml = moment(value).format('DD MMM YYYY')
@@ -34,6 +34,10 @@ define [
   Marionette.Layout.extend
     template: 'domain/show'
 
+    events:
+      'click .propertyMany a': 'onPropertyManyClick'
+      'click .propertyOne a': 'onPropertyOneClick'
+
     initialize: (options) ->
       @clazz = options.clazz
 
@@ -42,3 +46,13 @@ define [
         do (property) =>
           property: property
           value: @model.get(property.name)
+
+    onPropertyManyClick: (event) ->
+      event.preventDefault()
+      propertyName = @$(event.currentTarget).data('propertyName')
+      @trigger 'select:propertyMany', @model, propertyName
+
+    onPropertyOneClick: (event) ->
+      event.preventDefault()
+      propertyName = @$(event.currentTarget).data('propertyName')
+      @trigger 'select:propertyOne', @model, propertyName
