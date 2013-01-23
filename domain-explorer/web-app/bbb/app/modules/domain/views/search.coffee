@@ -12,7 +12,6 @@ define [
   './show'
   'layout'
 ], (app, _, Backbone, Marionette, QueryView, ResultsView, ShowSectionView, QueryModel, InstanceCollection, BreadcrumbCollection, ShowView) ->
-
   ShowController = Marionette.Controller.extend
     initialize: (options) ->
       @region = options.region
@@ -29,15 +28,9 @@ define [
 
       @listenTo @showSectionView, 'breadcrumb:back', => @region.pop()
 
-      @listenTo @showSectionView, 'breadcrumb:select', (breadcrumb) =>
-        # then @region.pop()
-        # if other clicked
-        # then showSectionView.showRegion.show theView
-        console.log 'p'
-
-      @listenTo @showSectionView, 'attribute:select', (instance, attribute) =>
-        # if body link click
-        # then showSectionView.showRegion.push newView and add breadcrumb
+      @listenTo @showSectionView, 'breadcrumb:select', (index) =>
+        @showSectionView.showRegion.showIndex index
+        @breadcrumbs.pop() while @breadcrumbs.length > index + 2
 
       @region.push @showSectionView
 
@@ -59,9 +52,6 @@ define [
     onSelectPropertyOne: (model, property) ->
       model.fetchPropertyOne(property).done (instance) =>
         @pushNewShowView instance, instance.clazz, property
-
-
-
 
 
   Marionette.Layout.extend

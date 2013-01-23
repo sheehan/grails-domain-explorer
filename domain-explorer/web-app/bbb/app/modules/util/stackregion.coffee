@@ -36,6 +36,9 @@ define [
       @currentView = @peek()
       @_displayView @currentView if @currentView
 
+    showIndex: (index) ->
+      @pop() while @views.length > index + 1
+
     # Pop until the view is on top. If not found, push it onto the empty stack.
     show: (view) ->
       @pop() while @views.length and @peek() isnt view

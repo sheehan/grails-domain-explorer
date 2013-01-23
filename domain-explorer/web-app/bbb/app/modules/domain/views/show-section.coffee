@@ -21,6 +21,7 @@ define [
         collection: breadcrumbCollection
 
       @listenTo @breadcrumbsView, 'back', => @trigger 'breadcrumb:back'
+      @listenTo @breadcrumbsView, 'select', (index) => @trigger 'breadcrumb:select', index
 
 
     onShow: ->

@@ -17,6 +17,8 @@ define [
 
       if index is 0
         @trigger 'back'
+      else
+        @trigger 'select', index - 1
 
 
     renderHtml: ->
