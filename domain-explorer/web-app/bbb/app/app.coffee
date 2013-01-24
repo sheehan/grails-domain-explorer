@@ -49,35 +49,4 @@ define [
     template = @getTemplate()
     Marionette.Renderer.render(template, data)
 
-
-  # Mix Backbone.Events, modules, and layout management into the app object.
-  _.extend app,
-
-  # Create a custom object with a nested Views object.
-    module: (additionalProps) ->
-      _.extend
-        Views: {}
-      , additionalProps
-
-
-    # Helper for using layouts.
-    useLayout: (name, options) ->
-
-      # Enable variable arity by allowing the first argument to be the options
-      # object and omitting the name argument.
-      options = name  if _.isObject(name)
-
-      # Ensure options is an object.
-      options = options or {}
-
-      # If a name property was specified use that as the template.
-      options.template = name  if _.isString(name)
-
-      # Create a new Layout with options.
-      layout = new Backbone.Layout(_.extend(
-        el: "#main"
-      , options))
-
-      # Cache the refererence.
-      @layout = layout
-  , Backbone.Events
+  app

@@ -12,8 +12,13 @@ define [
     regions:
       'mainRegion': '.main-container'
 
+    initialize: (options) ->
+      console.log options
+      @showController = options.showController
+
     onRender: ->
       @searchView = new SearchView
+        showController: @showController
 
     onShow: ->
       @mainRegion.show @searchView

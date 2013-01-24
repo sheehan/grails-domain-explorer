@@ -5,55 +5,10 @@ define [
   'backbone.marionette'
   './query'
   './results'
-  './show-section'
   '../models/query'
   '../collections/instances'
-  '../collections/breadcrumbs'
-  './show'
   'layout'
-], (app, _, Backbone, Marionette, QueryView, ResultsView, ShowSectionView, QueryModel, InstanceCollection, BreadcrumbCollection, ShowView) ->
-  ShowController = Marionette.Controller.extend
-    initialize: (options) ->
-      @region = options.region
-
-    show: (domainModel, clazz) ->
-      @breadcrumbs = new BreadcrumbCollection
-      @breadcrumbs.add [
-        { label: 'Results' }
-      ]
-      @showSectionView = new ShowSectionView
-        breadcrumbCollection: @breadcrumbs
-        domainModel: domainModel
-        clazz: clazz
-
-      @listenTo @showSectionView, 'breadcrumb:back', => @region.pop()
-
-      @listenTo @showSectionView, 'breadcrumb:select', (index) =>
-        @showSectionView.showRegion.showIndex index
-        @breadcrumbs.pop() while @breadcrumbs.length > index + 2
-
-      @region.push @showSectionView
-
-      @pushNewShowView domainModel, clazz, "#{clazz.name} : #{domainModel.id}"
-
-    pushNewShowView: (model, clazz, label) ->
-      @breadcrumbs.add
-        label: label
-
-      showView = new ShowView
-        model: model
-        clazz: clazz
-
-      @showSectionView.showRegion.push showView
-
-      @listenTo showView, 'select:propertyOne', @onSelectPropertyOne, @
-
-
-    onSelectPropertyOne: (model, property) ->
-      model.fetchPropertyOne(property).done (instance) =>
-        @pushNewShowView instance, instance.clazz, property
-
-
+], (app, _, Backbone, Marionette, QueryView, ResultsView, QueryModel, InstanceCollection) ->
   Marionette.Layout.extend
     template: 'domain/search'
 
@@ -63,7 +18,7 @@ define [
       'queryRegion': '.query-container'
       'resultsRegion': '.results-container'
 
-    initialize: ->
+    initialize: (options) ->
       @queryModel = new QueryModel
       @instances = new InstanceCollection
       Mousetrap.bind ['command+enter', 'ctrl+enter'], (event) => @execute()
@@ -85,8 +40,7 @@ define [
       @listenTo @resultsView, 'row:click', (model) =>
         @showController.show model, @instances.clazz
 
-      @showController = new ShowController
-        region: app.content
+      @showController = options.showController
 
     onShow: ->
       @queryRegion.show @queryView
