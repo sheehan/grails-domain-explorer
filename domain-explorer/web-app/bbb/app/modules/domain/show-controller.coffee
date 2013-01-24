@@ -1,22 +1,21 @@
 define [
   'backbone.marionette'
-  './views/page'
   './collections/breadcrumbs'
+  './views/search'
   './views/show'
   './views/show-section'
   './views/tabs-section'
-], (Marionette, PageView, BreadcrumbCollection, ShowView, ShowSectionView, TabsSectionView) ->
+], (Marionette, BreadcrumbCollection, SearchView, ShowView, ShowSectionView, TabsSectionView) ->
   Marionette.Controller.extend
     initialize: (options) ->
       @region = options.region
 
       tabsSectionView = new TabsSectionView
 
+      @searchView = new SearchView
+        controller: @
 
-      pageView = new PageView
-        showController: @
-
-      @region.show pageView
+      @region.show @searchView
 
     show: (domainModel, clazz) ->
       @breadcrumbs = new BreadcrumbCollection
