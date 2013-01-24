@@ -4,6 +4,9 @@ html {
 
 body {
   height: 100%;
+  &.container {
+    width: auto;
+  }
 }
 
 #main-content {
@@ -80,6 +83,29 @@ body {
       }
       tr:first-child td {
         border-top-width: 0;
+      }
+    }
+  }
+}
+
+.view-tabs-section {
+  height: 100%;
+  .tabs-header {
+    ul {
+      overflow: hidden;
+      margin: 10px;
+      border-bottom: 1px solid #999;
+      li {
+        &.active {
+          background-color: #ccc;
+          color: #333;
+        }
+        list-style-type: none;
+        float: left;
+        background-color: #666;
+        color: #fff;
+        padding: 2px 8px;
+        margin-right: 5px;
       }
     }
   }

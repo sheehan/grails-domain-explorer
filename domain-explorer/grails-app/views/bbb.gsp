@@ -23,7 +23,7 @@
   <!(endif)-->
 </head>
 
-<body>
+<body class="container">
 <!-- Application container. -->
 
 <main role="main" id="main"></main>
@@ -38,6 +38,13 @@
   <script src="require.js"></script>
   <!(endif)-->
 
+<div>
+  <div class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="#">Domain Explorer</a>
+    </div>
+  </div>
+</div>
 <div id="main-content"></div>
 
 <!--(if target debug)>

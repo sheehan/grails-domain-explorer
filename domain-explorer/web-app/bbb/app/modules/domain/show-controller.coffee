@@ -11,11 +11,14 @@ define [
       @region = options.region
 
       tabsSectionView = new TabsSectionView
+      @region.show tabsSectionView
 
       @searchView = new SearchView
-        controller: @
 
-      @region.show @searchView
+      @listenTo @searchView, 'row:click', (model, clazz) =>
+        @show model, clazz
+
+      tabsSectionView.tabsBodyRegion.show @searchView
 
     show: (domainModel, clazz) ->
       @breadcrumbs = new BreadcrumbCollection

@@ -1,8 +1,10 @@
 define [
   'backbone.marionette'
-], (Marionette) ->
+  'modules/util/dom-utils'
+  './tabs-header'
+], (Marionette, DomUtils) ->
   Marionette.Layout.extend
-    template: ''
+    template: 'domain/tabs-section'
 
     className: 'view-tabs-section'
 
@@ -11,12 +13,11 @@ define [
       'tabsBodyRegion': '.tabs-body'
 
     initialize: (options) ->
+      @listenTo @tabsBodyRegion, 'show', => @resize()
 
-      console.log 'hi matt'
+    onShow: ->
+
+      @resize()
 
     resize: ->
-      @layout = @$el.layout
-        north__paneSelector: '.tabs-header'
-        center__paneSelector: '.tabs-body'
-        resizable: true
-      @resultsView.resize()
+      DomUtils.sizeToFitVertical @$('.tabs-body'), @$el

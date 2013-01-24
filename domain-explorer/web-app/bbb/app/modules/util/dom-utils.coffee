@@ -3,9 +3,10 @@ define [
   'jquery'
 ], (_, $) ->
 
-  sizeToFitVertical: (el) ->
+  sizeToFitVertical: (el, container) ->
     $target = $(el)
-    container = _.find $target.parents(), (el) -> $(el).css('position') is 'absolute'
+    if not container
+      container = _.find $target.parents(), (el) -> $(el).css('position') is 'absolute'
     if container
       $container = $ container
       childrenHeight = _.reduce(

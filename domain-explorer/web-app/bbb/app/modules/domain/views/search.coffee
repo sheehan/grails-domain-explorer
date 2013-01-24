@@ -38,9 +38,7 @@ define [
         @execute()
 
       @listenTo @resultsView, 'row:click', (model) =>
-        @controller.show model, @instances.clazz
-
-      @controller = options.controller
+        @trigger 'row:click', model, @instances.clazz
 
     onShow: ->
       @queryRegion.show @queryView
@@ -59,6 +57,5 @@ define [
       @resultsView.resize()
 
     onClose: ->
-      @controller.close()
       Mousetrap.unbind ['command+enter', 'ctrl+enter']
 
