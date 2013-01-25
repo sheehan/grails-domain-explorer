@@ -1,8 +1,9 @@
 define [
   "handlebars",
   "./modules/util/stackregion"
+  "./modules/util/dom-utils"
   "backbone.marionette"
-], (Handlebars, StackRegion, Marionette) ->
+], (Handlebars, StackRegion, DomUtils, Marionette) ->
 
   # Provide a global location to place configuration settings and module
   # creation.
@@ -29,6 +30,8 @@ define [
     content:
       selector:"#main-content"
       regionType: StackRegion
+
+  DomUtils.sizeToFitVertical $('#main-content'), $('body')
 
   Marionette.Renderer.render = (template, data) -> JST[template] data
 
