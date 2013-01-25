@@ -92,22 +92,14 @@ body {
   height: 100%;
   .tabs-header {
     ul {
-      overflow: hidden;
-      margin: 10px;
-      border-bottom: 1px solid #999;
-      li {
-        &.active {
-          background-color: #ccc;
-          color: #333;
-        }
-        list-style-type: none;
-        float: left;
-        background-color: #666;
-        color: #fff;
-        padding: 2px 8px;
-        margin-right: 5px;
-      }
+      margin-bottom: 0;
     }
+    .nav-tabs li:first-child {
+      margin-left: 10px;
+    }
+  }
+  .tabs-body {
+    padding: 0 10px;
   }
 }
 
