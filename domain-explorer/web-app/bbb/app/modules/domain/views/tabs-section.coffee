@@ -1,7 +1,8 @@
 define [
   'backbone.marionette'
   'modules/util/dom-utils'
-], (Marionette, DomUtils) ->
+  'modules/util/radio-view'
+], (Marionette, DomUtils, RadioView) ->
   Marionette.Layout.extend
     template: 'domain/tabs-section'
 
@@ -18,8 +19,11 @@ define [
 
     initialize: (options) ->
       @listenTo @tabsBodyRegion, 'show', => @resize()
+      @tabsBodyView = new RadioView
+        className: 'full-height'
 
     onShow: ->
+      @tabsBodyRegion.show @tabsBodyView
       @resize()
 
     resize: ->
@@ -30,26 +34,38 @@ define [
       @$('.tabs-header li').removeClass 'active'
       $li = $(event.currentTarget).closest 'li'
       $li.addClass 'active'
-      # TODO change tab body
+      @tabsBodyView.show $li.data 'view'
 
     onNewClick: (event) ->
       event.preventDefault()
-      $lis = @$('.tabs-header li')
+      @trigger 'new'
+
+    addView: (title, view) ->
+      @resize()
+      @addTab title
+      @$('.tabs-header li.active').data 'view', view
+      @tabsBodyView.add view
+
+    addTab: (title) ->
+      $lis = @$('.tabs-header li:not(.new)')
       $lis.removeClass 'active'
-      numberOfTabs = $lis.length
       html = """
-         <li class="active">
-         <a href="#">
-         Home
-         <i class="icon-remove"></i>
-         </a>
-         </li>
-       """
-      $(html).insertAfter($($lis[numberOfTabs - 2]))
-      # TODO change tab body
+             <li class="active">
+             <a href="#">
+      #{title}
+             <i class="icon-remove"></i>
+             </a>
+             </li>
+             """
+      $(html).insertBefore(@$('.tabs-header li.new'))
 
     onDeleteClick: (event) ->
       event.preventDefault()
+      event.stopPropagation()
       $li = $(event.currentTarget).closest 'li'
+      @tabsBodyView.remove $li.data 'view'
       $li.remove()
-      # TODO change tab body
+
+      $lastLi = @$('.tabs-header li:not(.new)').last()
+      $lastLi.addClass 'active'
+      @tabsBodyView.show $lastLi.data 'view'

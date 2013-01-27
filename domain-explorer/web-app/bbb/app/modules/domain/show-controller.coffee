@@ -4,51 +4,56 @@ define [
   './views/search'
   './views/show'
   './views/show-section'
-  './views/tabs-section'
-], (Marionette, BreadcrumbCollection, SearchView, ShowView, ShowSectionView, TabsSectionView) ->
+  './tabs-controller'
+], (Marionette, BreadcrumbCollection, SearchView, ShowView, ShowSectionView, TabsController) ->
   Marionette.Controller.extend
     initialize: (options) ->
       @region = options.region
 
-      tabsSectionView = new TabsSectionView
-      @region.show tabsSectionView
+      @tabsController = new TabsController
+        region: options.region
 
-      @searchView = new SearchView
+      @listenTo @tabsController, 'tab:new', =>
+        @addNewTab 'Untitled'
 
-      @listenTo @searchView, 'row:click', (model, clazz) =>
+      @addNewTab 'Untitled'
+
+    addNewTab: (title) ->
+      searchView = new SearchView
+      @listenTo searchView, 'row:click', (model, clazz) =>
         @show model, clazz
 
-      tabsSectionView.tabsBodyRegion.show @searchView
+      @tabsController.addView title, searchView
 
     show: (domainModel, clazz) ->
-      @breadcrumbs = new BreadcrumbCollection
-      @breadcrumbs.add [
+      breadcrumbs = new BreadcrumbCollection
+      breadcrumbs.add [
         { label: 'Results' }
       ]
-      @showSectionView = new ShowSectionView
-        breadcrumbCollection: @breadcrumbs
+      showSectionView = new ShowSectionView
+        breadcrumbCollection: breadcrumbs
         domainModel: domainModel
         clazz: clazz
 
-      @listenTo @showSectionView, 'breadcrumb:back', => @region.pop()
+      @listenTo showSectionView, 'breadcrumb:back', => @region.pop()
 
-      @listenTo @showSectionView, 'breadcrumb:select', (index) =>
-        @showSectionView.showRegion.showIndex index
-        @breadcrumbs.pop() while @breadcrumbs.length > index + 2
+      @listenTo showSectionView, 'breadcrumb:select', (index) =>
+        showSectionView.showRegion.showIndex index
+        breadcrumbs.pop() while breadcrumbs.length > index + 2
 
-      @region.push @showSectionView
+      @region.push showSectionView
 
-      @pushNewShowView domainModel, clazz, "#{clazz.name} : #{domainModel.id}"
+      @pushNewShowView domainModel, clazz, "#{clazz.name} : #{domainModel.id}", breadcrumbs, showSectionView.showRegion
 
-    pushNewShowView: (model, clazz, label) ->
-      @breadcrumbs.add
+    pushNewShowView: (model, clazz, label, breadcrumbs, region) ->
+      breadcrumbs.add
         label: label
 
       showView = new ShowView
         model: model
         clazz: clazz
 
-      @showSectionView.showRegion.push showView
+      region.push showView
 
       @listenTo showView, 'select:propertyOne', @onSelectPropertyOne, @
 
