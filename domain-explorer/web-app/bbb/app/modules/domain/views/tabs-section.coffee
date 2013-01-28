@@ -8,9 +8,11 @@ define [
 
     className: 'view-tabs-section'
 
+    triggers:
+      'click .tabs-header a.new': 'new'
+
     events:
       'click .tabs-header a:not(.new)': 'onTabClick'
-      'click .tabs-header a.new': 'onNewClick'
       'click i.icon-remove': 'onDeleteClick'
 
     regions:
@@ -36,11 +38,8 @@ define [
       $li.addClass 'active'
       @tabsBodyView.show $li.data 'view'
 
-    onNewClick: (event) ->
-      event.preventDefault()
-      @trigger 'new'
-
     addView: (title, view) ->
+      console.log view
       @resize()
       @addTab title
       @$('.tabs-header li.active').data 'view', view

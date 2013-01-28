@@ -16,3 +16,4 @@ define [
       @views.push view
       view.render()
       @$el.append view.$el
+      Marionette.triggerMethod.call view, 'show'

@@ -21,3 +21,6 @@ define [
 
     remove: (view) ->
       @views = _.without @views, view
+
+    onClose: ->
+      _.invoke @views, 'close'
