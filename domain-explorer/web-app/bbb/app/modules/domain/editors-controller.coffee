@@ -4,9 +4,8 @@ define [
   './views/show'
   './views/show-section'
   './tabs-controller'
-  './show-controller'
   './search-controller'
-], (Marionette, SearchView, ShowView, ShowSectionView, TabsController, ShowController, SearchController) ->
+], (Marionette, SearchView, ShowView, ShowSectionView, TabsController, SearchController) ->
   Marionette.Controller.extend
     initialize: (options) ->
       @region = options.region

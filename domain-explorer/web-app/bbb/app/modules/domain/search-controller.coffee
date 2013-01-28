@@ -4,9 +4,8 @@ define [
   './views/search'
   './views/show'
   './views/show-section'
-  'modules/util/radio-view'
   'modules/util/stack-view'
-], (Marionette, BreadcrumbCollection, SearchView, ShowView, ShowSectionView, RadioView, StackView) ->
+], (Marionette, BreadcrumbCollection, SearchView, ShowView, ShowSectionView, StackView) ->
   Marionette.Controller.extend
     initialize: (options) ->
       @region = options.region
