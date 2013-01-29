@@ -1,3 +1,4 @@
+import com.coderberry.faker.FakerService
 import embedded.Embedded
 
 Closure rand(List list) {
@@ -5,18 +6,23 @@ Closure rand(List list) {
     return { -> list[random.nextInt(list.size())] }
 }
 
+def fakerService = new FakerService()
+
 testDataConfig {
     sampleData {
         'bookstore.Address' {
-            List address1List = ['123 Fake St', '846 1st Ave', '55531 Alberta Place']
-            address1 = rand(address1List)
+            address1 = {-> fakerService.streetAddress() }
+            emailAddress = {-> fakerService.email() }
+        }
+        'bookstore.Book' {
+            published = {-> fakerService.pastDate() }
         }
         'config.Article' {
             def i = 1
-            name = {-> "name${i++}"}
+            name = {-> fakerService.wordCapital() }
         }
         'config.Hotel' {
-            name = "Super 8"
+            name = 'Super 8'
         }
         'embedded.Embedding' {
             inner = new Embedded(someValue: 'test')

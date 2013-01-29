@@ -20,7 +20,6 @@ define [
 
     addNewTab: (title) ->
       searchController = new SearchController
-        region: @region
 
       searchView = searchController.view
       @tabsController.addView title, searchView

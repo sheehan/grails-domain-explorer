@@ -8,12 +8,22 @@ import org.codehaus.groovy.grails.commons.GrailsDomainClass
 class BootStrap {
 
     def grailsApplication
+    def fakerService
 
     def init = { servletContext ->
+
         if (Environment.current == Environment.DEVELOPMENT) {
             grailsApplication.domainClasses.each { GrailsDomainClass domainClass ->
                 log.debug "building: $domainClass.clazz"
-                5.times { domainClass.clazz.build() }
+                switch (domainClass.clazz) {
+                    case Address:
+
+                        break
+                    default:
+                        5.times {
+                            domainClass.clazz.build()
+                        }
+                }
             }
         }
     }

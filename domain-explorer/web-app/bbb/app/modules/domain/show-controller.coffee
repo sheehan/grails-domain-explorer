@@ -4,56 +4,41 @@ define [
   './views/search'
   './views/show'
   './views/show-section'
-  './tabs-controller'
-], (Marionette, BreadcrumbCollection, SearchView, ShowView, ShowSectionView, TabsController) ->
+], (Marionette, BreadcrumbCollection, SearchView, ShowView, ShowSectionView) ->
   Marionette.Controller.extend
     initialize: (options) ->
-      @region = options.region
+      domainModel = options.domainModel
+      clazz = options.clazz
 
-      @tabsController = new TabsController
-        region: options.region
-
-      @listenTo @tabsController, 'tab:new', =>
-        @addNewTab 'Untitled'
-
-      @addNewTab 'Untitled'
-
-    addNewTab: (title) ->
-      searchView = new SearchView
-      @listenTo searchView, 'row:click', (model, clazz) =>
-        @show model, clazz
-
-      @tabsController.addView title, searchView
-
-    show: (domainModel, clazz) ->
-      breadcrumbs = new BreadcrumbCollection
-      breadcrumbs.add [
+      @breadcrumbs = new BreadcrumbCollection
+      @breadcrumbs.add [
         { label: 'Results' }
       ]
       showSectionView = new ShowSectionView
-        breadcrumbCollection: breadcrumbs
+        breadcrumbCollection: @breadcrumbs
         domainModel: domainModel
         clazz: clazz
+
+      @view = showSectionView
+      @region = showSectionView.showRegion
 
       @listenTo showSectionView, 'breadcrumb:back', => @region.pop()
 
       @listenTo showSectionView, 'breadcrumb:select', (index) =>
         showSectionView.showRegion.showIndex index
-        breadcrumbs.pop() while breadcrumbs.length > index + 2
+        @breadcrumbs.pop() while @breadcrumbs.length > index + 2
 
-      @region.push showSectionView
+      @pushNewShowView domainModel, clazz, "#{clazz.name} : #{domainModel.id}"
 
-      @pushNewShowView domainModel, clazz, "#{clazz.name} : #{domainModel.id}", breadcrumbs, showSectionView.showRegion
-
-    pushNewShowView: (model, clazz, label, breadcrumbs, region) ->
-      breadcrumbs.add
+    pushNewShowView: (model, clazz, label) ->
+      @breadcrumbs.add
         label: label
 
       showView = new ShowView
         model: model
         clazz: clazz
 
-      region.push showView
+      @view.push showView
 
       @listenTo showView, 'select:propertyOne', @onSelectPropertyOne, @
 

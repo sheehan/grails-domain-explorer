@@ -3,16 +3,15 @@ define [
   'backbone.marionette'
   "../../util/stackregion"
   './breadcrumbs'
-], (app, Marionette, StackRegion, BreadcrumbsView) ->
+  'modules/util/stack-view'
+], (app, Marionette, StackRegion, BreadcrumbsView, StackView) ->
 
   Marionette.Layout.extend
     template: 'domain/view-section'
 
     regions:
       'breadcrumbsRegion':'.breadcrumbs-section'
-      'showRegion':
-        selector: ".show-section"
-        regionType: StackRegion
+      'showRegion': ".show-section"
 
     initialize: (options) ->
       breadcrumbCollection = options.breadcrumbCollection
@@ -23,6 +22,15 @@ define [
       @listenTo @breadcrumbsView, 'back', => @trigger 'breadcrumb:back'
       @listenTo @breadcrumbsView, 'select', (index) => @trigger 'breadcrumb:select', index
 
+      @stackView = new StackView
+        className: 'full-height'
+
+    onRender: ->
+      @showRegion.show @stackView
 
     onShow: ->
       @breadcrumbsRegion.show @breadcrumbsView
+
+    push: (view) ->
+      console.log 'yo'
+      @stackView.push view
