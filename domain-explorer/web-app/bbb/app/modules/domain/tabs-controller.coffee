@@ -6,7 +6,6 @@ define [
   Marionette.Controller.extend
 
     initialize: (options) ->
-      @views = []
       @tabsSectionView = new TabsSectionView
 
       @region = options.region
@@ -15,15 +14,7 @@ define [
         @trigger 'tab:new'
 
     addView: (title, view) ->
-      _.each @views, (view) -> view.$el.hide()
-      @views.push view
       @tabsSectionView.addView title, view
 
     removeView: (view) ->
       'TODO'
-
-
-
-
-
-

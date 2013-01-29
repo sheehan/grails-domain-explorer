@@ -32,5 +32,4 @@ define [
       @breadcrumbsRegion.show @breadcrumbsView
 
     push: (view) ->
-      console.log 'yo'
       @stackView.push view

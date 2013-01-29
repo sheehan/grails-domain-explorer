@@ -1,11 +1,9 @@
 define [
   'backbone.marionette'
   './views/search'
-  './views/show'
-  './views/show-section'
   './tabs-controller'
   './search-controller'
-], (Marionette, SearchView, ShowView, ShowSectionView, TabsController, SearchController) ->
+], (Marionette, SearchView, TabsController, SearchController) ->
   Marionette.Controller.extend
     initialize: (options) ->
       @region = options.region
