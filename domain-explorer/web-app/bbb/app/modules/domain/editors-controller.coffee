@@ -1,18 +1,19 @@
 define [
   'backbone.marionette'
   './views/search'
-  './tabs-controller'
   './search-controller'
-], (Marionette, SearchView, TabsController, SearchController) ->
+  './views/tabs-section'
+], (Marionette, SearchView, SearchController, TabsSectionView) ->
   Marionette.Controller.extend
     initialize: (options) ->
       @region = options.region
 
-      @tabsController = new TabsController
-        region: options.region
+      @tabsSectionView = new TabsSectionView
 
-      @listenTo @tabsController, 'tab:new', =>
+      @listenTo @tabsSectionView, 'new', =>
         @addNewTab 'Untitled'
+
+      @region.show @tabsSectionView
 
       @addNewTab 'Untitled'
 
@@ -20,4 +21,6 @@ define [
       searchController = new SearchController
 
       searchView = searchController.view
-      @tabsController.addView title, searchView
+      @tabsSectionView.addView title, searchView
+
+    onClose: ->

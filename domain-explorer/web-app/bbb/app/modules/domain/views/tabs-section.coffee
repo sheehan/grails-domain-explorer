@@ -22,7 +22,6 @@ define [
     initialize: (options) ->
       @listenTo @tabsBodyRegion, 'show', => @resize()
       @tabsBodyView = new RadioView
-        className: 'full-height'
 
     onShow: ->
       @tabsBodyRegion.show @tabsBodyView
@@ -39,7 +38,6 @@ define [
       @tabsBodyView.show $li.data 'view'
 
     addView: (title, view) ->
-      console.log view
       @resize()
       @addTab title
       @$('.tabs-header li.active').data 'view', view

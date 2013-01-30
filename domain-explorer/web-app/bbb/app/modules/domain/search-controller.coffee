@@ -4,10 +4,10 @@ define [
   'modules/util/stack-view'
   './show-controller'
 ], (Marionette, SearchView, StackView, ShowController) ->
+
   Marionette.Controller.extend
     initialize: (options) ->
       searchView = new SearchView
-        className: 'full-height'
 
       @view = new StackView
       @view.push searchView
@@ -17,3 +17,6 @@ define [
           domainModel: model
           clazz: clazz
         @view.push showController.view
+
+    onClose: ->
+      @view.close()

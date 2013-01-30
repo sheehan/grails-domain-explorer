@@ -21,3 +21,6 @@ define [
       view.render()
       @$el.append view.$el
       Marionette.triggerMethod.call view, 'show'
+
+    onClose: ->
+      _.invoke @views, 'close'

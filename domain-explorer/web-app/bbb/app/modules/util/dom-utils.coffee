@@ -3,12 +3,19 @@ define [
   'jquery'
 ], (_, $) ->
 
-  sizeToFitVertical: (el, container) ->
+  sizeToFitVertical = (el, container) ->
     $target = $(el)
+
     if not container
       container = _.find $target.parents(), (el) -> $(el).css('position') is 'absolute'
+
     if container
       $container = $ container
+
+      for ancestor in $target.parentsUntil(container).get().reverse()
+        sizeToFitVertical ancestor, container
+
+
       childrenHeight = _.reduce(
         $container.children()
         (memo, el) -> memo + $(el).outerHeight true
@@ -17,3 +24,5 @@ define [
 
       difference = $container.height() - childrenHeight
       $target.height $target.height() + difference
+
+  sizeToFitVertical: sizeToFitVertical

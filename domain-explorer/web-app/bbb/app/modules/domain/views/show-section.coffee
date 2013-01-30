@@ -23,7 +23,6 @@ define [
       @listenTo @breadcrumbsView, 'select', (index) => @trigger 'breadcrumb:select', index
 
       @stackView = new StackView
-        className: 'full-height'
 
     onRender: ->
       @showRegion.show @stackView
