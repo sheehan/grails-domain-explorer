@@ -65,6 +65,7 @@ define [
       @dataTable.fnDestroy() if @dataTable
 
     resize: ->
+      console.log 'begin'
       DomUtils.sizeToFitVertical @$('.dataTables_scrollBody')
 
 

@@ -1,3 +1,13 @@
-define ["app"], (app) ->
-  Router = Backbone.Router.extend({})
-  Router
+define [
+  'app'
+  'modules/domain/editors-controller'
+], (app, EditorsController) ->
+
+  Backbone.Router.extend
+
+    routes:
+      '': 'index'
+
+    index: ->
+      new EditorsController
+        region: app.content

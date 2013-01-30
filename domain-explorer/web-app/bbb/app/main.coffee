@@ -1,20 +1,19 @@
 require [
   "app"
   "router"
-  "modules/domain/module"
+  "backbone"
   "backbone.stickit"
   "mousetrap"
   "jst"
-], (app, Router, Domain) ->
+], (app, Router, Backbone) ->
 
   # Define your master router on the application namespace and trigger all
   # navigation from this instance.
   app.router = new Router()
-  new Domain.Router()
   app.bind "initialize:before", (options) ->
 
   app.bind "initialize:after", (options) ->
-    Backbone.history and Backbone.history.start(
+    Backbone.history?.start(
       pushState: true
       root: "/bookstore/domain/bbb/"
     )

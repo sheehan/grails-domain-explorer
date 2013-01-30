@@ -1,9 +1,8 @@
 define [
   "handlebars",
-  "./modules/util/stackregion"
   "./modules/util/dom-utils"
   "backbone.marionette"
-], (Handlebars, StackRegion, DomUtils, Marionette) ->
+], (Handlebars, DomUtils, Marionette) ->
 
   # Provide a global location to place configuration settings and module
   # creation.
@@ -27,9 +26,7 @@ define [
       url
   )
   app.addRegions
-    content:
-      selector:"#main-content"
-      regionType: StackRegion
+    content: "#main-content"
 
   DomUtils.sizeToFitVertical $('#main-content'), $('body')
 
