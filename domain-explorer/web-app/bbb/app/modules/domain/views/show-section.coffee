@@ -6,7 +6,7 @@ define [
 ], (app, Marionette, BreadcrumbsView, StackView) ->
 
   Marionette.Layout.extend
-    template: 'domain/view-section'
+    template: 'domain/show-section'
 
     regions:
       'breadcrumbsRegion':'.breadcrumbs-section'
