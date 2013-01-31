@@ -85,8 +85,10 @@ body {
     }
   }
   .dataTables_scrollBody {
+    border-bottom: 1px solid #dddddd;
     table {
       border-top-width: 0;
+      border-bottom-width: 0;
       tr {
         cursor: pointer;
       }
@@ -99,19 +101,14 @@ body {
 
 .view-tabs-section {
   height: 100%;
-  .tabs-header {
-    ul.nav-tabs {
-      margin-bottom: 0;
-      & > li:not(.active) > a {
-        border: 1px solid #ddd;
-      }
-      & > li:first-child {
-        margin-left: 10px;
-      }
+  ul.nav-tabs {
+    margin-bottom: 0;
+    & > li:not(.active) > a {
+      border: 1px solid #ddd;
     }
-  }
-  .tabs-body {
-//    padding: 0 10px;
+    & > li:first-child {
+      margin-left: 10px;
+    }
   }
 }
 

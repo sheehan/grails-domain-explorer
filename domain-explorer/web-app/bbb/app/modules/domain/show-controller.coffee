@@ -14,19 +14,12 @@ define [
       @breadcrumbs.add [
         { label: 'Results' }
       ]
-      showSectionView = new ShowSectionView
+      @view = new ShowSectionView
         breadcrumbCollection: @breadcrumbs
         domainModel: domainModel
         clazz: clazz
 
-      @view = showSectionView
-      @region = showSectionView.showRegion
-
-      @listenTo showSectionView, 'breadcrumb:back', => @region.pop()
-
-      @listenTo showSectionView, 'breadcrumb:select', (index) =>
-        showSectionView.showRegion.showIndex index
-        @breadcrumbs.pop() while @breadcrumbs.length > index + 2
+      @listenTo @view, 'back', => @trigger 'back'
 
       @pushNewShowView domainModel, clazz, "#{clazz.name} : #{domainModel.id}"
 
@@ -46,3 +39,7 @@ define [
     onSelectPropertyOne: (model, property) ->
       model.fetchPropertyOne(property).done (instance) =>
         @pushNewShowView instance, instance.clazz, property
+
+
+    onClose: ->
+      @view.close()

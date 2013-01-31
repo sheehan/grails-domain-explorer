@@ -1,19 +1,36 @@
 define [
+  'backbone'
   'backbone.marionette'
   './views/search'
   './search-controller'
-  './views/tabs-section'
-], (Marionette, SearchView, SearchController, TabsSectionView) ->
-  Marionette.Controller.extend
+  './views/tabs'
+  'modules/util/radio-view'
+], (Backbone, Marionette, SearchView, SearchController, TabsView, RadioView) ->
+
+  Marionette.Layout.extend
+    template: 'domain/editors'
+
+    regions:
+      'tabsRegion': '.tabs'
+      'bodyRegion': '.body'
+
     initialize: (options) ->
-      @region = options.region
+      @tabsCollection = new Backbone.Collection
+      @tabsView = new TabsView
+        collection: @tabsCollection
 
-      @tabsSectionView = new TabsSectionView
+      @bodyView = new RadioView
 
-      @listenTo @tabsSectionView, 'new', =>
+      @listenTo @tabsView, 'new', =>
         @addNewTab 'Untitled'
 
-      @region.show @tabsSectionView
+      @listenTo @tabsView, 'select', (tab) =>
+        view = tab.view
+        @bodyView.show view
+
+    onShow: ->
+      @tabsRegion.show @tabsView
+      @bodyRegion.show @bodyView
 
       @addNewTab 'Untitled'
 
@@ -21,6 +38,16 @@ define [
       searchController = new SearchController
 
       searchView = searchController.view
-      @tabsSectionView.addView title, searchView
+      @bodyView.add searchView
+
+      @tabsCollection.each (tab) ->
+        tab.set selected: false
+
+      tab = new Backbone.Model
+        title: title
+        selected: true
+      tab.view = searchView
+
+      @tabsCollection.add tab
 
     onClose: ->

@@ -6,7 +6,7 @@ define [
   setHeight = ($target) ->
     $container = $target.parent()
     childrenHeight = _.reduce(
-      $container.children()
+      $container.children(':visible')
       (memo, el) -> memo + $(el).outerHeight true
       0
     )
@@ -20,9 +20,7 @@ define [
 
     if not container
       container = _.find $target.parents(), (el) ->
-        $(el).css('position') is 'absolute' or $(el)[0].style.height
-      console.log el
-      console.log container
+        $(el).css('position') is 'absolute' #or $(el)[0].style.height
 
     if not container
       container = $('body')[0]

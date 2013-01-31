@@ -65,9 +65,7 @@ define [
       @dataTable.fnDestroy() if @dataTable
 
     resize: ->
-      console.log 'begin'
       DomUtils.sizeToFitVertical @$('.dataTables_scrollBody')
-
 
     renderCell: (property, value) ->
       if property.oneToMany or property.manyToMany

@@ -1,12 +1,13 @@
 define [
   "handlebars",
   "./modules/util/dom-utils"
+  "backbone"
   "backbone.marionette"
-], (Handlebars, DomUtils, Marionette) ->
+], (Handlebars, DomUtils, Backbone, Marionette) ->
 
   # Provide a global location to place configuration settings and module
   # creation.
-  app = new Backbone.Marionette.Application(
+  app = new Backbone.Marionette.Application
 
     # The root path to run the application.
     root: "/bookstore/plugins/domain-explorer-0.1/bbb/" # TODO,
@@ -24,13 +25,20 @@ define [
         queryString = jQuery.param(params, true)
         url += "?" + queryString  if queryString.length > 0
       url
-  )
+
   app.addRegions
     content: "#main-content"
 
   DomUtils.sizeToFitVertical $('#main-content'), $('body')
 
   Marionette.Renderer.render = (template, data) -> JST[template] data
+
+  _ensureElementOld = Backbone.View::_ensureElement
+
+  Backbone.View::_ensureElement = ->
+    _ensureElementOld.apply @, arguments
+    @$el.data 'view', @
+    @$el.attr 'data-view-cid', @cid
 
   # TODO hack!!
   Marionette.ItemView::render = ->

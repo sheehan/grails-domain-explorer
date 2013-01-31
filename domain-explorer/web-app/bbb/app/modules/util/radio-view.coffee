@@ -19,7 +19,12 @@ define [
       @$el.children().hide()
       view.$el.show()
 
+    showByCid: (cid) ->
+      view = _.find @views, (v) -> v.cid is cid
+      @show view if view
+
     remove: (view) ->
+      view.close()
       @views = _.without @views, view
 
     onClose: ->

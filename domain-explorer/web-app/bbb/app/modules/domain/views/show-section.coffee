@@ -1,10 +1,9 @@
 define [
   'app'
   'backbone.marionette'
-  "../../util/stackregion"
   './breadcrumbs'
   'modules/util/stack-view'
-], (app, Marionette, StackRegion, BreadcrumbsView, StackView) ->
+], (app, Marionette, BreadcrumbsView, StackView) ->
 
   Marionette.Layout.extend
     template: 'domain/view-section'
@@ -14,20 +13,20 @@ define [
       'showRegion': ".show-section"
 
     initialize: (options) ->
-      breadcrumbCollection = options.breadcrumbCollection
+      @breadcrumbs = options.breadcrumbCollection
 
       @breadcrumbsView = new BreadcrumbsView
-        collection: breadcrumbCollection
+        collection: @breadcrumbs
 
-      @listenTo @breadcrumbsView, 'back', => @trigger 'breadcrumb:back'
-      @listenTo @breadcrumbsView, 'select', (index) => @trigger 'breadcrumb:select', index
+      @listenTo @breadcrumbsView, 'back', => @trigger 'back'
+      @listenTo @breadcrumbsView, 'select', (index) =>
+        @breadcrumbs.pop() while @breadcrumbs.length > index + 2
+        @stackView.pop() while @stackView.views.length > index + 1
 
       @stackView = new StackView
 
-    onRender: ->
-      @showRegion.show @stackView
-
     onShow: ->
+      @showRegion.show @stackView
       @breadcrumbsRegion.show @breadcrumbsView
 
     push: (view) ->

@@ -9,5 +9,5 @@ define [
       '': 'index'
 
     index: ->
-      new EditorsController
-        region: app.content
+      view = new EditorsController
+      app.content.show view

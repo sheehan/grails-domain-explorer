@@ -17,6 +17,7 @@ define [
           domainModel: model
           clazz: clazz
         @view.push showController.view
+        @listenTo showController, 'back', => @view.pop()
 
     onClose: ->
       @view.close()
