@@ -12,13 +12,15 @@ define [
       'breadcrumbsRegion':'.breadcrumbs-section'
       'showRegion': ".show-section"
 
+    triggers:
+      'click .back': 'back'
+
     initialize: (options) ->
       @breadcrumbs = options.breadcrumbCollection
 
       @breadcrumbsView = new BreadcrumbsView
         collection: @breadcrumbs
 
-      @listenTo @breadcrumbsView, 'back', => @trigger 'back'
       @listenTo @breadcrumbsView, 'select', (index) =>
         @breadcrumbs.pop() while @breadcrumbs.length > index + 2
         @stackView.pop() while @stackView.views.length > index + 1

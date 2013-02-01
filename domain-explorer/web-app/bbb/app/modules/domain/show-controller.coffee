@@ -11,9 +11,6 @@ define [
       clazz = options.clazz
 
       @breadcrumbs = new BreadcrumbCollection
-      @breadcrumbs.add [
-        { label: 'Results' }
-      ]
       @view = new ShowSectionView
         breadcrumbCollection: @breadcrumbs
         domainModel: domainModel
@@ -34,11 +31,15 @@ define [
       @view.push showView
 
       @listenTo showView, 'select:propertyOne', @onSelectPropertyOne, @
+      @listenTo showView, 'select:propertyMany', @onSelectPropertyMany, @
 
 
     onSelectPropertyOne: (model, property) ->
       model.fetchPropertyOne(property).done (instance) =>
         @pushNewShowView instance, instance.clazz, property
+
+    onSelectPropertyMany: (model, property) ->
+      console.log 'onSelectPropertyMany'
 
 
     onClose: ->

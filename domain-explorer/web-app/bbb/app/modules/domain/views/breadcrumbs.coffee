@@ -15,10 +15,7 @@ define [
       $li = $(event.currentTarget).closest('li')
       index = @$('li').index($li)
 
-      if index is 0
-        @trigger 'back'
-      else
-        @trigger 'select', index - 1
+      @trigger 'select', index
 
 
     renderHtml: ->
