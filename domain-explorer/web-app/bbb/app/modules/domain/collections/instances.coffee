@@ -21,3 +21,14 @@ define [
         @reset resp.value
 
       dfd
+
+    fetchPropertyMany: (model, propertyName) ->
+      url = app.createLink('domain', 'findPropertyMany')
+      dfd = $.post url,
+        className: model.get 'className'
+        id: model.id
+        property: propertyName
+
+      dfd.then (resp) =>
+        @reset resp.values
+        @clazz = resp.clazz

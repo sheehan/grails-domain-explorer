@@ -53,6 +53,21 @@ class DomainController {
         render json as JSON
     }
 
+    def findPropertyMany(String className, Long id, String property) {
+        int max = 50
+        int offset = 0
+        GrailsDomainClass sourceDomainClass = grailsApplication.getDomainClass(className)
+        GrailsDomainClass propertyDomainClass = sourceDomainClass.properties.find { it.name == property }.referencedDomainClass
+        Class clazz = sourceDomainClass.clazz
+
+        List values = clazz.executeQuery("select a.${property} from ${clazz.name} a where a.id = :id order by a.id", [id: id],  [max: max, offset: offset])
+        Map json = [
+            clazz: domainClassToMap(propertyDomainClass),
+            values: values.collect { domainInstanceToMap it, propertyDomainClass }
+        ]
+        render json as JSON
+    }
+
     def rest = {
         switch (request.method) {
             case "POST":
@@ -298,7 +313,7 @@ class DomainController {
         ]
     }
 
-    private String determinePropertyView(GrailsDomainClassProperty property) {
+    private static String determinePropertyView(GrailsDomainClassProperty property) {
         if (property.type == Boolean || property.type == boolean) {
             return 'boolean'
         } else if (property.type && Number.isAssignableFrom(property.type) || (property.type?.isPrimitive() && property.type != boolean)) {
@@ -331,7 +346,7 @@ class DomainController {
         return 'string'
     }
 
-    private Map domainInstanceToMap(entity, GrailsDomainClass domainClass) {
+    private static Map domainInstanceToMap(entity, GrailsDomainClass domainClass) {
         Map result = [
             className: domainClass.fullName
         ]
@@ -359,7 +374,7 @@ class DomainController {
         result
     }
 
-    private List getProperties(GrailsDomainClass domainClass) {
+    private static List<GrailsDomainClassProperty> getProperties(GrailsDomainClass domainClass) {
         List props = []
         if (domainClass.identifier) {
             props << domainClass.identifier

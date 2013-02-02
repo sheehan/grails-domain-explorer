@@ -22,7 +22,7 @@ define [
         collection: @breadcrumbs
 
       @listenTo @breadcrumbsView, 'select', (index) =>
-        @breadcrumbs.pop() while @breadcrumbs.length > index + 2
+        @breadcrumbs.pop() while @breadcrumbs.length > index + 1
         @stackView.pop() while @stackView.views.length > index + 1
 
       @stackView = new StackView
