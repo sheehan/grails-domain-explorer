@@ -21,9 +21,7 @@ define [
         @initTable()
         @dataTable.fnAddData @collection.toJSON()
 
-        start = @collection.offset + 1
-        end = start + @collection.size() - 1
-        @$('.showing').html "Showing #{start} - #{end}"
+        @$('.showing').html "Showing #{@collection.getStart()} - #{@collection.getEnd()}"
       else
         @$('table').html ''
         @$('.showing').html ''

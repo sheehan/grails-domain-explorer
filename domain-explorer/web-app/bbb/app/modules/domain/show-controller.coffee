@@ -52,6 +52,12 @@ define [
         collection: collection
         clazz: clazz
 
+      @listenTo resultsView, 'next', =>
+        collection.next()
+
+      @listenTo resultsView, 'prev', =>
+        collection.prev()
+
       @view.push resultsView
       resultsView.showItems()
 

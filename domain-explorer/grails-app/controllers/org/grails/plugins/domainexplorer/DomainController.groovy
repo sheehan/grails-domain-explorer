@@ -53,21 +53,6 @@ class DomainController {
         render json as JSON
     }
 
-    def findPropertyMany(String className, Long id, String property) {
-        int max = 50
-        int offset = 0
-        GrailsDomainClass sourceDomainClass = grailsApplication.getDomainClass(className)
-        GrailsDomainClass propertyDomainClass = sourceDomainClass.properties.find { it.name == property }.referencedDomainClass
-        Class clazz = sourceDomainClass.clazz
-
-        List values = clazz.executeQuery("select a.${property} from ${clazz.name} a where a.id = :id order by a.id", [id: id],  [max: max, offset: offset])
-        Map json = [
-            clazz: domainClassToMap(propertyDomainClass),
-            values: values.collect { domainInstanceToMap it, propertyDomainClass }
-        ]
-        render json as JSON
-    }
-
     def rest = {
         switch (request.method) {
             case "POST":

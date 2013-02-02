@@ -21,10 +21,11 @@ define [
     initialize: (options) ->
       @queryModel = new QueryModel
       @instances = new InstanceCollection
-      Mousetrap.bind ['command+enter', 'ctrl+enter'], (event) => @execute()
 
       @queryView = new QueryView model: @queryModel
       @resultsView = new ResultsView collection: @instances
+
+      @listenTo app, 'execute', => @execute()
 
       @listenTo @queryView, 'execute', =>
         @execute()
@@ -55,7 +56,4 @@ define [
         center__paneSelector: '.results-container'
         resizable: true
       @resultsView.resize()
-
-    onClose: ->
-      Mousetrap.unbind ['command+enter', 'ctrl+enter']
 

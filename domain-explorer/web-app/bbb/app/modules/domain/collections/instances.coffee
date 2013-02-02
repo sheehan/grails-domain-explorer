@@ -6,29 +6,41 @@ define [
   Backbone.Collection.extend
     model: InstanceModel
 
-    search: (query, max, offset) ->
-      url = app.createLink('domain', 'executeQuery')
+    initialize: (options) ->
+      @max = 50
+      @offset = 0
+
+    search: (query, max = 50, offset = 0) ->
+      @offset = offset
+      @max = max
+      @query = query
+      @_search()
+
+    _search: ->
+      url = app.createLink 'domain', 'executeQuery'
       dfd = $.post url,
-        query: query
-        max: max
-        offset: offset
+        query: @query
+        max: @max
+        offset: @offset
 
       dfd.done (resp) =>
         @clazz = resp.clazz
-        @offset = offset
-        @max = max
-        @query = query
         @reset resp.value
 
-      dfd
-
     fetchPropertyMany: (model, propertyName) ->
-      url = app.createLink('domain', 'findPropertyMany')
-      dfd = $.post url,
-        className: model.get 'className'
-        id: model.id
-        property: propertyName
+      @query = "select a.#{propertyName} from #{model.get 'className'} a where a.id = #{model.id} order by a.id"
+      @_search()
 
-      dfd.then (resp) =>
-        @reset resp.values
-        @clazz = resp.clazz
+    next: ->
+      @offset = @offset + @max
+      @_search()
+
+    prev: ->
+      @offset = @offset - @max
+      @_search()
+
+    getStart: ->
+      @offset + 1
+
+    getEnd: ->
+      @offset + @size()

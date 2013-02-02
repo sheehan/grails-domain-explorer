@@ -3,7 +3,8 @@ define [
   "./modules/util/dom-utils"
   "backbone"
   "backbone.marionette"
-], (Handlebars, DomUtils, Backbone, Marionette) ->
+  "mousetrap"
+], (Handlebars, DomUtils, Backbone, Marionette, Mousetrap) ->
 
   # Provide a global location to place configuration settings and module
   # creation.
@@ -28,6 +29,28 @@ define [
 
   app.addRegions
     content: "#main-content"
+
+  # TODO move
+  do (Mousetrap) ->
+    _global_callbacks = {}
+    _original_stop_callback = Mousetrap.stopCallback
+    Mousetrap.stopCallback = (e, element, combo) ->
+      return false  if _global_callbacks[combo]
+      _original_stop_callback e, element, combo
+
+    Mousetrap.bindGlobal = (keys, callback, action) ->
+      Mousetrap.bind keys, callback, action
+      if keys instanceof Array
+        i = 0
+
+        while i < keys.length
+          _global_callbacks[keys[i]] = true
+          i++
+        return
+      _global_callbacks[keys] = true
+
+
+  Mousetrap.bindGlobal ['command+enter', 'ctrl+enter'], => app.trigger 'execute'
 
   DomUtils.sizeToFitVertical $('#main-content'), $('body')
 
