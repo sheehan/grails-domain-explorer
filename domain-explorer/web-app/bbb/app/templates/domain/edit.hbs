@@ -1,0 +1,25 @@
+<div class="toolbar-section">
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            <button class="btn save">
+                <i class="icon-ok"></i>
+                Save
+            </button>
+            <button class="btn cancel">
+                <i class="icon-remove"></i>
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+<div class="form-horizontal">
+    <div class="errors"></div>
+    <form class="form-horizontal">
+      {{#each this}}
+          <div class="control-group {{property.view}}" data-property-name="{{property.name}}"><label class="control-label">{{property.name}}:</label>
+
+              <div class="controls"></div>
+          </div>
+      {{/each}}
+    </form>
+</div>

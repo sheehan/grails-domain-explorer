@@ -4,7 +4,7 @@ define [
   '../../util/dom-utils'
   'dataTables'
 ], (Marionette, moment, DomUtils) ->
-  Marionette.Layout.extend
+  Marionette.ItemView.extend
     template: 'domain/results'
 
     className: 'view-results'
@@ -12,9 +12,9 @@ define [
     initialize: ->
       @listenTo @collection, "reset", @showItems
 
-    triggers:
-      'click .next': 'next'
-      'click .prev': 'prev'
+    events:
+      'click .next': 'onNext'
+      'click .prev': 'onPrev'
 
     showItems: ->
       if @collection.clazz
@@ -25,6 +25,14 @@ define [
       else
         @$('table').html ''
         @$('.showing').html ''
+
+    onNext: (event) ->
+      event.preventDefault()
+      @collection.next()
+
+    onPrev: (event) ->
+      event.preventDefault()
+      @collection.prev()
 
     initTable: ->
       clazz = @collection.clazz

@@ -37,6 +37,7 @@ define [
     events:
       'click .propertyMany a': 'onPropertyManyClick'
       'click .propertyOne a': 'onPropertyOneClick'
+      'click .toolbar-section .edit': 'onEditClick'
 
     initialize: (options) ->
       @clazz = options.clazz
@@ -56,3 +57,7 @@ define [
       event.preventDefault()
       propertyName = @$(event.currentTarget).data('propertyName')
       @trigger 'select:propertyOne', @model, propertyName
+
+    onEditClick: (event) ->
+      event.preventDefault()
+      @trigger 'edit', @model

@@ -6,7 +6,8 @@ define [
   './views/show'
   './views/results'
   './views/show-section'
-], (Marionette, BreadcrumbCollection, InstancesCollection, SearchView, ShowView, ResultsView, ShowSectionView) ->
+  './views/edit'
+], (Marionette, BreadcrumbCollection, InstancesCollection, SearchView, ShowView, ResultsView, ShowSectionView, EditView) ->
   Marionette.Controller.extend
     initialize: (options) ->
       domainModel = options.domainModel
@@ -31,6 +32,18 @@ define [
       instances.fetchPropertyMany(model, property).done =>
         @pushNewManyView instances, instances.clazz, property
 
+    onEdit: (model) ->
+      editView = new EditView
+        model: model
+        clazz: model.clazz
+
+      @listenTo editView, 'cancel', => @view.pop()
+      @listenTo editView, 'save', =>
+        data = editView.serialize()
+        model.updateWithData data
+
+      @view.push editView
+
     pushNewShowView: (model, clazz, label) ->
       @breadcrumbs.add
         label: label
@@ -43,6 +56,7 @@ define [
 
       @listenTo showView, 'select:propertyOne', @onSelectPropertyOne, @
       @listenTo showView, 'select:propertyMany', @onSelectPropertyMany, @
+      @listenTo showView, 'edit', @onEdit, @
 
     pushNewManyView: (collection, clazz, label) ->
       @breadcrumbs.add
@@ -51,12 +65,6 @@ define [
       resultsView = new ResultsView
         collection: collection
         clazz: clazz
-
-      @listenTo resultsView, 'next', =>
-        collection.next()
-
-      @listenTo resultsView, 'prev', =>
-        collection.prev()
 
       @view.push resultsView
       resultsView.showItems()

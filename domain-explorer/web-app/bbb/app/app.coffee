@@ -14,10 +14,11 @@ define [
     root: "/bookstore/plugins/domain-explorer-0.1/bbb/" # TODO,
     start: (options) ->
       @options = options
+      @baseUrl = @options.serverURL
       Backbone.Marionette.Application::start.apply this, arguments
 
     createLink: (controller, action, params) ->
-      url = @options.serverURL + "/" + controller
+      url = @baseUrl + "/" + controller
       url += "/" + action  if action
       if params isnt `undefined`
         if params.id
@@ -79,5 +80,16 @@ define [
   Marionette.ItemView::renderHtml = (data) ->
     template = @getTemplate()
     Marionette.Renderer.render(template, data)
+
+  Marionette.View::addSubview = (selector, view) ->
+    @listenTo @, 'render', =>
+      view.render()
+      @$(selector).append view.el
+
+    @listenTo @, 'close', -> view.close()
+    @listenTo @, 'show', -> Marionette.triggerMethod.call(view, 'show')
+
+    @subviews ?= []
+    @subviews.push view
 
   app

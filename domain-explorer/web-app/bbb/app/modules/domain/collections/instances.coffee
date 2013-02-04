@@ -5,14 +5,10 @@ define [
 ], (app, Backbone, InstanceModel) ->
   Backbone.Collection.extend
     model: InstanceModel
+    max: 50
+    offset: 0
 
-    initialize: (options) ->
-      @max = 50
-      @offset = 0
-
-    search: (query, max = 50, offset = 0) ->
-      @offset = offset
-      @max = max
+    search: (query) ->
       @query = query
       @_search()
 
@@ -25,7 +21,10 @@ define [
 
       dfd.done (resp) =>
         @clazz = resp.clazz
-        @reset resp.value
+        models = _.collect resp.value, (props) -> new InstanceModel(props)
+        model.clazz = @clazz for model in models
+
+        @reset models
 
     fetchPropertyMany: (model, propertyName) ->
       @query = "select a.#{propertyName} from #{model.get 'className'} a where a.id = #{model.id} order by a.id"

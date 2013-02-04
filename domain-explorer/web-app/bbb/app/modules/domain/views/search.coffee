@@ -9,14 +9,11 @@ define [
   '../collections/instances'
   'layout'
 ], (app, _, Backbone, Marionette, QueryView, ResultsView, QueryModel, InstanceCollection) ->
-  Marionette.Layout.extend
+
+  Marionette.ItemView.extend
     template: 'domain/search'
 
     className: 'view-search'
-
-    regions:
-      'queryRegion': '.query-container'
-      'resultsRegion': '.results-container'
 
     initialize: (options) ->
       @queryModel = new QueryModel
@@ -27,28 +24,19 @@ define [
 
       @listenTo app, 'execute', => @execute()
 
-      @listenTo @queryView, 'execute', =>
-        @execute()
-
-      @listenTo @resultsView, 'next', =>
-        @queryModel.nextPage()
-        @execute()
-
-      @listenTo @resultsView, 'prev', =>
-        @queryModel.prevPage()
-        @execute()
+      @listenTo @queryView, 'execute', => @execute()
 
       @listenTo @resultsView, 'row:click', (model) =>
         @trigger 'row:click', model, @instances.clazz
 
+      @addSubview '.query-container', @queryView
+      @addSubview '.results-container', @resultsView
+
     onShow: ->
-      @queryRegion.show @queryView
-      @resultsRegion.show @resultsView
       @resize()
 
-
     execute: ->
-      @instances.search @queryModel.get('query'), @queryModel.get('max'), @queryModel.get('offset')
+      @instances.search @queryModel.get('query')
 
     resize: ->
       @layout = @$el.layout

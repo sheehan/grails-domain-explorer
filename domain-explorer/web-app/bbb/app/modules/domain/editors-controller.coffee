@@ -7,12 +7,8 @@ define [
   'modules/util/radio-view'
 ], (Backbone, Marionette, SearchView, SearchController, TabsView, RadioView) ->
 
-  Marionette.Layout.extend
+  Marionette.ItemView.extend
     template: 'domain/editors'
-
-    regions:
-      'tabsRegion': '.tabs'
-      'bodyRegion': '.body'
 
     initialize: (options) ->
       @tabsCollection = new Backbone.Collection
@@ -21,20 +17,21 @@ define [
 
       @bodyView = new RadioView
 
-      @listenTo @tabsView, 'new', =>
-        @addNewTab 'Untitled'
+      @listenTo @tabsView, 'new', => @addNewTab()
 
       @listenTo @tabsView, 'select', (tab) =>
         view = tab.view
         @bodyView.show view
 
+      @addSubview '.tabs', @tabsView
+      @addSubview '.body', @bodyView
+
     onShow: ->
-      @tabsRegion.show @tabsView
-      @bodyRegion.show @bodyView
+      @addNewTab()
 
-      @addNewTab 'Untitled'
 
-    addNewTab: (title) ->
+    addNewTab: ->
+      title = 'Untitled' + (@tabsCollection.length + 1)
       searchController = new SearchController
 
       searchView = searchController.view

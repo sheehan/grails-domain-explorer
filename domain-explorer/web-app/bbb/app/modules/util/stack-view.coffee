@@ -23,4 +23,5 @@ define [
       Marionette.triggerMethod.call view, 'show'
 
     onClose: ->
+      console.log 'stack view close'
       _.invoke @views, 'close'

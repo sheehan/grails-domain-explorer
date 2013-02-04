@@ -100,6 +100,9 @@ class DomainController {
     }
 
     private update() {
+        println '****'
+        println params
+        println '****'
         def data = retrieveRecord()
         if (data.result.success) {
             try {

@@ -5,12 +5,8 @@ define [
   'modules/util/stack-view'
 ], (app, Marionette, BreadcrumbsView, StackView) ->
 
-  Marionette.Layout.extend
+  Marionette.ItemView.extend
     template: 'domain/show-section'
-
-    regions:
-      'breadcrumbsRegion':'.breadcrumbs-section'
-      'showRegion': ".show-section"
 
     triggers:
       'click .back': 'back'
@@ -27,9 +23,11 @@ define [
 
       @stackView = new StackView
 
-    onShow: ->
-      @showRegion.show @stackView
-      @breadcrumbsRegion.show @breadcrumbsView
+      @addSubview '.breadcrumbs-section', @breadcrumbsView
+      @addSubview '.show-section', @stackView
 
     push: (view) ->
       @stackView.push view
+
+    pop: (view) ->
+      @stackView.pop()

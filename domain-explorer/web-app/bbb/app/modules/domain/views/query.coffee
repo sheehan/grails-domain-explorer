@@ -1,4 +1,8 @@
-define ['app', 'backbone.marionette'], (app, Marionette) ->
+define [
+  'app'
+  'backbone.marionette'
+], (app, Marionette) ->
+
   Marionette.ItemView.extend
     template: 'domain/query'
 
@@ -9,8 +13,9 @@ define ['app', 'backbone.marionette'], (app, Marionette) ->
 
     bindings:
       '[name=query]': 'query'
-      '[name=max]': 'max'
-      '[name=offset]': 'offset'
 
     onRender: ->
       @stickit()
+
+    onClose: ->
+      console.log 'close query'
