@@ -70,8 +70,13 @@ define [
     onClose: ->
       @dataTable.fnDestroy() if @dataTable
 
+    onShow: ->
+      DomUtils.sizeToFitVertical @$('table')
+
     resize: ->
+      console.log 'resize2'
       DomUtils.sizeToFitVertical @$('.dataTables_scrollBody')
+      window.DomUtils = DomUtils
 
     renderCell: (property, value) ->
       if property.oneToMany or property.manyToMany

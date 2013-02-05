@@ -12,6 +12,7 @@
   <!--(if target dummy)><!-->
   <link rel="stylesheet" href="${resource(dir: 'bbb', file: '/dist/debug/vendor/bootstrap/css/bootstrap.css')}">
   <link rel="stylesheet" href="${resource(dir: 'bbb', file: '/dist/debug/app/styles/app.css')}">
+  <link rel="stylesheet" href="${resource(dir: 'bbb', file: '/vendor/codemirror-3.02/lib/codemirror.css')}">
   <!--<!(endif)-->
 
   <!--(if target release)>

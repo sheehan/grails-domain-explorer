@@ -9,6 +9,7 @@ define [
     initialize: (options) ->
       searchView = new SearchView
 
+      console.log 'push onto stacjz'
       @view = new StackView
       @view.push searchView
 

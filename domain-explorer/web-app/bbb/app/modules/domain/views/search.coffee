@@ -5,10 +5,9 @@ define [
   'backbone.marionette'
   './query'
   './results'
-  '../models/query'
   '../collections/instances'
   'layout'
-], (app, _, Backbone, Marionette, QueryView, ResultsView, QueryModel, InstanceCollection) ->
+], (app, _, Backbone, Marionette, QueryView, ResultsView, InstanceCollection) ->
 
   Marionette.ItemView.extend
     template: 'domain/search'
@@ -16,10 +15,9 @@ define [
     className: 'view-search'
 
     initialize: (options) ->
-      @queryModel = new QueryModel
       @instances = new InstanceCollection
 
-      @queryView = new QueryView model: @queryModel
+      @queryView = new QueryView
       @resultsView = new ResultsView collection: @instances
 
       @listenTo app, 'execute', => @execute()
@@ -36,7 +34,7 @@ define [
       @resize()
 
     execute: ->
-      @instances.search @queryModel.get('query')
+      @instances.search @queryView.getQuery()
 
     resize: ->
       @layout = @$el.layout

@@ -29,11 +29,11 @@ define [
     onShow: ->
       @addNewTab()
 
-
     addNewTab: ->
       title = 'Untitled' + (@tabsCollection.length + 1)
       searchController = new SearchController
 
+      console.log 'adding searchview'
       searchView = searchController.view
       @bodyView.add searchView
 

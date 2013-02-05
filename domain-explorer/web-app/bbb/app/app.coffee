@@ -87,7 +87,8 @@ define [
       @$(selector).append view.el
 
     @listenTo @, 'close', -> view.close()
-    @listenTo @, 'show', -> Marionette.triggerMethod.call(view, 'show')
+    @listenTo @, 'show', ->
+      Marionette.triggerMethod.call(view, 'show')
 
     @subviews ?= []
     @subviews.push view

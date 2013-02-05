@@ -1,7 +1,8 @@
 define [
   'app'
   'backbone.marionette'
-], (app, Marionette) ->
+  'codemirror'
+], (app, Marionette, CodeMirror) ->
 
   Marionette.ItemView.extend
     template: 'domain/query'
@@ -11,11 +12,15 @@ define [
     triggers:
       'click .execute': 'execute'
 
-    bindings:
-      '[name=query]': 'query'
+    onShow: ->
+      console.log 'show codemirror'
+      @editor = CodeMirror.fromTextArea @$('textarea')[0],
+        mode: 'text/x-sql'
+        lineNumbers: true
+      @editor.focus()
 
-    onRender: ->
-      @stickit()
+    onResize: ->
+      @editor.refresh()
 
-    onClose: ->
-      console.log 'close query'
+    getQuery: ->
+      @editor.getValue()

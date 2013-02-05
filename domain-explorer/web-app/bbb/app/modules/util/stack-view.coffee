@@ -6,6 +6,7 @@ define [
 
     initialize: (options) ->
       @views = []
+      @isShown = false
 
     pop: ->
       if @views.length
@@ -20,7 +21,11 @@ define [
       @$el.children().hide()
       view.render()
       @$el.append view.$el
-      Marionette.triggerMethod.call view, 'show'
+      Marionette.triggerMethod.call view, 'show' if @isShown
+
+    onShow: ->
+      @isShown = true
+      Marionette.triggerMethod.call view, 'show' for view in @views
 
     onClose: ->
       console.log 'stack view close'
