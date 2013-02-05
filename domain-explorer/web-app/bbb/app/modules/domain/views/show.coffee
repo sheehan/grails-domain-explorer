@@ -31,7 +31,7 @@ define [
 
     new Handlebars.SafeString(valueHtml)
 
-  Marionette.Layout.extend
+  Marionette.ItemView.extend
     template: 'domain/show'
 
     events:
@@ -41,6 +41,7 @@ define [
 
     initialize: (options) ->
       @clazz = options.clazz
+      @listenTo @model, 'change', => @render()
 
     serializeData: ->
       for property in @clazz.properties

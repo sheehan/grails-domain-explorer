@@ -2,7 +2,7 @@ define [
   'app'
   'backbone'
   'jquery'
-], (app, Backbone) ->
+], (app, Backbone, $) ->
   Instance = Backbone.Model.extend
 
     fetchPropertyOne: (propertyName) ->

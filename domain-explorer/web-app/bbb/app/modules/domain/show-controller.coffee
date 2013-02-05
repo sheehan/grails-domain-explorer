@@ -39,8 +39,14 @@ define [
 
       @listenTo editView, 'cancel', => @view.pop()
       @listenTo editView, 'save', =>
+        editView.setSaving true
         data = editView.serialize()
-        model.updateWithData data
+        dfd = model.updateWithData data
+        dfd.done => @view.pop()
+
+        dfd.fail (data) =>
+          editView.setSaving false
+          editView.showErrors data.errors
 
       @view.push editView
 
