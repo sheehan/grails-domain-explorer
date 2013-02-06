@@ -5,6 +5,7 @@ require [
   "backbone.stickit"
   "mousetrap"
   "jst"
+  "jquery.ui"
 ], (app, Router, Backbone) ->
 
   # Define your master router on the application namespace and trigger all

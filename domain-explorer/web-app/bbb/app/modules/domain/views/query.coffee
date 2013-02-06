@@ -13,13 +13,13 @@ define [
       'click .execute': 'execute'
 
     onShow: ->
-      console.log 'show codemirror'
-      @editor = CodeMirror.fromTextArea @$('textarea')[0],
+      @editor = CodeMirror @$('.editor')[0],
         mode: 'text/x-sql'
         lineNumbers: true
       @editor.focus()
 
-    onResize: ->
+    resize: ->
+      @editor.setSize null, @$('.editor').height()
       @editor.refresh()
 
     getQuery: ->

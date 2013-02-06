@@ -17,6 +17,7 @@ require.config
     codemirror: '../vendor/codemirror-3.02/mode/sql/sql'
     moment: '../vendor/js/libs/moment'
     layout: '../vendor/js/libs/jquery.layout-latest'
+    'jquery.ui': '../vendor/jquery-ui-1.10.0.custom/js/jquery-ui-1.10.0.custom'
 
   shim:
     'backbone':
@@ -32,3 +33,7 @@ require.config
         '../vendor/codemirror-3.02/lib/codemirror'
       ]
       'exports': 'CodeMirror'
+    'jquery.ui':
+      deps: [
+        'jquery'
+      ]

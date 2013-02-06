@@ -211,7 +211,7 @@ define [
         when "boolean"
           BooleanView
         when "embedded"
-          EmbeddedView
+          NotSupportedView
         when "associationOne"
           AssociationOneView
         else

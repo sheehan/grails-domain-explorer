@@ -13,8 +13,8 @@ define [
       @listenTo @collection, "reset", @showItems
 
     events:
-      'click .next': 'onNext'
-      'click .prev': 'onPrev'
+      'click .next:not(.disabled)': 'onNext'
+      'click .prev:not(.disabled)': 'onPrev'
 
     showItems: ->
       if @collection.clazz
@@ -22,6 +22,16 @@ define [
         @dataTable.fnAddData @collection.toJSON()
 
         @$('.showing').html "Showing #{@collection.getStart()} - #{@collection.getEnd()}"
+
+        if not @collection.hasNext()
+          @$('.next').addClass 'disabled'
+        else
+          @$('.next').removeClass 'disabled'
+
+        if not @collection.hasPrev()
+          @$('.prev').addClass 'disabled'
+        else
+          @$('.prev').removeClass 'disabled'
       else
         @$('table').html ''
         @$('.showing').html ''
@@ -37,7 +47,11 @@ define [
     initTable: ->
       clazz = @collection.clazz
       @dataTable.fnDestroy() if @dataTable
-      @$('table').html ''
+
+#      @$('table').html ''
+
+      @$('table').remove()
+      @$el.append '<table class="table table-striped table-bordered"></table>'
 
       aoColumns = []
       aoColumns.push
@@ -74,9 +88,7 @@ define [
       DomUtils.sizeToFitVertical @$('table')
 
     resize: ->
-      console.log 'resize2'
       DomUtils.sizeToFitVertical @$('.dataTables_scrollBody')
-      window.DomUtils = DomUtils
 
     renderCell: (property, value) ->
       if property.oneToMany or property.manyToMany

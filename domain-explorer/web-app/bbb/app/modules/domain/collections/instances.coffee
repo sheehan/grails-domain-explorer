@@ -9,6 +9,7 @@ define [
     offset: 0
 
     search: (query) ->
+      @offset = 0
       @query = query
       @_search()
 
@@ -43,3 +44,9 @@ define [
 
     getEnd: ->
       @offset + @size()
+
+    hasNext: ->
+      @length is @max
+
+    hasPrev: ->
+      @offset > 0

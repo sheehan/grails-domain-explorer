@@ -30,6 +30,8 @@ define [
       @addSubview '.query-container', @queryView
       @addSubview '.results-container', @resultsView
 
+      @listenTo app, 'resize', => @resize()
+
     onShow: ->
       @resize()
 
@@ -39,7 +41,14 @@ define [
     resize: ->
       @layout = @$el.layout
         north__paneSelector: '.query-container'
+        north__size: 200
         center__paneSelector: '.results-container'
         resizable: true
+        closable: false
+        findNestedContent: true
+        onresize: =>
+          @queryView.resize()
+          @resultsView.resize()
+      @queryView.resize()
       @resultsView.resize()
 

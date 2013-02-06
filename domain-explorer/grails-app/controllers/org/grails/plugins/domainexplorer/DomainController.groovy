@@ -4,6 +4,7 @@ import grails.converters.JSON
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import org.codehaus.groovy.grails.commons.GrailsDomainClassProperty
 import org.codehaus.groovy.grails.validation.ConstrainedProperty
+import org.hibernate.hql.ast.QuerySyntaxException
 import org.springframework.web.servlet.support.RequestContextUtils
 
 class DomainController {
@@ -28,8 +29,14 @@ class DomainController {
     }
 
     def executeQuery(String query, int max, int offset) {
-        List result = grailsApplication.domainClasses.first().clazz.executeQuery(query, [:], [max: max, offset: offset])
         Map json = [:]
+        List result
+        try {
+            result = grailsApplication.domainClasses.first().clazz.executeQuery(query, [:], [max: max, offset: offset])
+        } catch (QuerySyntaxException qse) {
+            json.success = false
+            json.error = 'The query syntax is not valid.'
+        }
         if (result) {
             GrailsDomainClass domainClass = grailsApplication.getDomainClass(result[0].class.name)
             json.clazz = domainClassToMap(domainClass)

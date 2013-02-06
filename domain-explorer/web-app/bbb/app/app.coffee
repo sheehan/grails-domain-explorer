@@ -93,4 +93,5 @@ define [
     @subviews ?= []
     @subviews.push view
 
+  window.app = app
   app
