@@ -12,7 +12,17 @@ class DomainController {
     def index() {
         [
             json: [
-                serverURL: grailsApplication.config.grails.serverURL
+                serverURL: grailsApplication.config.grails.serverURL,
+                pageUrl: grailsApplication.config.grails.serverURL + '/domain/bbb/'
+            ]
+        ]
+    }
+
+    def bbb() {
+        render view: 'bbb', model: [
+            json: [
+                serverUrl: grailsApplication.config.grails.serverURL,
+                pageContextPath: request.contextPath + '/domain/bbb/'
             ]
         ]
     }
@@ -33,7 +43,7 @@ class DomainController {
         List result
         try {
             result = grailsApplication.domainClasses.first().clazz.executeQuery(query, [:], [max: max, offset: offset])
-        } catch (QuerySyntaxException qse) {
+        } catch (ex) {
             json.success = false
             json.error = 'The query syntax is not valid.'
         }

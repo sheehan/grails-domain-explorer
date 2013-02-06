@@ -14,7 +14,8 @@ define [
     root: "/bookstore/plugins/domain-explorer-0.1/bbb/" # TODO,
     start: (options) ->
       @options = options
-      @baseUrl = @options.serverURL
+      @baseUrl = @options.serverUrl
+      console.log @baseUrl
       Backbone.Marionette.Application::start.apply this, arguments
 
     createLink: (controller, action, params) ->

@@ -1,3 +1,4 @@
+<%@ page import="grails.converters.JSON" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -22,17 +23,19 @@
   <!--(if target debug)>
   <link rel="stylesheet" href="index.css">
   <!(endif)-->
+
+  <script>
+    (function () {
+      window.appconf = <%= (json as JSON).toString() %>;
+    })()
+  </script>
 </head>
 
 <body class="container">
-<!-- Application container. -->
-
-<main role="main" id="main"></main>
-
-<!-- Application source. -->
 
 <!--(if target dummy)><!-->
-<script data-main="${resource(dir: 'bbb', file: '/dist/debug/app/config')}" src="${resource(dir: 'bbb', file: '/vendor/js/libs/require.js')}"></script>
+<script data-main="${resource(dir: 'bbb', file: '/dist/debug/app/config')}"
+        src="${resource(dir: 'bbb', file: '/vendor/js/libs/require.js')}"></script>
 <!--<!(endif)-->
 
 <!--(if target release)>
@@ -46,6 +49,7 @@
     </div>
   </div>
 </div>
+
 <div id="main-content"></div>
 
 <!--(if target debug)>

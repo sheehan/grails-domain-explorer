@@ -23,4 +23,4 @@ define [
       @editor.refresh()
 
     getQuery: ->
-      @editor.getValue()
+      @editor.getSelection() or @editor.getValue()

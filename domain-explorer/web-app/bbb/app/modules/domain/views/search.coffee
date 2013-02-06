@@ -34,22 +34,27 @@ define [
       @listenTo app, 'resize', => @resize()
 
     onShow: ->
+      @layout = @$el.layout
+        center__paneSelector: '.query-container'
+        south__size: 500
+        south__paneSelector: '.results-container'
+        south__initClosed: true
+        resizable: true
+        closable: false
+        findNestedContent: true
+        onresize: => @resize()
       @resize()
 
     execute: ->
       @instances.search @queryView.getQuery()
+      if @layout.state.south.isClosed
+        @layout.sizePane 'south', @$el.height() - 200
+        @layout.open 'south'
 
     resize: ->
-      @layout = @$el.layout
-        north__paneSelector: '.query-container'
-        north__size: 200
-        center__paneSelector: '.results-container'
-        resizable: true
-        closable: false
-        findNestedContent: true
-        onresize: =>
-          @queryView.resize()
-          @resultsView.resize()
       @queryView.resize()
       @resultsView.resize()
+
+    onClose: ->
+      @layout.destroy()
 
