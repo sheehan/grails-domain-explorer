@@ -51,7 +51,8 @@ define [
 #      @$('table').html ''
 
       @$('table').remove()
-      @$el.append '<table class="table table-striped table-bordered"></table>'
+      @wrapper = @$('.table-wrapper')
+      @wrapper.append '<table class="table table-striped table-bordered"></table>'
 
       aoColumns = []
       aoColumns.push
@@ -85,7 +86,7 @@ define [
       @dataTable.fnDestroy() if @dataTable
 
     onShow: ->
-      DomUtils.sizeToFitVertical @$('table')
+      DomUtils.sizeToFitVertical @$('.table-wrapper')
 
     resize: ->
       DomUtils.sizeToFitVertical @$('.dataTables_scrollBody')
