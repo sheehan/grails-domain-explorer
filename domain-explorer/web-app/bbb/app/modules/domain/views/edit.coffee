@@ -9,7 +9,7 @@ define [
     model: ErrorModel
 
   ErrorsView = Marionette.ItemView.extend
-    template: "edit/errors"
+    template: "domain/edit/errors"
     className: "alert alert-error"
     initialize: (options) ->
       @errors = options.errors
