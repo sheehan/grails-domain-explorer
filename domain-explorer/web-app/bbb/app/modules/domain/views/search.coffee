@@ -20,7 +20,8 @@ define [
       @queryView = new QueryView
       @resultsView = new ResultsView collection: @instances
 
-      @listenTo app, 'execute', => @execute()
+      @listenTo app, 'execute', =>
+        @execute() if @$el.is ':visible'
 
       @listenTo @queryView, 'execute', => @execute()
 

@@ -14,8 +14,6 @@ define [
       view.render()
       @$el.children().hide()
       @$el.append view.$el
-      console.log 'isShown: ' +@isShown
-      console.log 'isVisible: ' +@$el.is(':visible')
       Marionette.triggerMethod.call view, 'show' if @isShown
 
     show: (view) ->
@@ -35,4 +33,4 @@ define [
       Marionette.triggerMethod.call view, 'show' for view in @views
 
     onClose: ->
-      _.invoke @views, 'close'
+      view?.close() for view in @views
