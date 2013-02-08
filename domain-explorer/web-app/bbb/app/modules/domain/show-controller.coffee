@@ -7,7 +7,8 @@ define [
   './views/results'
   './views/show-section'
   './views/edit'
-], (Marionette, BreadcrumbCollection, InstancesCollection, SearchView, ShowView, ResultsView, ShowSectionView, EditView) ->
+  './views/association-many-section'
+], (Marionette, BreadcrumbCollection, InstancesCollection, SearchView, ShowView, ResultsView, ShowSectionView, EditView, AssocitationManySectionView) ->
   Marionette.Controller.extend
     initialize: (options) ->
       domainModel = options.domainModel
@@ -68,12 +69,12 @@ define [
       @breadcrumbs.add
         label: label
 
-      resultsView = new ResultsView
+      resultsView = new AssocitationManySectionView
         collection: collection
         clazz: clazz
 
       @view.push resultsView
-      resultsView.showItems()
+      resultsView.showItems() # TODO
 
     onClose: ->
       @view.close()

@@ -27,6 +27,9 @@ define [
       else
         @$('.prev').removeClass 'disabled'
 
+    onRender: ->
+      @update()
+
     onNext: (event) ->
       event.preventDefault()
       @collection.next()

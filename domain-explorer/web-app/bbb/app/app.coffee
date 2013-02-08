@@ -15,7 +15,6 @@ define [
     start: (options) ->
       @options = options
       @baseUrl = @options.serverUrl
-      console.log @baseUrl
       Backbone.Marionette.Application::start.apply this, arguments
 
     createLink: (controller, action, params) ->

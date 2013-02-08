@@ -27,14 +27,39 @@ body {
   .toolbar-container {
     overflow: hidden;
     padding: 5px 10px;
-    .actions {
-      float: left;
+    .btn-toolbar {
+      margin: 0;
+      .actions {
+        float: left;
+      }
+      .pagination-container {
+        float: right;
+        .showing {
+          display: inline;
+          font-size: 14px;
+          margin-right: 10px;
+        }
+      }
     }
-    .pagination-container {
-      float: right;
-      .showing {
-        display: inline;
-        font-size: 100%;
+  }
+}
+
+.view-association-many-section {
+  .toolbar-container {
+    overflow: hidden;
+    padding: 5px 10px;
+    .btn-toolbar {
+      margin: 0;
+      .actions {
+        float: left;
+      }
+      .pagination-container {
+        float: right;
+        .showing {
+          display: inline;
+          font-size: 14px;
+          margin-right: 10px;
+        }
       }
     }
   }
@@ -102,6 +127,7 @@ body {
     border-radius: 0;
   }
   table {
+    max-width: none;
     width: 100%;
     margin: 0;
     border-radius: 0;

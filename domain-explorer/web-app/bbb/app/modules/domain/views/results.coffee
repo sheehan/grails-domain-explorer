@@ -10,13 +10,14 @@ define [
     className: 'view-results'
 
     initialize: ->
-      @listenTo @collection, "reset", @showItems
+      @listenTo @collection, 'reset', @showItems
+      @listenTo @collection, 'change', @onModelChange
 
-      # TODO listen to model change events, fnUpdate
+    onModelChange: (model, options) ->
+      @dataTable.fnUpdate model.toJSON(), @collection.indexOf(model)
 
     showItems: ->
       if @collection.clazz
-        console.log 'hi'
         @initTable()
         @dataTable.fnAddData @collection.toJSON()
 
@@ -27,8 +28,6 @@ define [
     initTable: ->
       clazz = @collection.clazz
       @dataTable.fnDestroy() if @dataTable
-
-#      @$('table').html ''
 
       @$('table').remove()
       @wrapper = @$('.table-wrapper')
@@ -69,7 +68,9 @@ define [
       DomUtils.sizeToFitVertical @$('.table-wrapper')
 
     resize: ->
-      DomUtils.sizeToFitVertical @$('.dataTables_scrollBody')
+      if @$el.is ':visible'
+        DomUtils.sizeToFitVertical @$('.dataTables_scrollBody')
+        @dataTable?.fnAdjustColumnSizing()
 
     renderCell: (property, value) ->
       if property.oneToMany or property.manyToMany

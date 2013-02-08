@@ -14,7 +14,8 @@ define [
         view.close()
 
         if @views.length
-          @views[@views.length - 1].$el.show()
+          nextView = @views[@views.length - 1]
+          nextView.$el.show()
 
     push: (view) ->
       @views.push view
