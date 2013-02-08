@@ -12,37 +12,17 @@ define [
     initialize: ->
       @listenTo @collection, "reset", @showItems
 
-    events:
-      'click .next:not(.disabled)': 'onNext'
-      'click .prev:not(.disabled)': 'onPrev'
+      # TODO listen to model change events, fnUpdate
 
     showItems: ->
       if @collection.clazz
+        console.log 'hi'
         @initTable()
         @dataTable.fnAddData @collection.toJSON()
 
-        @$('.showing').html "Showing #{@collection.getStart()} - #{@collection.getEnd()}"
-
-        if not @collection.hasNext()
-          @$('.next').addClass 'disabled'
-        else
-          @$('.next').removeClass 'disabled'
-
-        if not @collection.hasPrev()
-          @$('.prev').addClass 'disabled'
-        else
-          @$('.prev').removeClass 'disabled'
       else
         @$('table').html ''
         @$('.showing').html ''
-
-    onNext: (event) ->
-      event.preventDefault()
-      @collection.next()
-
-    onPrev: (event) ->
-      event.preventDefault()
-      @collection.prev()
 
     initTable: ->
       clazz = @collection.clazz

@@ -5,9 +5,10 @@ define [
   'backbone.marionette'
   './query'
   './results'
+  './results-toolbar'
   '../collections/instances'
   'layout'
-], (app, _, Backbone, Marionette, QueryView, ResultsView, InstanceCollection) ->
+], (app, _, Backbone, Marionette, QueryView, ResultsView, ResultsToolbarView, InstanceCollection) ->
 
   Marionette.ItemView.extend
     template: 'domain/search'
@@ -18,6 +19,7 @@ define [
       @instances = new InstanceCollection
 
       @queryView = new QueryView
+      @resultsToolbarView = new ResultsToolbarView collection: @instances
       @resultsView = new ResultsView collection: @instances
 
       @listenTo app, 'execute', =>
@@ -29,6 +31,7 @@ define [
         @trigger 'row:click', model, @instances.clazz
 
       @addSubview '.query-container', @queryView
+      @addSubview '.toolbar-container', @resultsToolbarView
       @addSubview '.results-container', @resultsView
 
       @listenTo app, 'resize', => @resize()
@@ -37,7 +40,7 @@ define [
       @layout = @$el.layout
         center__paneSelector: '.query-container'
         south__size: 500
-        south__paneSelector: '.results-container'
+        south__paneSelector: '.results-section'
         south__initClosed: true
         resizable: true
         closable: false

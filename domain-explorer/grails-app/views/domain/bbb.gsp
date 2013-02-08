@@ -25,9 +25,7 @@
   <!(endif)-->
 
   <script>
-    (function () {
-      window.appconf = <%= (json as JSON).toString() %>;
-    })()
+    window.appconfig = <%= (json as JSON).toString() %>;
   </script>
 </head>
 

@@ -24,6 +24,20 @@ body {
 
 .view-search {
   height: 100%;
+  .toolbar-container {
+    overflow: hidden;
+    padding: 5px 10px;
+    .actions {
+      float: left;
+    }
+    .pagination-container {
+      float: right;
+      .showing {
+        display: inline;
+        font-size: 100%;
+      }
+    }
+  }
 }
 
 .view-query {
@@ -108,6 +122,8 @@ body {
   .dataTables_scrollHead {
     table {
       border-width: 0 0 1px 0;
+      background-color: #fff;
+
     }
   }
   .dataTables_scrollBody {

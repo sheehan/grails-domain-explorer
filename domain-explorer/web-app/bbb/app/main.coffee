@@ -16,8 +16,8 @@ require [
   app.bind "initialize:after", (options) ->
     Backbone.history?.start(
       pushState: true
-      root: window.appconf.pageContextPath
+      root: window.appconfig.pageContextPath
     )
 
-  app.start window.appconf
+  app.start window.appconfig
 
