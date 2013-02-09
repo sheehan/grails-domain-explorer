@@ -1,25 +1,22 @@
 define [
   'backbone.marionette'
-  './views/search'
+  './search'
   'modules/util/stack-view'
-  './show-controller'
+  '../show-controller'
 ], (Marionette, SearchView, StackView, ShowController) ->
 
-  Marionette.Controller.extend
+  StackView.extend
+
     initialize: (options) ->
       searchView = new SearchView
 
-      @view = new StackView
-      @view.push searchView
+      @push searchView
 
       @listenTo searchView, 'row:click', (model) =>
         showController = new ShowController
           domainModel: model
           clazz: model.clazz
-        @view.push showController.view
+        @push showController.view
         @listenTo showController, 'back', =>
-          @view.pop()
+          @pop()
           searchView.resize()
-
-    onClose: ->
-      @view.close()

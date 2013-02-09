@@ -1,9 +1,10 @@
 define [
   'backbone.marionette'
+  'jquery'
   'moment'
   '../../util/dom-utils'
   'dataTables'
-], (Marionette, moment, DomUtils) ->
+], (Marionette, $, moment, DomUtils) ->
   Marionette.ItemView.extend
     template: 'domain/results'
 
@@ -70,7 +71,7 @@ define [
     resize: ->
       if @$el.is ':visible'
         DomUtils.sizeToFitVertical @$('.dataTables_scrollBody')
-        @dataTable?.fnAdjustColumnSizing()
+#        @dataTable?.fnAdjustColumnSizing()
 
     renderCell: (property, value) ->
       if property.oneToMany or property.manyToMany

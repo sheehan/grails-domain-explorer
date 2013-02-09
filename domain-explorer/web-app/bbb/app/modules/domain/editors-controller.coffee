@@ -2,10 +2,10 @@ define [
   'backbone'
   'backbone.marionette'
   './views/search'
-  './search-controller'
+  './views/search-section'
   './views/tabs'
   'modules/util/radio-view'
-], (Backbone, Marionette, SearchView, SearchController, TabsView, RadioView) ->
+], (Backbone, Marionette, SearchView, SearchSectionView, TabsView, RadioView) ->
 
   Marionette.ItemView.extend
     template: 'domain/editors'
@@ -31,10 +31,8 @@ define [
 
     addNewTab: ->
       title = 'Untitled' + (@tabsCollection.length + 1)
-      searchController = new SearchController
 
-      console.log 'adding searchview'
-      searchView = searchController.view
+      searchView = new SearchSectionView
       @bodyView.add searchView
 
       @tabsCollection.each (tab) ->

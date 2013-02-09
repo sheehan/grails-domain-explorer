@@ -4,9 +4,10 @@ define [
 
   Marionette.View.extend
 
-    initialize: (options) ->
+    constructor: ->
       @views = []
       @isShown = false
+      Marionette.View::constructor.apply this, arguments
 
     pop: ->
       if @views.length
@@ -29,5 +30,4 @@ define [
       Marionette.triggerMethod.call view, 'show' for view in @views
 
     onClose: ->
-      console.log 'stack view close'
       _.invoke @views, 'close'
