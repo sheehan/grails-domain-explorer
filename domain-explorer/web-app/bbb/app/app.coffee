@@ -93,5 +93,9 @@ define [
     @subviews ?= []
     @subviews.push view
 
+    Marionette.View::recurseMethod = (method) ->
+      Marionette.triggerMethod.call @, method
+      Marionette.triggerMethod.call view, method for view in @subviews
+
   window.app = app
   app

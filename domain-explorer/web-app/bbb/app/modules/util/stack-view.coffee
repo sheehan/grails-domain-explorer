@@ -12,6 +12,7 @@ define [
     pop: ->
       if @views.length
         view = @views.pop()
+        @stopListening view
         view.close()
 
         if @views.length
@@ -19,6 +20,7 @@ define [
           nextView.$el.show()
 
     push: (view) ->
+      console.log "pushing #{view.cid} onto #{@cid}"
       @views.push view
       @$el.children().hide()
       view.render()

@@ -55,10 +55,14 @@ define [
         sScrollY: "100%"
         sScrollX: "100%"
         fnRowCallback: (nRow, aData, iDisplayIndex, iDisplayIndexFull) =>
-          $(nRow).click (event) =>
-            if not $(event.target).closest('td').is('.check')
-              model = @collection.find (m) => m.id is aData.id
-              @trigger 'row:click', model
+          hasListener = $(nRow).data 'hasListener'
+          if (not hasListener)
+            $(nRow).click (event) =>
+              if not $(event.target).closest('td').is('.check')
+                model = @collection.find (m) => m.id is aData.id
+                @trigger 'row:click', model
+
+            $(nRow).data 'hasListener', true
 
       @resize()
 
@@ -71,7 +75,7 @@ define [
     resize: ->
       if @$el.is ':visible'
         DomUtils.sizeToFitVertical @$('.dataTables_scrollBody')
-#        @dataTable?.fnAdjustColumnSizing()
+        @dataTable?.fnDraw()
 
     renderCell: (property, value) ->
       if property.oneToMany or property.manyToMany

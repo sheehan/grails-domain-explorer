@@ -17,15 +17,8 @@ define [
     update: ->
       @$('.showing').html "Showing #{@collection.getStart()} - #{@collection.getEnd()}"
 
-      if not @collection.hasNext()
-        @$('.next').addClass 'disabled'
-      else
-        @$('.next').removeClass 'disabled'
-
-      if not @collection.hasPrev()
-        @$('.prev').addClass 'disabled'
-      else
-        @$('.prev').removeClass 'disabled'
+      @$('.next').toggleClass 'disabled', (not @collection.hasNext())
+      @$('.prev').toggleClass 'disabled', (not @collection.hasPrev())
 
     onRender: ->
       @update()
