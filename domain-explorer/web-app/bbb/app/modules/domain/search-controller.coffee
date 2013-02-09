@@ -12,10 +12,10 @@ define [
       @view = new StackView
       @view.push searchView
 
-      @listenTo searchView, 'row:click', (model, clazz) =>
+      @listenTo searchView, 'row:click', (model) =>
         showController = new ShowController
           domainModel: model
-          clazz: clazz
+          clazz: model.clazz
         @view.push showController.view
         @listenTo showController, 'back', =>
           @view.pop()

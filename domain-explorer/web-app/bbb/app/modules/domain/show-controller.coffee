@@ -9,6 +9,7 @@ define [
   './views/edit'
   './views/association-many-section'
 ], (Marionette, BreadcrumbCollection, InstancesCollection, SearchView, ShowView, ResultsView, ShowSectionView, EditView, AssocitationManySectionView) ->
+
   Marionette.Controller.extend
     initialize: (options) ->
       domainModel = options.domainModel
@@ -61,8 +62,8 @@ define [
 
       @view.push showView
 
-      @listenTo showView, 'select:propertyOne', @onSelectPropertyOne, @
-      @listenTo showView, 'select:propertyMany', @onSelectPropertyMany, @
+      @listenTo showView, 'select:propertyOne', @onSelectPropertyOne
+      @listenTo showView, 'select:propertyMany', @onSelectPropertyMany
       @listenTo showView, 'edit', @onEdit, @
 
     pushNewManyView: (collection, clazz, label) ->
@@ -72,6 +73,9 @@ define [
       resultsView = new AssocitationManySectionView
         collection: collection
         clazz: clazz
+
+      @listenTo resultsView, 'row:click', (model) =>
+        @pushNewShowView model, model.clazz, "#{model.clazz.name} : #{model.id}"
 
       @view.push resultsView
       resultsView.showItems() # TODO

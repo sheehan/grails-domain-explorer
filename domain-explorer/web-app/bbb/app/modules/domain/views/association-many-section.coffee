@@ -19,6 +19,10 @@ define [
         clazz: @clazz
         collection: @collection
 
+
+      @listenTo @resultsView, 'row:click', (model) =>
+        @trigger 'row:click', model
+
       @addSubview '.toolbar-container', @toolbarView
       @addSubview '.results-container', @resultsView
 

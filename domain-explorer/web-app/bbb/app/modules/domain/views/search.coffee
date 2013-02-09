@@ -28,7 +28,7 @@ define [
       @listenTo @queryView, 'execute', => @execute()
 
       @listenTo @resultsView, 'row:click', (model) =>
-        @trigger 'row:click', model, @instances.clazz
+        @trigger 'row:click', model
 
       @addSubview '.query-container', @queryView
       @addSubview '.toolbar-container', @resultsToolbarView
