@@ -18,9 +18,9 @@ define [
         if @views.length
           nextView = @views[@views.length - 1]
           nextView.$el.show()
+          nextView.recurseMethod 'resize'
 
     push: (view) ->
-      console.log "pushing #{view.cid} onto #{@cid}"
       @views.push view
       @$el.children().hide()
       view.render()

@@ -1,9 +1,9 @@
 define [
   'backbone.marionette'
   './search'
+  './show-section'
   'modules/util/stack-view'
-  '../show-controller'
-], (Marionette, SearchView, StackView, ShowController) ->
+], (Marionette, SearchView, ShowSectionView, StackView) ->
 
   StackView.extend
 
@@ -13,10 +13,10 @@ define [
       @push searchView
 
       @listenTo searchView, 'row:click', (model) =>
-        showController = new ShowController
-          domainModel: model
+        showView = new ShowSectionView
+          model: model
           clazz: model.clazz
-        @push showController.view
-        @listenTo showController, 'back', =>
+        @push showView
+        @listenTo showView, 'back', =>
           @pop()
           searchView.resize()

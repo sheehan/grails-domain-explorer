@@ -1,7 +1,15 @@
 define [
   'handlebars'
   'backbone.marionette'
-], (Handlebars, Marionette) ->
+  '../collections/breadcrumbs'
+  '../collections/instances'
+  './search'
+  './show'
+  './results'
+  './show-section'
+  './edit'
+  './association-many-section'
+], (Handlebars, Marionette, BreadcrumbCollection, InstancesCollection, SearchView, ShowView, ResultsView,   ShowSectionView, EditView, AssocitationManySectionView) ->
 
   Handlebars.registerHelper 'property_value', ->
     property = @property
@@ -43,6 +51,8 @@ define [
       @clazz = options.clazz
       @listenTo @model, 'change', => @render()
 
+      @breadcrumbs = new BreadcrumbCollection
+
     serializeData: ->
       for property in @clazz.properties
         do (property) =>
@@ -62,3 +72,4 @@ define [
     onEditClick: (event) ->
       event.preventDefault()
       @trigger 'edit', @model
+

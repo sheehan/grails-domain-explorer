@@ -70,8 +70,8 @@ define [
     @triggerMethod "before:render", @
     @triggerMethod "item:before:render", @
     data = @serializeData()
-    data = @mixinTemplateHelpers(data)
-    html = @renderHtml(data)
+    data = @mixinTemplateHelpers data
+    html = @renderHtml data
     @$el.html html
     @bindUIElements()
     @triggerMethod "render", @
@@ -79,7 +79,7 @@ define [
 
   Marionette.ItemView::renderHtml = (data) ->
     template = @getTemplate()
-    Marionette.Renderer.render(template, data)
+    Marionette.Renderer.render template, data
 
   Marionette.View::addSubview = (selector, view) ->
     @listenTo @, 'render', =>
@@ -88,14 +88,15 @@ define [
 
     @listenTo @, 'close', -> view.close()
     @listenTo @, 'show', ->
-      Marionette.triggerMethod.call(view, 'show')
+      @triggerMethod.call(view, 'show')
 
     @subviews ?= []
     @subviews.push view
 
-    Marionette.View::recurseMethod = (method) ->
-      Marionette.triggerMethod.call @, method
-      Marionette.triggerMethod.call view, method for view in @subviews
+  Marionette.View::recurseMethod = (method) ->
+    @triggerMethod.call @, method
+    if @subviews
+      view.recurseMethod method for view in @subviews
 
   window.app = app
   app

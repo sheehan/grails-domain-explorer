@@ -75,7 +75,8 @@ define [
     resize: ->
       if @$el.is ':visible'
         DomUtils.sizeToFitVertical @$('.dataTables_scrollBody')
-        @dataTable?.fnDraw()
+#        @dataTable?.fnDraw()
+        @dataTable?.fnAdjustColumnSizing()
 
     renderCell: (property, value) ->
       if property.oneToMany or property.manyToMany

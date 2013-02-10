@@ -52,6 +52,5 @@ grails.project.dependency.resolution = {
         compile ":console:1.2"
         compile ":faker:0.7"
 
-
     }
 }
