@@ -4,7 +4,6 @@ import grails.converters.JSON
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
 import org.codehaus.groovy.grails.commons.GrailsDomainClassProperty
 import org.codehaus.groovy.grails.validation.ConstrainedProperty
-import org.hibernate.hql.ast.QuerySyntaxException
 import org.springframework.web.servlet.support.RequestContextUtils
 
 class DomainController {
@@ -39,6 +38,7 @@ class DomainController {
     }
 
     def executeQuery(String query, int max, int offset) {
+//        sleep 2000
         Map json = [:]
         List result
         try {

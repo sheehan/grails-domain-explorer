@@ -4,11 +4,10 @@ define [
   'backbone'
   'backbone.marionette'
   './query'
-  './results'
-  './results-toolbar'
+  './results-section'
   '../collections/instances'
   'layout'
-], (app, _, Backbone, Marionette, QueryView, ResultsView, ResultsToolbarView, InstanceCollection) ->
+], (app, _, Backbone, Marionette, QueryView, ResultsSectionView, InstanceCollection) ->
 
   Marionette.ItemView.extend
     template: 'domain/search'
@@ -19,22 +18,26 @@ define [
       @instances = new InstanceCollection
 
       @queryView = new QueryView
-      @resultsToolbarView = new ResultsToolbarView collection: @instances
-      @resultsView = new ResultsView collection: @instances
+      @resultsSectionView = new ResultsSectionView collection: @instances
 
       @listenTo app, 'execute', =>
         @execute() if @$el.is ':visible'
 
       @listenTo @queryView, 'execute', => @execute()
 
-      @listenTo @resultsView, 'row:click', (model) =>
+      @listenTo @resultsSectionView, 'row:click', (model) =>
         @trigger 'row:click', model
 
       @addSubview '.query-container', @queryView
-      @addSubview '.toolbar-container', @resultsToolbarView
-      @addSubview '.results-container', @resultsView
+
+      @addSubview '.results-section', @resultsSectionView
 
       @listenTo app, 'resize', => @resize()
+
+    onLoading: ->
+      #
+      html = JST['tmpl TODO']()
+      @$el.html html
 
     onShow: ->
       @layout = @$el.layout
@@ -56,8 +59,13 @@ define [
 
     resize: ->
       @queryView.resize()
-      @resultsView.resize()
+      @resultsSectionView.resize()
+
+    destroyLayout: ->
+      if @layout
+        @layout.destroy()
+        delete @layout
 
     onClose: ->
-      @layout.destroy()
+      @destroyLayout()
 
