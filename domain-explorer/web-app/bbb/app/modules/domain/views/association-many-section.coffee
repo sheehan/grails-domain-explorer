@@ -1,10 +1,10 @@
 define [
-  'backbone.marionette'
+  './item-view'
   './results'
   './association-many-toolbar'
-], (Marionette, ResultsView, ToolbarView) ->
+], (ItemView, ResultsView, ToolbarView) ->
 
-  Marionette.ItemView.extend
+  ItemView.extend
     template: 'domain/association-many-section'
 
     className: 'view-association-many-section'

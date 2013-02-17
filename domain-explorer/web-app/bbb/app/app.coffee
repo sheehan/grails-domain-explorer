@@ -28,6 +28,9 @@ define [
         url += "?" + queryString  if queryString.length > 0
       url
 
+    tmpl: (path, data) -> JST[path] data
+
+
   app.addRegions
     content: "#main-content"
 
@@ -63,40 +66,6 @@ define [
     _ensureElementOld.apply @, arguments
     @$el.data 'view', @
     @$el.attr 'data-view-cid', @cid
-
-  # TODO hack!!
-  Marionette.ItemView::render = ->
-    @isClosed = false
-    @triggerMethod "before:render", @
-    @triggerMethod "item:before:render", @
-    data = @serializeData()
-    data = @mixinTemplateHelpers data
-    html = @renderHtml data
-    @$el.html html
-    @bindUIElements()
-    @triggerMethod "render", @
-    @triggerMethod "item:rendered", @
-
-  Marionette.ItemView::renderHtml = (data) ->
-    template = @getTemplate()
-    Marionette.Renderer.render template, data
-
-  Marionette.View::addSubview = (selector, view) ->
-    @listenTo @, 'render', =>
-      view.render()
-      @$(selector).append view.el
-
-    @listenTo @, 'close', -> view.close()
-    @listenTo @, 'show', ->
-      @triggerMethod.call(view, 'show')
-
-    @subviews ?= []
-    @subviews.push view
-
-  Marionette.View::recurseMethod = (method) ->
-    @triggerMethod.call @, method
-    if @subviews
-      view.recurseMethod method for view in @subviews
 
   window.app = app
 

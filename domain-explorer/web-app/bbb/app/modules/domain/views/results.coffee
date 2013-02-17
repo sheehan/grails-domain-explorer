@@ -1,11 +1,11 @@
 define [
-  'backbone.marionette'
+  './item-view'
   'jquery'
   'moment'
   '../../util/dom-utils'
   'dataTables'
-], (Marionette, $, moment, DomUtils) ->
-  Marionette.ItemView.extend
+], (ItemView, $, moment, DomUtils) ->
+  ItemView.extend
     template: 'domain/results'
 
     className: 'view-results'

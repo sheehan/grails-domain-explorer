@@ -1,9 +1,8 @@
 define [
-  'backbone.marionette'
   './search'
   './show-section'
   'modules/util/stack-view'
-], (Marionette, SearchView, ShowSectionView, StackView) ->
+], (SearchView, ShowSectionView, StackView) ->
 
   StackView.extend
 

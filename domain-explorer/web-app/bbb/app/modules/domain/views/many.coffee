@@ -1,7 +1,7 @@
 define [
   'handlebars'
-  'backbone.marionette'
-], (Handlebars, Marionette) ->
+  './item-view'
+], (Handlebars, ItemView) ->
 
   Handlebars.registerHelper 'property_value', ->
     property = @property
@@ -31,7 +31,7 @@ define [
 
     new Handlebars.SafeString(valueHtml)
 
-  Marionette.Layout.extend
+  ItemView.extend
     template: 'domain/many'
 
     events:

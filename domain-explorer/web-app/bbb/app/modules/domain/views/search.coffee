@@ -2,14 +2,14 @@ define [
   'app'
   'underscore'
   'backbone'
-  'backbone.marionette'
+  './item-view'
   './query'
   './results-section'
   '../collections/instances'
   'layout'
-], (app, _, Backbone, Marionette, QueryView, ResultsSectionView, InstanceCollection) ->
+], (app, _, Backbone, ItemView, QueryView, ResultsSectionView, InstanceCollection) ->
 
-  Marionette.ItemView.extend
+  ItemView.extend
     template: 'domain/search'
 
     className: 'view-search'

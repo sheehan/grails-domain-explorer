@@ -1,10 +1,11 @@
 define [
   'backbone.marionette'
+  './item-view'
   'modules/util/dom-utils'
   'modules/util/radio-view'
-], (Marionette) ->
+], (Marionette, ItemView) ->
 
-  TabView = Marionette.ItemView.extend
+  TabView = ItemView.extend
     tagName: 'li'
 
     template: 'domain/tab'

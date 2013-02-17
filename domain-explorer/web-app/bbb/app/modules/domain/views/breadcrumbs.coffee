@@ -1,9 +1,9 @@
 define [
   'app'
-  'backbone.marionette'
-], (app, Marionette) ->
-  Marionette.Layout.extend
+  './item-view'
+], (app, ItemView) ->
 
+  ItemView.extend
     events:
       'click li a': 'onClick'
 

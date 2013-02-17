@@ -2,13 +2,14 @@ define [
   'handlebars'
   'backbone'
   'backbone.marionette'
-], (Handlebars, Backbone, Marionette) ->
+  './item-view'
+], (Handlebars, Backbone, Marionette, ItemView) ->
   ErrorModel = Backbone.Model.extend()
 
   ErrorCollection = Backbone.Collection.extend
     model: ErrorModel
 
-  ErrorsView = Marionette.ItemView.extend
+  ErrorsView = ItemView.extend
     template: "domain/edit/errors"
     className: "alert alert-error"
     initialize: (options) ->
@@ -17,7 +18,7 @@ define [
     serializeData: ->
       @errors
 
-  DateView = Marionette.ItemView.extend
+  DateView = ItemView.extend
     template: "domain/edit/form/date"
     initialize: (options) ->
       @property = options.property
@@ -48,7 +49,7 @@ define [
       data[@propertyName] = moment(date).format("YYYY-MM-DDTHH:mm:ss.SSSZZ")
       data
 
-  StringView = Marionette.ItemView.extend
+  StringView = ItemView.extend
     template: "domain/edit/form/string"
     initialize: (options) ->
       @property = options.property
@@ -63,7 +64,7 @@ define [
       data[@propertyName] = @$el.find("input").val()
       data
 
-  ReadOnlyView = Marionette.ItemView.extend
+  ReadOnlyView = ItemView.extend
     template: "domain/edit/form/readOnly"
     initialize: (options) ->
       @property = options.property
@@ -76,7 +77,7 @@ define [
     serialize: ->
       {}
 
-  BooleanView = Marionette.ItemView.extend
+  BooleanView = ItemView.extend
     template: "domain/edit/form/boolean"
     initialize: (options) ->
       @property = options.property
@@ -91,7 +92,7 @@ define [
       data[@propertyName] = @$el.find("input").val()
       data
 
-  AssociationOneView = Marionette.ItemView.extend
+  AssociationOneView = ItemView.extend
     events:
       "click button.clear": "_handleClearClick"
 
@@ -114,7 +115,7 @@ define [
       data[@propertyName + ".id"] = val
       data
 
-  NotSupportedView = Marionette.ItemView.extend
+  NotSupportedView = ItemView.extend
     template: "domain/edit/form/notSupported"
     initialize: (options) ->
       @property = options.property
@@ -127,7 +128,7 @@ define [
     serialize: ->
       {}
 
-  EmbeddedView = Marionette.ItemView.extend
+  EmbeddedView = ItemView.extend
     template: "domain/edit/form/embedded"
     initialize: (options) ->
       @property = options.property

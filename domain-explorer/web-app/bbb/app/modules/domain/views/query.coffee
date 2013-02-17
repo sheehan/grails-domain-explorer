@@ -1,10 +1,10 @@
 define [
   'app'
-  'backbone.marionette'
+  './item-view'
   'codemirror'
-], (app, Marionette, CodeMirror) ->
+], (app, ItemView, CodeMirror) ->
 
-  Marionette.ItemView.extend
+  ItemView.extend
     template: 'domain/query'
 
     className: 'view-query'

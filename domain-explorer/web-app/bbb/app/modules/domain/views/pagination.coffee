@@ -1,8 +1,8 @@
 define [
-  'backbone.marionette'
-], (Marionette) ->
+  './item-view'
+], (ItemView) ->
 
-  Marionette.ItemView.extend
+  ItemView.extend
     template: 'domain/pagination'
 
     className: 'view-pagination'

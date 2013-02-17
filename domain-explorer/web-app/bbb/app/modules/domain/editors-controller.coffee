@@ -1,12 +1,12 @@
 define [
   'backbone'
-  'backbone.marionette'
+  './views/item-view'
   './views/search-section'
   './views/tabs'
   'modules/util/radio-view'
-], (Backbone, Marionette, SearchSectionView, TabsView, RadioView) ->
+], (Backbone,  ItemView, SearchSectionView, TabsView, RadioView) ->
 
-  Marionette.ItemView.extend
+  ItemView.extend
     template: 'domain/editors'
 
     initialize: (options) ->

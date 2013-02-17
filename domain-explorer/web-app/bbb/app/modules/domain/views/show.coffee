@@ -1,15 +1,8 @@
 define [
   'handlebars'
-  'backbone.marionette'
+  './item-view'
   '../collections/breadcrumbs'
-  '../collections/instances'
-  './search'
-  './show'
-  './results'
-  './show-section'
-  './edit'
-  './association-many-section'
-], (Handlebars, Marionette, BreadcrumbCollection, InstancesCollection, SearchView, ShowView, ResultsView,   ShowSectionView, EditView, AssocitationManySectionView) ->
+], (Handlebars, ItemView, BreadcrumbCollection) ->
 
   Handlebars.registerHelper 'property_value', ->
     property = @property
@@ -39,7 +32,7 @@ define [
 
     new Handlebars.SafeString(valueHtml)
 
-  Marionette.ItemView.extend
+  ItemView.extend
     template: 'domain/show'
 
     events:

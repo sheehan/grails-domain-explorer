@@ -1,6 +1,6 @@
 define [
   'app'
-  'backbone.marionette'
+  './item-view'
   'modules/util/stack-view'
   './breadcrumbs'
   './show'
@@ -8,9 +8,9 @@ define [
   './association-many-section'
   '../collections/breadcrumbs'
   '../collections/instances'
-], (app, Marionette, StackView, BreadcrumbsView, ShowView, EditView, AssocitationManySectionView, BreadcrumbCollection, InstancesCollection) ->
+], (app, ItemView, StackView, BreadcrumbsView, ShowView, EditView, AssocitationManySectionView, BreadcrumbCollection, InstancesCollection) ->
 
-  Marionette.ItemView.extend
+  ItemView.extend
     template: 'domain/show-section'
 
     triggers:
