@@ -14,6 +14,7 @@ define [
       @_search()
 
     _search: ->
+      @trigger 'request'
       url = app.createLink 'domain', 'executeQuery'
       dfd = $.post url,
         query: @query

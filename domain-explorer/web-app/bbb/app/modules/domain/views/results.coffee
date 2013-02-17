@@ -11,7 +11,6 @@ define [
     className: 'view-results'
 
     initialize: ->
-      @listenTo @collection, 'reset', @showItems
       @listenTo @collection, 'change', @onModelChange
 
     onModelChange: (model, options) ->

@@ -29,15 +29,9 @@ define [
         @trigger 'row:click', model
 
       @addSubview '.query-container', @queryView
-
       @addSubview '.results-section', @resultsSectionView
 
       @listenTo app, 'resize', => @resize()
-
-    onLoading: ->
-      #
-      html = JST['tmpl TODO']()
-      @$el.html html
 
     onShow: ->
       @layout = @$el.layout

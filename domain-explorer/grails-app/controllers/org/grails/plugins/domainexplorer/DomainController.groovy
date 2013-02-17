@@ -38,7 +38,7 @@ class DomainController {
     }
 
     def executeQuery(String query, int max, int offset) {
-//        sleep 2000
+        sleep 2000
         Map json = [:]
         List result
         try {

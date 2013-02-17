@@ -99,4 +99,5 @@ define [
       view.recurseMethod method for view in @subviews
 
   window.app = app
+
   app

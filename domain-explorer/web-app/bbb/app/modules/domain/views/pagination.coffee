@@ -8,20 +8,17 @@ define [
     className: 'view-pagination'
 
     initialize: ->
-      @listenTo @collection, "reset", @update
+      @listenTo @collection, "reset", @render
 
-    events:
-      'click .next:not(.disabled)': 'onNext'
-      'click .prev:not(.disabled)': 'onPrev'
-
-    update: ->
+    onRender: ->
       @$('.showing').html "Showing #{@collection.getStart()} - #{@collection.getEnd()}"
 
       @$('.next').toggleClass 'disabled', (not @collection.hasNext())
       @$('.prev').toggleClass 'disabled', (not @collection.hasPrev())
 
-    onRender: ->
-      @update()
+      # TODO normal events hash not working for some reason
+      @$('.next:not(.disabled)').click (event) => @onNext(event)
+      @$('.prev:not(.disabled)').click (event) => @onPrev(event)
 
     onNext: (event) ->
       event.preventDefault()
