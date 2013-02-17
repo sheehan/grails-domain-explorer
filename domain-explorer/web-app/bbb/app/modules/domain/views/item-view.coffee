@@ -5,6 +5,10 @@ define [
 
   Marionette.ItemView.extend
 
+    constructor: () ->
+      @subviews = []
+      Marionette.ItemView::constructor.apply @, arguments
+
     render: ->
       @isClosed = false
       @triggerMethod "before:render", @
@@ -30,11 +34,9 @@ define [
       @listenTo @, 'show', ->
         @triggerMethod.call(view, 'show')
 
-      @subviews ?= []
       @subviews.push view
 
     recurseMethod: (method) ->
       @triggerMethod.call @, method
-      if @subviews
-        view.recurseMethod method for view in @subviews
+      view.recurseMethod method for view in @subviews
 

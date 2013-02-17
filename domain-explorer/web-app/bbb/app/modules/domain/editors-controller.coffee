@@ -43,5 +43,3 @@ define [
       tab.view = searchView
 
       @tabsCollection.add tab
-
-    onClose: ->

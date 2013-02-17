@@ -28,7 +28,7 @@ define [
 
     onRender: ->
       @$('.loading-animation').remove()
-      @resultsView.showItems()
+      @resultsView.resize()
 
     resize: ->
       @resultsView.resize()

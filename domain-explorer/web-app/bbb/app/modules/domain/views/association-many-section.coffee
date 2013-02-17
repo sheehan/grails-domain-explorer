@@ -19,6 +19,9 @@ define [
         clazz: @clazz
         collection: @collection
 
+      @listenTo @collection, 'reset', @render
+      @listenTo @collection, 'request', @onLoading
+
 
       @listenTo @resultsView, 'row:click', (model) =>
         @trigger 'row:click', model
@@ -27,4 +30,16 @@ define [
       @addSubview '.results-container', @resultsView
 
     showItems: ->
-      @resultsView.showItems()
+#      @resultsView.showItems()
+
+    onLoading: ->
+      @$el.children().hide()
+      html = app.tmpl 'loading-animation'
+      @$el.append html
+
+    onRender: ->
+      @$('.loading-animation').remove()
+      @resultsView.resize()
+
+    resize: ->
+      @resultsView.resize()

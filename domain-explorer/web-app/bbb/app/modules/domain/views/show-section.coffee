@@ -44,9 +44,7 @@ define [
         @pushNewShowView instance, instance.clazz, property
 
     onSelectPropertyMany: (model, property) ->
-      instances = new InstancesCollection()
-      instances.fetchPropertyMany(model, property).done =>
-        @pushNewManyView instances, instances.clazz, property
+      @pushNewManyView model, property
 
     onEdit: (model) ->
       editView = new EditView
@@ -80,16 +78,19 @@ define [
       @listenTo showView, 'select:propertyMany', @onSelectPropertyMany
       @listenTo showView, 'edit', @onEdit, @
 
-    pushNewManyView: (collection, clazz, label) ->
+    pushNewManyView: (model, property) ->
+      collection = new InstancesCollection()
       @breadcrumbs.add
-        label: label
+        label: property
 
       resultsView = new AssocitationManySectionView
         collection: collection
-        clazz: clazz
+        clazz: collection.clazz
 
       @listenTo resultsView, 'row:click', (model) =>
         @pushNewShowView model, model.clazz, "#{model.clazz.name} : #{model.id}"
 
       @stackView.push resultsView
-      resultsView.showItems() # TODO
+      resultsView.resize() # TODO some sort of on visible event
+
+      collection.fetchPropertyMany(model, property)

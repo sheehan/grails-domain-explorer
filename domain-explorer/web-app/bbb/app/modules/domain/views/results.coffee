@@ -16,7 +16,7 @@ define [
     onModelChange: (model, options) ->
       @dataTable.fnUpdate model.toJSON(), @collection.indexOf(model)
 
-    showItems: ->
+    onRender: ->
       if @collection.clazz
         @initTable()
         @dataTable.fnAddData @collection.toJSON()
