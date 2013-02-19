@@ -40,3 +40,5 @@ define [
       @triggerMethod.call @, method
       view.recurseMethod method for view in @subviews
 
+    log: (string) ->
+      console?.log "#{@cid}: #{string}"

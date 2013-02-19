@@ -6,7 +6,7 @@ define [
   Instance = Backbone.Model.extend
 
     fetchPropertyOne: (propertyName) ->
-      @trigger 'request'
+#      @trigger 'request'
       url = app.createLink 'domain', 'findPropertyOne'
       dfd = $.post url,
         className: @get 'className'
@@ -19,7 +19,7 @@ define [
         instance
 
     updateWithData: (data) ->
-      @trigger 'request'
+#      @trigger 'request'
       dfd = $.Deferred()
       url = "#{app.baseUrl}/domain/rest/#{@get 'className'}/#{@id}"
       postData = _.extend data,
