@@ -1,22 +1,8 @@
 define [
   'handlebars'
   'backbone'
-  'backbone.marionette'
   './item-view'
-], (Handlebars, Backbone, Marionette, ItemView) ->
-  ErrorModel = Backbone.Model.extend()
-
-  ErrorCollection = Backbone.Collection.extend
-    model: ErrorModel
-
-  ErrorsView = ItemView.extend
-    template: "domain/edit/errors"
-    className: "alert alert-error"
-    initialize: (options) ->
-      @errors = options.errors
-
-    serializeData: ->
-      @errors
+], (Handlebars, Backbone, ItemView) ->
 
   DateView = ItemView.extend
     template: "domain/edit/form/date"
@@ -141,15 +127,12 @@ define [
     serialize: ->
       {}
 
-  Marionette.Layout.extend
+  ItemView.extend
     template: 'domain/edit'
 
     triggers:
       'click .toolbar-section .cancel': 'cancel'
       'click .toolbar-section .save': 'save'
-
-    regions:
-      errors: '.errors'
 
     initialize: (options) ->
       @clazz = options.clazz
@@ -222,4 +205,5 @@ define [
       @$el.toggleClass "saving", isSaving
 
     showErrors: (errors) ->
-      @errors.show new ErrorsView(errors: errors)
+      html = app.tmpl 'domain/edit/errors', errors
+      @$('.errors').html html
