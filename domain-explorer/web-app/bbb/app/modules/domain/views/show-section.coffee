@@ -72,8 +72,6 @@ define [
         model: model
         clazz: clazz
 
-      @log 'pushing new show view'
-
       @stackView.push showView
 
       @listenTo showView, 'select:propertyOne', @onSelectPropertyOne

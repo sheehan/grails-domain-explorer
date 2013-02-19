@@ -20,7 +20,7 @@ define [
         collection: @collection
 
       @listenTo @collection, 'reset', @render
-      @listenTo @collection, 'request', @onLoading
+      @listenTo @collection, 'search:start', @onLoading
 
 
       @listenTo @resultsView, 'row:click', (model) =>

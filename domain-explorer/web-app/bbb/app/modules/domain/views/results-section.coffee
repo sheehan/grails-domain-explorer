@@ -16,7 +16,7 @@ define [
         @trigger 'row:click', model
 
       @listenTo @collection, 'reset', @render
-      @listenTo @collection, 'request', @onLoading
+      @listenTo @collection, 'search:start', @onLoading
 
       @addSubview '.toolbar-container', @resultsToolbarView
       @addSubview '.results-container', @resultsView

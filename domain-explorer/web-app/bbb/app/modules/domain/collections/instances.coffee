@@ -14,8 +14,7 @@ define [
       @_search()
 
     _search: ->
-      console.log "#{@cid}: search"
-      @trigger 'request'
+      @trigger 'search:start'
       url = app.createLink 'domain', 'executeQuery'
       dfd = $.post url,
         query: @query
